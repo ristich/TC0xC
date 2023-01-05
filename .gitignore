@@ -1,0 +1,19 @@
+# Mac
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Eagle
+*.s#?
+*.b#?
+*.l#?
+*.b$?
+*.s$?
+*.l$?
+
+# Eagle project file
+# It contains a serial number and references to the file structure
+# on your computer.
+# comment the following line if you want to have your project file included.
+eagle.epf
