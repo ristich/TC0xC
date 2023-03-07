@@ -148,6 +148,18 @@
 <libraries>
 <library name="Rob-Diodes" urn="urn:adsk.eagle:library:37150039">
 <packages>
+<package name="GULL-WING-2.3MM" urn="urn:adsk.eagle:footprint:39410736/1" locally_modified="yes" library_version="11" library_locally_modified="yes">
+<smd name="P$1" x="-1.9" y="0" dx="1.35" dy="0.75" layer="1"/>
+<smd name="P$2" x="1.9" y="0" dx="1.35" dy="0.75" layer="1"/>
+<wire x1="-1.15" y1="1.15" x2="1.15" y2="1.15" width="0.127" layer="22"/>
+<wire x1="1.15" y1="-1.15" x2="-1.15" y2="-1.15" width="0.127" layer="22"/>
+<text x="0" y="1.397" size="0.8128" layer="25" font="vector" ratio="12" align="bottom-center">&gt;NAME</text>
+<text x="0" y="-1.397" size="0.8128" layer="27" font="vector" ratio="12" rot="R180" align="bottom-center">&gt;VALUE</text>
+<wire x1="-1.15" y1="0.628" x2="-1.15" y2="1.15" width="0.127" layer="22"/>
+<wire x1="1.15" y1="1.15" x2="1.15" y2="0.628" width="0.127" layer="22"/>
+<wire x1="-1.15" y1="-1.15" x2="-1.15" y2="-0.628" width="0.127" layer="22"/>
+<wire x1="1.15" y1="-0.628" x2="1.15" y2="-1.15" width="0.127" layer="22"/>
+</package>
 <package name="SMD-603" urn="urn:adsk.eagle:footprint:37040971/2" library_version="1">
 <smd name="P$1" x="-0.75" y="0" dx="0.8" dy="0.8" layer="1" roundness="10"/>
 <smd name="P$2" x="0.75" y="0" dx="0.8" dy="0.8" layer="1" roundness="10"/>
@@ -191,6 +203,11 @@
 </package>
 </packages>
 <packages3d>
+<package3d name="GULL-WING-2.3MM" urn="urn:adsk.eagle:package:39410737/2" type="model" library_version="11" library_locally_modified="yes">
+<packageinstances>
+<packageinstance name="GULL-WING-2.3MM"/>
+</packageinstances>
+</package3d>
 <package3d name="SMD-603" urn="urn:adsk.eagle:package:37041000/3" type="model" library_version="1">
 <packageinstances>
 <packageinstance name="SMD-603"/>
@@ -229,6 +246,25 @@
 </symbol>
 </symbols>
 <devicesets>
+<deviceset name="VSMB2020X01" library_version="11" library_locally_modified="yes">
+<gates>
+<gate name="G$1" symbol="LED" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="GULL-WING-2.3MM">
+<connects>
+<connect gate="G$1" pin="ANODE+" pad="P$1"/>
+<connect gate="G$1" pin="CATHODE-" pad="P$2"/>
+</connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:39410737/2"/>
+</package3dinstances>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
 <deviceset name="LED" urn="urn:adsk.eagle:component:37150051/1" prefix="D" library_version="1">
 <gates>
 <gate name="G$1" symbol="LED" x="0" y="0"/>
@@ -308,6 +344,9 @@
 <part name="D22" library="Rob-Diodes" library_urn="urn:adsk.eagle:library:37150039" deviceset="LED" device="-603" package3d_urn="urn:adsk.eagle:package:37041000/3"/>
 <part name="D23" library="Rob-Diodes" library_urn="urn:adsk.eagle:library:37150039" deviceset="LED" device="-603" package3d_urn="urn:adsk.eagle:package:37041000/3"/>
 <part name="D24" library="Rob-Diodes" library_urn="urn:adsk.eagle:library:37150039" deviceset="LED" device="-603" package3d_urn="urn:adsk.eagle:package:37041000/3"/>
+<part name="D25" library="Rob-Diodes" library_urn="urn:adsk.eagle:library:37150039" deviceset="VSMB2020X01" device="" package3d_urn="urn:adsk.eagle:package:39410737/2"/>
+<part name="D26" library="Rob-Diodes" library_urn="urn:adsk.eagle:library:37150039" deviceset="LED" device="-603" package3d_urn="urn:adsk.eagle:package:37041000/3"/>
+<part name="D27" library="Rob-Diodes" library_urn="urn:adsk.eagle:library:37150039" deviceset="VSMB2020X01" device="" package3d_urn="urn:adsk.eagle:package:39410737/2"/>
 </parts>
 <sheets>
 <sheet>
@@ -385,6 +424,15 @@
 </instance>
 <instance part="D24" gate="G$1" x="99.06" y="2.54" smashed="yes">
 <attribute name="NAME" x="96.52" y="5.08" size="1.778" layer="95" font="vector"/>
+</instance>
+<instance part="D25" gate="G$1" x="78.74" y="-15.24" smashed="yes">
+<attribute name="NAME" x="76.2" y="-12.7" size="1.778" layer="95" font="vector"/>
+</instance>
+<instance part="D26" gate="G$1" x="88.9" y="-10.16" smashed="yes">
+<attribute name="NAME" x="86.36" y="-7.62" size="1.778" layer="95" font="vector"/>
+</instance>
+<instance part="D27" gate="G$1" x="78.74" y="-10.16" smashed="yes">
+<attribute name="NAME" x="76.2" y="-7.62" size="1.778" layer="95" font="vector"/>
 </instance>
 </instances>
 <busses>

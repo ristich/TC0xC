@@ -155,7 +155,7 @@
 <layer number="255" name="routoute" color="7" fill="1" visible="yes" active="yes"/>
 </layers>
 <board>
-<fusionsync huburn="a.YnVzaW5lc3M6c3VuZGJlcmdmZXJhcg" projecturn="a.YnVzaW5lc3M6c3VuZGJlcmdmZXJhciMyMDIyMDkwNjU1MzEzMzI4MQ" f3durn="urn:adsk.wipprod:dm.lineage:_LBjbpjSReejQ1QNtJxQtQ" pcbguid="" lastpulledtime="" lastsyncedchangeguid="" latestrevisionid="f5b60855-6e7b-4d74-8156-d1332458dd38" lastsyncedrevisionid="f5b60855-6e7b-4d74-8156-d1332458dd38" lastboardhashguid="b8e310b4-e6ef-eddc-2d3b-9480b213e5a7" lastpushedtime="2023-02-28T01:28:50Z" linktopcb3d="true"/>
+<fusionsync huburn="a.YnVzaW5lc3M6c3VuZGJlcmdmZXJhcg" projecturn="a.YnVzaW5lc3M6c3VuZGJlcmdmZXJhciMyMDIyMDkwNjU1MzEzMzI4MQ" f3durn="urn:adsk.wipprod:dm.lineage:_LBjbpjSReejQ1QNtJxQtQ" pcbguid="" lastpulledtime="" lastsyncedchangeguid="" latestrevisionid="c8c15753-8cb0-4c92-aaa7-c8cb3c30b25e" lastsyncedrevisionid="c8c15753-8cb0-4c92-aaa7-c8cb3c30b25e" lastboardhashguid="f6b63956-15fd-f67c-a3b4-4bf64a7ab889" lastpushedtime="2023-03-03T02:30:11Z" linktopcb3d="true"/>
 <plain>
 <wire x1="53.975" y1="24.695375" x2="53.88615625" y2="25.113003125" width="0" layer="49"/>
 <wire x1="53.88615625" y1="25.113003125" x2="53.72549375" y2="25.492853125" width="0" layer="49"/>
@@ -2337,10 +2337,10 @@
 <wire x1="0" y1="41.275" x2="1.397" y2="39.878" width="0.0254" layer="20"/>
 <wire x1="0" y1="41.275" x2="0" y2="60.325" width="0.0254" layer="20"/>
 <wire x1="0" y1="60.325" x2="1.397" y2="61.722" width="0.0254" layer="20"/>
-<hole x="22.86" y="88.9" drill="4.064"/>
-<hole x="78.74" y="88.9" drill="4.064"/>
-<hole x="78.74" y="12.7" drill="4.064"/>
-<hole x="22.86" y="12.7" drill="4.064"/>
+<hole x="22.86" y="88.9" drill="2.794"/>
+<hole x="78.74" y="88.9" drill="2.794"/>
+<hole x="78.74" y="12.7" drill="2.794"/>
+<hole x="22.86" y="12.7" drill="2.794"/>
 <hole x="1.97" y="55.18" drill="1.55"/>
 <hole x="99.63" y="46.42" drill="1.55"/>
 <wire x1="7.62" y1="52.07" x2="11.43" y2="55.88" width="0.1778" layer="51"/>
@@ -2353,6 +2353,18 @@
 <libraries>
 <library name="Rob-Diodes" urn="urn:adsk.eagle:library:37150039">
 <packages>
+<package name="GULL-WING-2.3MM" urn="urn:adsk.eagle:footprint:39410736/1" locally_modified="yes" library_version="11" library_locally_modified="yes">
+<smd name="P$1" x="-1.9" y="0" dx="1.35" dy="0.75" layer="1"/>
+<smd name="P$2" x="1.9" y="0" dx="1.35" dy="0.75" layer="1"/>
+<wire x1="-1.15" y1="1.15" x2="1.15" y2="1.15" width="0.127" layer="22"/>
+<wire x1="1.15" y1="-1.15" x2="-1.15" y2="-1.15" width="0.127" layer="22"/>
+<text x="0" y="1.397" size="0.8128" layer="25" font="vector" ratio="12" align="bottom-center">&gt;NAME</text>
+<text x="0" y="-1.397" size="0.8128" layer="27" font="vector" ratio="12" rot="R180" align="bottom-center">&gt;VALUE</text>
+<wire x1="-1.15" y1="0.628" x2="-1.15" y2="1.15" width="0.127" layer="22"/>
+<wire x1="1.15" y1="1.15" x2="1.15" y2="0.628" width="0.127" layer="22"/>
+<wire x1="-1.15" y1="-1.15" x2="-1.15" y2="-0.628" width="0.127" layer="22"/>
+<wire x1="1.15" y1="-0.628" x2="1.15" y2="-1.15" width="0.127" layer="22"/>
+</package>
 <package name="SMD-603" urn="urn:adsk.eagle:footprint:37040971/2" library_version="1">
 <smd name="P$1" x="-0.75" y="0" dx="0.8" dy="0.8" layer="1" roundness="10"/>
 <smd name="P$2" x="0.75" y="0" dx="0.8" dy="0.8" layer="1" roundness="10"/>
@@ -2369,6 +2381,11 @@
 </package>
 </packages>
 <packages3d>
+<package3d name="GULL-WING-2.3MM" urn="urn:adsk.eagle:package:39410737/2" type="model" library_version="11" library_locally_modified="yes">
+<packageinstances>
+<packageinstance name="GULL-WING-2.3MM"/>
+</packageinstances>
+</package3d>
 <package3d name="SMD-603" urn="urn:adsk.eagle:package:37041000/3" type="model" library_version="1">
 <packageinstances>
 <packageinstance name="SMD-603"/>
@@ -2664,6 +2681,18 @@ design rules under a new name.</description>
 <element name="D24" library="Rob-Diodes" library_urn="urn:adsk.eagle:library:37150039" package="SMD-603" package3d_urn="urn:adsk.eagle:package:37041000/3" value="LED-603" x="8.6741" y="85.55228125" smashed="yes">
 <attribute name="NAME" x="8.6741" y="86.56828125" size="0.8128" layer="25" font="vector" ratio="12" align="bottom-center"/>
 <attribute name="VALUE" x="8.6741" y="84.53628125" size="0.8128" layer="27" font="vector" ratio="12" align="top-center"/>
+</element>
+<element name="D25" library="Rob-Diodes" library_urn="urn:adsk.eagle:library:37150039" package="GULL-WING-2.3MM" package3d_urn="urn:adsk.eagle:package:39410737/2" value="VSMB2020X01" x="6.35" y="50.8" smashed="yes">
+<attribute name="NAME" x="6.35" y="51.816" size="0.8128" layer="25" font="vector" ratio="12" align="bottom-center"/>
+<attribute name="VALUE" x="6.35" y="49.784" size="0.8128" layer="27" font="vector" ratio="12" align="top-center"/>
+</element>
+<element name="D26" library="Rob-Diodes" library_urn="urn:adsk.eagle:library:37150039" package="SMD-603" package3d_urn="urn:adsk.eagle:package:37041000/3" value="LED-603" x="50.8" y="50.8" smashed="yes">
+<attribute name="NAME" x="50.8" y="51.816" size="0.8128" layer="25" font="vector" ratio="12" align="bottom-center"/>
+<attribute name="VALUE" x="50.8" y="49.784" size="0.8128" layer="27" font="vector" ratio="12" align="top-center"/>
+</element>
+<element name="D27" library="Rob-Diodes" library_urn="urn:adsk.eagle:library:37150039" package="GULL-WING-2.3MM" package3d_urn="urn:adsk.eagle:package:39410737/2" value="VSMB2020X01" x="95.25" y="50.8" smashed="yes">
+<attribute name="NAME" x="95.25" y="51.816" size="0.8128" layer="25" font="vector" ratio="12" align="bottom-center"/>
+<attribute name="VALUE" x="95.25" y="49.784" size="0.8128" layer="27" font="vector" ratio="12" align="top-center"/>
 </element>
 </elements>
 <signals>
