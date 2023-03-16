@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="50" unitdist="mil" unit="inch" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="inch"/>
+<grid distance="50" unitdist="mil" unit="mm" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="16" fill="1" visible="no" active="no"/>
@@ -2275,8 +2275,8 @@
 <wire x1="12.446" y1="53.34" x2="12.446" y2="48.26" width="0.01" layer="20"/>
 <wire x1="13.446" y1="55.179990625" x2="13.446" y2="46.419990625" width="0.01" layer="200"/>
 <wire x1="88.17211875" y1="55.179990625" x2="88.17211875" y2="46.419990625" width="0.01" layer="200"/>
-<hole x="10.73" y="46.42" drill="1.55"/>
-<hole x="90.87" y="55.18" drill="1.55"/>
+<hole x="10.603" y="46.42" drill="1.55"/>
+<hole x="90.997" y="55.18" drill="1.55"/>
 <wire x1="90.87" y1="46.42" x2="99.63" y2="46.42" width="0.01" layer="201"/>
 <wire x1="99.63" y1="46.42" x2="99.63" y2="55.18" width="0.01" layer="201"/>
 <wire x1="90.87" y1="55.18" x2="90.87" y2="46.42" width="0.01" layer="201"/>
@@ -2287,10 +2287,10 @@
 <wire x1="1.97" y1="46.42" x2="10.73" y2="46.42" width="0.01" layer="201"/>
 <wire x1="12.7" y1="0" x2="88.9" y2="0" width="0.01" layer="201"/>
 <wire x1="1.27" y1="88.9" x2="1.27" y2="12.7" width="0.01" layer="201"/>
-<wire x1="5.08" y1="50.8" x2="7.62" y2="50.8" width="0.1778" layer="51"/>
-<wire x1="6.35" y1="52.07" x2="6.35" y2="49.53" width="0.1778" layer="51"/>
-<wire x1="93.98" y1="50.8" x2="96.52" y2="50.8" width="0.1778" layer="51"/>
-<wire x1="95.25" y1="52.07" x2="95.25" y2="49.53" width="0.1778" layer="51"/>
+<wire x1="4.953" y1="50.8" x2="7.493" y2="50.8" width="0.1778" layer="51"/>
+<wire x1="6.223" y1="52.07" x2="6.223" y2="49.53" width="0.1778" layer="51"/>
+<wire x1="94.107" y1="50.8" x2="96.647" y2="50.8" width="0.1778" layer="51"/>
+<wire x1="95.377" y1="52.07" x2="95.377" y2="49.53" width="0.1778" layer="51"/>
 <wire x1="49.53" y1="50.8" x2="52.07" y2="50.8" width="0.1778" layer="51"/>
 <wire x1="50.8" y1="52.07" x2="50.8" y2="49.53" width="0.1778" layer="51"/>
 <wire x1="17.526" y1="48.26" x2="12.446" y2="48.26" width="0.01" layer="201"/>
@@ -2351,14 +2351,14 @@
 <hole x="78.74" y="88.9" drill="2.794"/>
 <hole x="78.74" y="12.7" drill="2.794"/>
 <hole x="22.86" y="12.7" drill="2.794"/>
-<hole x="1.97" y="55.18" drill="1.55"/>
-<hole x="99.63" y="46.42" drill="1.55"/>
-<wire x1="7.62" y1="52.07" x2="11.43" y2="55.88" width="0.1778" layer="51"/>
-<text x="8.89" y="57.15" size="1.778" layer="51" font="vector">Transmitter</text>
+<hole x="1.843" y="55.18" drill="1.55"/>
+<hole x="99.757" y="46.42" drill="1.55"/>
+<wire x1="7.493" y1="52.07" x2="11.303" y2="55.88" width="0.1778" layer="51"/>
+<text x="8.763" y="57.15" size="1.778" layer="51" font="vector">Transmitter</text>
 <wire x1="52.07" y1="52.07" x2="55.88" y2="55.88" width="0.1778" layer="51"/>
 <text x="53.34" y="57.15" size="1.778" layer="51" font="vector">Receiver</text>
-<wire x1="96.52" y1="52.07" x2="100.33" y2="55.88" width="0.1778" layer="51"/>
-<text x="97.79" y="57.15" size="1.778" layer="51" font="vector">Transmitter</text>
+<wire x1="96.647" y1="52.07" x2="100.33" y2="55.88" width="0.1778" layer="51"/>
+<text x="97.917" y="57.15" size="1.778" layer="51" font="vector">Transmitter</text>
 <polygon width="0.1" layer="39">
 <vertex x="100.33" y="62.865"/>
 <vertex x="100.33" y="64.389"/>
@@ -2371,14 +2371,14 @@
 <vertex x="100.33" y="37.211"/>
 <vertex x="99.06" y="37.846"/>
 </polygon>
-<circle x="99.63" y="46.42" radius="1.57" width="0" layer="39"/>
-<circle x="90.87" y="46.42" radius="1.57" width="0" layer="39"/>
-<circle x="99.63" y="55.18" radius="1.57" width="0" layer="39"/>
-<circle x="90.87" y="55.18" radius="1.57" width="0" layer="39"/>
-<circle x="10.73" y="46.42" radius="1.57" width="0" layer="39"/>
-<circle x="1.97" y="46.42" radius="1.57" width="0" layer="39"/>
-<circle x="10.73" y="55.18" radius="1.57" width="0" layer="39"/>
-<circle x="1.97" y="55.18" radius="1.57" width="0" layer="39"/>
+<circle x="99.757" y="46.42" radius="1.57" width="0" layer="39"/>
+<circle x="90.997" y="46.42" radius="1.57" width="0" layer="39"/>
+<circle x="99.757" y="55.18" radius="1.57" width="0" layer="39"/>
+<circle x="90.997" y="55.18" radius="1.57" width="0" layer="39"/>
+<circle x="10.603" y="46.42" radius="1.57" width="0" layer="39"/>
+<circle x="1.843" y="46.42" radius="1.57" width="0" layer="39"/>
+<circle x="10.603" y="55.18" radius="1.57" width="0" layer="39"/>
+<circle x="1.843" y="55.18" radius="1.57" width="0" layer="39"/>
 <polygon width="0.1" layer="39">
 <vertex x="50.8" y="71.882"/>
 <vertex x="50.8" y="70.739" curve="90"/>
@@ -3354,17 +3354,17 @@ design rules under a new name.</description>
 <attribute name="NAME" x="8.6741" y="86.56828125" size="0.8128" layer="25" font="vector" ratio="12" align="bottom-center"/>
 <attribute name="VALUE" x="8.6741" y="84.53628125" size="0.8128" layer="27" font="vector" ratio="12" align="top-center"/>
 </element>
-<element name="D25" library="Rob-Diodes" library_urn="urn:adsk.eagle:library:37150039" package="GULL-WING-2.3MM" package3d_urn="urn:adsk.eagle:package:39410737/2" value="VSMB2020X01" x="6.35" y="50.8" smashed="yes">
-<attribute name="NAME" x="6.35" y="51.816" size="0.8128" layer="25" font="vector" ratio="12" align="bottom-center"/>
-<attribute name="VALUE" x="6.35" y="49.784" size="0.8128" layer="27" font="vector" ratio="12" align="top-center"/>
+<element name="D25" library="Rob-Diodes" library_urn="urn:adsk.eagle:library:37150039" package="GULL-WING-2.3MM" package3d_urn="urn:adsk.eagle:package:39410737/2" value="VSMB2020X01" x="6.223" y="50.8" smashed="yes">
+<attribute name="NAME" x="6.223" y="51.816" size="0.8128" layer="25" font="vector" ratio="12" align="bottom-center"/>
+<attribute name="VALUE" x="6.223" y="49.784" size="0.8128" layer="27" font="vector" ratio="12" align="top-center"/>
 </element>
 <element name="D26" library="Rob-Diodes" library_urn="urn:adsk.eagle:library:37150039" package="SMD-603" package3d_urn="urn:adsk.eagle:package:37041000/3" value="LED-603" x="50.8" y="50.8" smashed="yes">
 <attribute name="NAME" x="50.8" y="51.816" size="0.8128" layer="25" font="vector" ratio="12" align="bottom-center"/>
 <attribute name="VALUE" x="50.8" y="49.784" size="0.8128" layer="27" font="vector" ratio="12" align="top-center"/>
 </element>
-<element name="D27" library="Rob-Diodes" library_urn="urn:adsk.eagle:library:37150039" package="GULL-WING-2.3MM" package3d_urn="urn:adsk.eagle:package:39410737/2" value="VSMB2020X01" x="95.25" y="50.8" smashed="yes">
-<attribute name="NAME" x="95.25" y="51.816" size="0.8128" layer="25" font="vector" ratio="12" align="bottom-center"/>
-<attribute name="VALUE" x="95.25" y="49.784" size="0.8128" layer="27" font="vector" ratio="12" align="top-center"/>
+<element name="D27" library="Rob-Diodes" library_urn="urn:adsk.eagle:library:37150039" package="GULL-WING-2.3MM" package3d_urn="urn:adsk.eagle:package:39410737/2" value="VSMB2020X01" x="95.377" y="50.8" smashed="yes">
+<attribute name="NAME" x="95.377" y="51.816" size="0.8128" layer="25" font="vector" ratio="12" align="bottom-center"/>
+<attribute name="VALUE" x="95.377" y="49.784" size="0.8128" layer="27" font="vector" ratio="12" align="top-center"/>
 </element>
 <element name="S2" library="IDEO-Switches" package="CUS-12_SPDT" override_package3d_urn="urn:adsk.eagle:package:39505090/2" override_package_urn="urn:adsk.eagle:footprint:39505091/1" value="CUS-12B" x="3.41" y="76.25" smashed="yes" rot="R270">
 <attribute name="NAME" x="5.95" y="80.06" size="0.8128" layer="25" ratio="15" rot="R270" align="bottom-right"/>
