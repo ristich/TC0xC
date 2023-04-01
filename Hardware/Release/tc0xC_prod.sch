@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.3.0">
+<eagle version="9.6.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -6491,10 +6491,10 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <part name="GND12" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="GND16" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="SUPPLY23" library="SparkFun-Aesthetics" deviceset="3.3V" device=""/>
-<part name="S2" library="IDEO-Switches" deviceset="CUS-12B" device=""/>
+<part name="S2" library="IDEO-Switches" deviceset="CUS-12B" device="" override_package3d_urn="urn:adsk.eagle:package:39905697/2" override_package_urn="urn:adsk.eagle:footprint:39905698/1"/>
 <part name="SUPPLY15" library="SparkFun-Aesthetics" deviceset="V_BATT" device=""/>
 <part name="GND34" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
-<part name="J1" library="SparkFun-Connectors-new" deviceset="USB_MICRO-B" device=""/>
+<part name="J1" library="SparkFun-Connectors-new" deviceset="USB_MICRO-B" device="" override_package3d_urn="urn:adsk.eagle:package:39905683/2" override_package_urn="urn:adsk.eagle:footprint:39905684/1"/>
 <part name="GND39" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="IC1" library="AP2112M-3.3TRG1" deviceset="AP2112M-3.3TRG1" device=""/>
 <part name="GND35" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
@@ -6523,8 +6523,8 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <part name="R6" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="20k"/>
 <part name="U$3" library="microbuilder" deviceset="GND" device=""/>
 <part name="D33" library="TSOP36256" deviceset="TSOP36256" device="TT"/>
-<part name="D27" library="VSMB2020X01" deviceset="VSMB2020X01" device=""/>
-<part name="D28" library="VSMB2020X01" deviceset="VSMB2020X01" device=""/>
+<part name="D27" library="VSMB2020X01" deviceset="VSMB2020X01" device="" override_package3d_urn="urn:adsk.eagle:package:39905680/2" override_package_urn="urn:adsk.eagle:footprint:39905681/1"/>
+<part name="D28" library="VSMB2020X01" deviceset="VSMB2020X01" device="" override_package3d_urn="urn:adsk.eagle:package:39905717/2" override_package_urn="urn:adsk.eagle:footprint:39905718/1"/>
 <part name="R19" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="10k"/>
 <part name="SUPPLY3" library="SparkFun-Aesthetics" deviceset="3.3V" device=""/>
 <part name="R20" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="100"/>
@@ -6532,7 +6532,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <part name="GND17" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="R21" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="8.2"/>
 <part name="R22" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="8.2"/>
-<part name="S3" library="TL3340AF160QG" deviceset="TL3340AF160QG" device=""/>
+<part name="S3" library="TL3340AF160QG" deviceset="TL3340AF160QG" device="" override_package3d_urn="urn:adsk.eagle:package:39905701/2" override_package_urn="urn:adsk.eagle:footprint:39905702/1"/>
 <part name="TP2" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPS" device="TP08R" package3d_urn="urn:adsk.eagle:package:27956/1"/>
 <part name="TP3" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPS" device="TP08R" package3d_urn="urn:adsk.eagle:package:27956/1"/>
 <part name="GND37" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
@@ -7286,13 +7286,15 @@ populated</text>
 <junction x="-83.82" y="27.94"/>
 <pinref part="U1" gate="G$1" pin="VCC"/>
 </segment>
+</net>
+<net name="N$17" class="0">
 <segment>
+<pinref part="C6" gate="G$1" pin="2"/>
 <pinref part="R20" gate="G$1" pin="1"/>
+<wire x1="-30.48" y1="-50.8" x2="-30.48" y2="-53.34" width="0.1524" layer="91"/>
 <pinref part="D33" gate="G$1" pin="VS"/>
 <wire x1="-30.48" y1="-53.34" x2="-35.56" y2="-53.34" width="0.1524" layer="91"/>
-<wire x1="-30.48" y1="-53.34" x2="-30.48" y2="-50.8" width="0.1524" layer="91"/>
 <junction x="-30.48" y="-53.34"/>
-<pinref part="C6" gate="G$1" pin="2"/>
 </segment>
 </net>
 </nets>
@@ -8665,6 +8667,11 @@ will not be understood (or retained) with this version.
 Since Version 8.3, EAGLE supports the association of 3D packages
 with devices in libraries, schematics, and board files. Those 3D
 packages will not be understood (or retained) with this version.
+</note>
+<note version="9.4" severity="warning">
+Since Version 9.4, EAGLE supports the overriding of 3D packages
+in schematics and board files. Those overridden 3d packages
+will not be understood (or retained) with this version.
 </note>
 </compatibility>
 </eagle>
