@@ -1,0 +1,24 @@
+{
+    "Header": {
+        "Comment": "All values are metric (mm)",
+        "CreationDate": "2023-04-07T17:24:26Z",
+        "GenerationSoftware": {
+            "Application": "EAGLE",
+            "Vendor": "Autodesk",
+            "Version": "9.6.2"
+        },
+        "Part": "Single"
+    },
+    "Overall": {
+        "BoardThickness": 1.57,
+        "LayerNumber": 2,
+        "Name": {
+            "ProjectId": "tc0xC_prod"
+        },
+        "Owner": "Rudy Ristich <rudy@workshop88.com>",
+        "Size": {
+            "X": 98.552,
+            "Y": 99.6315
+        }
+    }
+}
