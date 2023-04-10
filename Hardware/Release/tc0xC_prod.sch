@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -5427,106 +5427,106 @@ Doc constructeur &lt;a href="http://geii/magasin/pdf/TSOP36256.pdf" title="Enlar
 <part name="D22" library="Rob-Diodes" library_urn="urn:adsk.eagle:library:37150039" deviceset="LED" device="-603" package3d_urn="urn:adsk.eagle:package:37041000/3"/>
 <part name="D23" library="Rob-Diodes" library_urn="urn:adsk.eagle:library:37150039" deviceset="LED" device="-603" package3d_urn="urn:adsk.eagle:package:37041000/3"/>
 <part name="D24" library="Rob-Diodes" library_urn="urn:adsk.eagle:library:37150039" deviceset="LED" device="-603" package3d_urn="urn:adsk.eagle:package:37041000/3"/>
-<part name="C11" library="SparkFun-Capacitors" deviceset="0.1UF" device="-0603-25V-(+80/-20%)" value="0.1uF"/>
+<part name="C11" library="SparkFun-Capacitors" deviceset="0.1UF" device="-0603-25V-(+80/-20%)" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="0.1uF"/>
 <part name="GND27" library="SparkFun" deviceset="GND" device=""/>
 <part name="GND26" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
-<part name="C14" library="SparkFun-Capacitors" deviceset="0.1UF" device="-0603-25V-(+80/-20%)" value="0.1uF"/>
-<part name="U4" library="SparkFun-DigitalIC" deviceset="FT231X" device="S" value="FT231XS"/>
-<part name="R13" library="SparkFun-Resistors" deviceset="27OHM1/10W1%(0603)" device="0603-RES" value="27"/>
-<part name="R14" library="SparkFun-Resistors" deviceset="27OHM1/10W1%(0603)" device="0603-RES" value="27"/>
-<part name="C13" library="SparkFun-Capacitors" deviceset="47PF" device="-0603-50V-5%" value="47pF"/>
-<part name="C12" library="SparkFun-Capacitors" deviceset="47PF" device="-0603-50V-5%" value="47pF"/>
+<part name="C14" library="SparkFun-Capacitors" deviceset="0.1UF" device="-0603-25V-(+80/-20%)" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="0.1uF"/>
+<part name="U4" library="SparkFun-DigitalIC" deviceset="FT231X" device="S" override_package3d_urn="urn:adsk.eagle:package:39992977/2" override_package_urn="urn:adsk.eagle:footprint:39992979/1" value="FT231XS"/>
+<part name="R13" library="SparkFun-Resistors" deviceset="27OHM1/10W1%(0603)" device="0603-RES" override_package3d_urn="urn:adsk.eagle:package:39986442/2" override_package_urn="urn:adsk.eagle:footprint:39986443/1" value="27"/>
+<part name="R14" library="SparkFun-Resistors" deviceset="27OHM1/10W1%(0603)" device="0603-RES" override_package3d_urn="urn:adsk.eagle:package:39986442/2" override_package_urn="urn:adsk.eagle:footprint:39986443/1" value="27"/>
+<part name="C13" library="SparkFun-Capacitors" deviceset="47PF" device="-0603-50V-5%" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="47pF"/>
+<part name="C12" library="SparkFun-Capacitors" deviceset="47PF" device="-0603-50V-5%" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="47pF"/>
 <part name="GND29" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="GND28" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
-<part name="C7FIVE" library="SparkFun-Capacitors" deviceset="0.1UF" device="-0603-25V-(+80/-20%)" value="0.1uF"/>
+<part name="C7FIVE" library="SparkFun-Capacitors" deviceset="0.1UF" device="-0603-25V-(+80/-20%)" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="0.1uF"/>
 <part name="GND33" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="GND32" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="GND31" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="GND30" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
-<part name="F1" library="SparkFun-PowerIC" deviceset="PTC" device="SMD" value="500mA"/>
+<part name="F1" library="SparkFun-PowerIC" deviceset="PTC" device="SMD" override_package3d_urn="urn:adsk.eagle:package:39993095/2" override_package_urn="urn:adsk.eagle:footprint:39993096/1" value="500mA"/>
 <part name="SUPPLY14" library="SparkFun-Aesthetics" deviceset="V_USB" device=""/>
 <part name="SUPPLY1" library="SparkFun-Aesthetics" deviceset="3.3V" device=""/>
 <part name="GND2" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
-<part name="Y1" library="things" deviceset="CRYSTAL-GROUNDED" device="3.2X2.5" value="26MHz">
+<part name="Y1" library="things" deviceset="CRYSTAL-GROUNDED" device="3.2X2.5" override_package3d_urn="urn:adsk.eagle:package:39993029/2" override_package_urn="urn:adsk.eagle:footprint:39993030/1" value="26MHz">
 <attribute name="PROD_ID" value="XTAL-12454"/>
 </part>
-<part name="C3" library="SparkFun-Capacitors" deviceset="10PF" device="-0603-50V-5%" value="10pF"/>
-<part name="C4" library="SparkFun-Capacitors" deviceset="10PF" device="-0603-50V-5%" value="10pF"/>
-<part name="C1" library="esp32-thing-temp" deviceset="270PF-50V-5%(0603)" device="" value="270pF"/>
-<part name="C2" library="esp32-thing-temp" deviceset="270PF-50V-5%(0603)" device="" value="270pF"/>
-<part name="C5" library="SparkFun-Capacitors" deviceset="10NF" device="-0603-50V-10%" value="10nF"/>
-<part name="R2" library="SparkFun-Resistors" deviceset="20KOHM" device="-0603-1/10W-1%" value="20k"/>
+<part name="C3" library="SparkFun-Capacitors" deviceset="10PF" device="-0603-50V-5%" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="10pF"/>
+<part name="C4" library="SparkFun-Capacitors" deviceset="10PF" device="-0603-50V-5%" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="10pF"/>
+<part name="C1" library="esp32-thing-temp" deviceset="270PF-50V-5%(0603)" device="" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="270pF"/>
+<part name="C2" library="esp32-thing-temp" deviceset="270PF-50V-5%(0603)" device="" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="270pF"/>
+<part name="C5" library="SparkFun-Capacitors" deviceset="10NF" device="-0603-50V-10%" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="10nF"/>
+<part name="R2" library="SparkFun-Resistors" deviceset="20KOHM" device="-0603-1/10W-1%" override_package3d_urn="urn:adsk.eagle:package:39986442/2" override_package_urn="urn:adsk.eagle:footprint:39986443/1" value="20k"/>
 <part name="GND3" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
-<part name="C8" library="esp32-thing-temp" deviceset="5.6PF-50V-5%(0603)" device="" value="5.6pF">
+<part name="C8" library="esp32-thing-temp" deviceset="5.6PF-50V-5%(0603)" device="" override_package3d_urn="urn:adsk.eagle:package:39986419/2" override_package_urn="urn:adsk.eagle:footprint:39986420/1" value="5.6pF">
 <attribute name="PROD_ID" value="CAP-12456"/>
 </part>
-<part name="E1" library="esp32-thing-temp" deviceset="ANTENNA" device="TRACE-TUNED" value="ANTENNA"/>
+<part name="E1" library="esp32-thing-temp" deviceset="ANTENNA" device="TRACE-TUNED" override_package3d_urn="urn:adsk.eagle:package:39984514/2" override_package_urn="urn:adsk.eagle:footprint:39984515/1" value="ANTENNA"/>
 <part name="GND19" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
-<part name="C18" library="SparkFun-Capacitors" deviceset="100PF" device="-0603-50V-5%" value="100pF"/>
+<part name="C18" library="SparkFun-Capacitors" deviceset="100PF" device="-0603-50V-5%" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="100pF"/>
 <part name="SUPPLY9" library="SparkFun-Aesthetics" deviceset="3.3V" device=""/>
 <part name="GND5" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
-<part name="C20" library="SparkFun-Capacitors" deviceset="0.1UF" device="-0603-25V-(+80/-20%)" value="0.1uF"/>
+<part name="C20" library="SparkFun-Capacitors" deviceset="0.1UF" device="-0603-25V-(+80/-20%)" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="0.1uF"/>
 <part name="SUPPLY10" library="SparkFun-Aesthetics" deviceset="3.3V" device=""/>
 <part name="GND6" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
-<part name="C21" library="SparkFun-Capacitors" deviceset="0.1UF" device="-0603-25V-(+80/-20%)" value="0.1uF"/>
+<part name="C21" library="SparkFun-Capacitors" deviceset="0.1UF" device="-0603-25V-(+80/-20%)" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="0.1uF"/>
 <part name="SUPPLY11" library="SparkFun-Aesthetics" deviceset="3.3V" device=""/>
 <part name="GND7" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
-<part name="C22" library="SparkFun-Capacitors" deviceset="10UF" device="-0603-6.3V-20%" value="10uF"/>
+<part name="C22" library="SparkFun-Capacitors" deviceset="10UF" device="-0603-6.3V-20%" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="10uF"/>
 <part name="SUPPLY12" library="SparkFun-Aesthetics" deviceset="3.3V" device=""/>
 <part name="GND8" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
-<part name="C23" library="SparkFun-Capacitors" deviceset="0.1UF" device="-0603-25V-(+80/-20%)" value="0.1uF"/>
+<part name="C23" library="SparkFun-Capacitors" deviceset="0.1UF" device="-0603-25V-(+80/-20%)" override_package3d_urn="urn:adsk.eagle:package:39986435/2" override_package_urn="urn:adsk.eagle:footprint:39986436/1" value="0.1uF"/>
 <part name="SUPPLY13" library="SparkFun-Aesthetics" deviceset="3.3V" device=""/>
 <part name="GND18" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
-<part name="C24" library="SparkFun-Capacitors" deviceset="1.0UF" device="-0603-16V-10%" value="1.0uF"/>
+<part name="C24" library="SparkFun-Capacitors" deviceset="1.0UF" device="-0603-16V-10%" override_package3d_urn="urn:adsk.eagle:package:39986437/2" override_package_urn="urn:adsk.eagle:footprint:39986439/1" value="1.0uF"/>
 <part name="GND22" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
-<part name="C25" library="SparkFun-Capacitors" deviceset="0.1UF" device="-0603-25V-(+80/-20%)" value="0.1uF"/>
+<part name="C25" library="SparkFun-Capacitors" deviceset="0.1UF" device="-0603-25V-(+80/-20%)" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="0.1uF"/>
 <part name="SUPPLY16" library="SparkFun-Aesthetics" deviceset="3.3V" device=""/>
 <part name="GND24" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
-<part name="U2" library="esp32-thing-temp" deviceset="ESP3212" device=""/>
-<part name="C27" library="esp32-thing-temp" deviceset="3.0NF" device="-0603-50V-5%" value="3.0nF"/>
+<part name="U2" library="esp32-thing-temp" deviceset="ESP3212" device="" override_package3d_urn="urn:adsk.eagle:package:39993020/2" override_package_urn="urn:adsk.eagle:footprint:39993021/1"/>
+<part name="C27" library="esp32-thing-temp" deviceset="3.0NF" device="-0603-50V-5%" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="3.0nF"/>
 <part name="GND40" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
-<part name="R17" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="10k"/>
-<part name="R18" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="10k"/>
-<part name="Q2" library="esp32-thing-temp" deviceset="MBT3904DW1T1" device="" value="MBT3904DW1T1"/>
+<part name="R17" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" override_package3d_urn="urn:adsk.eagle:package:39986442/2" override_package_urn="urn:adsk.eagle:footprint:39986443/1" value="10k"/>
+<part name="R18" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" override_package3d_urn="urn:adsk.eagle:package:39986442/2" override_package_urn="urn:adsk.eagle:footprint:39986443/1" value="10k"/>
+<part name="Q2" library="esp32-thing-temp" deviceset="MBT3904DW1T1" device="" override_package3d_urn="urn:adsk.eagle:package:39993006/2" override_package_urn="urn:adsk.eagle:footprint:39993007/1" value="MBT3904DW1T1"/>
 <part name="GND1" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
-<part name="R1" library="SparkFun-Resistors" deviceset="10KOHM-1/10W-1%(0603)" device="0603" value="10k"/>
+<part name="R1" library="SparkFun-Resistors" deviceset="10KOHM-1/10W-1%(0603)" device="0603" override_package3d_urn="urn:adsk.eagle:package:39986442/2" override_package_urn="urn:adsk.eagle:footprint:39986443/1" value="10k"/>
 <part name="SUPPLY2" library="SparkFun-Aesthetics" deviceset="3.3V" device=""/>
-<part name="Y2" library="crystal" library_urn="urn:adsk.eagle:library:204" deviceset="FC-12M" device="" package3d_urn="urn:adsk.eagle:package:12123/1" value="32.768kHz"/>
-<part name="C9" library="SparkFun-Capacitors" deviceset="15PF" device="-0603-50V-5%" value="15pF"/>
-<part name="C26" library="SparkFun-Capacitors" deviceset="15PF" device="-0603-50V-5%" value="15pF"/>
+<part name="Y2" library="crystal" library_urn="urn:adsk.eagle:library:204" deviceset="FC-12M" device="" package3d_urn="urn:adsk.eagle:package:12123/1" override_package3d_urn="urn:adsk.eagle:package:39993057/2" override_package_urn="urn:adsk.eagle:footprint:12056/1" value="32.768kHz"/>
+<part name="C9" library="SparkFun-Capacitors" deviceset="15PF" device="-0603-50V-5%" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="15pF"/>
+<part name="C26" library="SparkFun-Capacitors" deviceset="15PF" device="-0603-50V-5%" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="15pF"/>
 <part name="GND20" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="GND23" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="GND15" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
-<part name="C29" library="SparkFun-Capacitors" deviceset="1.0UF" device="-0805-25V-(+80/-20%)" value="1.0uF"/>
-<part name="C30" library="SparkFun-Capacitors" deviceset="2.2UF" device="-0603-10V-20%" value="2.2uF"/>
+<part name="C29" library="SparkFun-Capacitors" deviceset="1.0UF" device="-0805-25V-(+80/-20%)" override_package3d_urn="urn:adsk.eagle:package:39992947/2" override_package_urn="urn:adsk.eagle:footprint:39992949/1" value="1.0uF"/>
+<part name="C30" library="SparkFun-Capacitors" deviceset="2.2UF" device="-0603-10V-20%" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="2.2uF"/>
 <part name="GND21" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="GND14" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
-<part name="D25" library="SparkFun-DiscreteSemi" deviceset="DIODE-SCHOTTKY" device="-BAT20J" value="BAT20J"/>
-<part name="R12" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="10k"/>
+<part name="D25" library="SparkFun-DiscreteSemi" deviceset="DIODE-SCHOTTKY" device="-BAT20J" override_package3d_urn="urn:adsk.eagle:package:39993132/2" override_package_urn="urn:adsk.eagle:footprint:39993133/1" value="BAT20J"/>
+<part name="R12" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" override_package3d_urn="urn:adsk.eagle:package:39986442/2" override_package_urn="urn:adsk.eagle:footprint:39986443/1" value="10k"/>
 <part name="GND13" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="SUPPLY7" library="SparkFun-Aesthetics" deviceset="VIN" device=""/>
-<part name="Q1" library="SparkFun-DiscreteSemi" deviceset="MOSFET-PCHANNEL" device="DMG2307L" value="2.5A/30V"/>
+<part name="Q1" library="SparkFun-DiscreteSemi" deviceset="MOSFET-PCHANNEL" device="DMG2307L" override_package3d_urn="urn:adsk.eagle:package:39993065/2" override_package_urn="urn:adsk.eagle:footprint:39993066/1" value="2.5A/30V"/>
 <part name="SUPPLY22" library="SparkFun-Aesthetics" deviceset="V_USB" device=""/>
 <part name="SUPPLY27" library="SparkFun-Aesthetics" deviceset="V_BATT" device=""/>
 <part name="SUPPLY8" library="SparkFun-Aesthetics" deviceset="3.3V" device=""/>
-<part name="D26" library="SparkFun-LED" deviceset="LED-RED" device="0603" value="RED"/>
-<part name="R15" library="SparkFun-Resistors" deviceset="1KOHM-1/10W-1%(0603)" device="" value="1K"/>
+<part name="D26" library="SparkFun-LED" deviceset="LED-RED" device="0603" override_package3d_urn="urn:adsk.eagle:package:39993125/2" override_package_urn="urn:adsk.eagle:footprint:39993126/1" value="RED"/>
+<part name="R15" library="SparkFun-Resistors" deviceset="1KOHM-1/10W-1%(0603)" device="" override_package3d_urn="urn:adsk.eagle:package:39986442/2" override_package_urn="urn:adsk.eagle:footprint:39986443/1" value="1K"/>
 <part name="GND25" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="GND4" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="GND9" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="GND10" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
-<part name="R3" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="10k"/>
-<part name="R4" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="10k"/>
+<part name="R3" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" override_package3d_urn="urn:adsk.eagle:package:39986442/2" override_package_urn="urn:adsk.eagle:footprint:39986443/1" value="10k"/>
+<part name="R4" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" override_package3d_urn="urn:adsk.eagle:package:39986442/2" override_package_urn="urn:adsk.eagle:footprint:39986443/1" value="10k"/>
 <part name="SUPPLY18" library="SparkFun-Aesthetics" deviceset="3.3V" device=""/>
 <part name="SUPPLY19" library="SparkFun-Aesthetics" deviceset="3.3V" device=""/>
-<part name="C15" library="SparkFun-Capacitors" deviceset="0.1UF" device="-0603-25V-(+80/-20%)" value="4.7uF"/>
-<part name="G2" library="keystone" deviceset="KEYSTONE_2479" device=""/>
-<part name="R7" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="10k"/>
+<part name="C15" library="SparkFun-Capacitors" deviceset="0.1UF" device="-0603-25V-(+80/-20%)" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="4.7uF"/>
+<part name="G2" library="keystone" deviceset="KEYSTONE_2479" device="" override_package3d_urn="urn:adsk.eagle:package:39993160/3" override_package_urn="urn:adsk.eagle:footprint:39993161/1"/>
+<part name="R7" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" override_package3d_urn="urn:adsk.eagle:package:39986442/2" override_package_urn="urn:adsk.eagle:footprint:39986443/1" value="10k"/>
 <part name="SUPPLY21" library="SparkFun-Aesthetics" deviceset="3.3V" device=""/>
-<part name="R10" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="10k"/>
-<part name="R11" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="1k"/>
-<part name="Q4" library="esp32-thing-temp" deviceset="MBT3904DW1T1" device="" value="MBT3904DW1T1"/>
-<part name="R16" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="1k"/>
+<part name="R10" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" override_package3d_urn="urn:adsk.eagle:package:39986442/2" override_package_urn="urn:adsk.eagle:footprint:39986443/1" value="10k"/>
+<part name="R11" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" override_package3d_urn="urn:adsk.eagle:package:39986442/2" override_package_urn="urn:adsk.eagle:footprint:39986443/1" value="1k"/>
+<part name="Q4" library="esp32-thing-temp" deviceset="MBT3904DW1T1" device="" override_package3d_urn="urn:adsk.eagle:package:39992991/2" override_package_urn="urn:adsk.eagle:footprint:39992992/1" value="MBT3904DW1T1"/>
+<part name="R16" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" override_package3d_urn="urn:adsk.eagle:package:39986442/2" override_package_urn="urn:adsk.eagle:footprint:39986443/1" value="1k"/>
 <part name="GND12" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="GND16" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="SUPPLY23" library="SparkFun-Aesthetics" deviceset="3.3V" device=""/>
@@ -5535,54 +5535,54 @@ Doc constructeur &lt;a href="http://geii/magasin/pdf/TSOP36256.pdf" title="Enlar
 <part name="GND34" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="J1" library="SparkFun-Connectors-new" deviceset="USB_MICRO-B" device="" override_package3d_urn="urn:adsk.eagle:package:39905683/2" override_package_urn="urn:adsk.eagle:footprint:39905684/1"/>
 <part name="GND39" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
-<part name="IC1" library="AP2112M-3.3TRG1" deviceset="AP2112M-3.3TRG1" device=""/>
+<part name="IC1" library="AP2112M-3.3TRG1" deviceset="AP2112M-3.3TRG1" device="" override_package3d_urn="urn:adsk.eagle:package:39992969/2" override_package_urn="urn:adsk.eagle:footprint:39992970/1"/>
 <part name="GND35" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="GND36" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
-<part name="U5" library="SparkFun-DigitalIC" deviceset="W25Q32FV" device="SS"/>
-<part name="C17" library="SparkFun-Capacitors" deviceset="0.1UF" device="-0603-25V-(+80/-20%)" value="0.1uF"/>
+<part name="U5" library="SparkFun-DigitalIC" deviceset="W25Q32FV" device="SS" override_package3d_urn="urn:adsk.eagle:package:39984507/4" override_package_urn="urn:adsk.eagle:footprint:39984508/1"/>
+<part name="C17" library="SparkFun-Capacitors" deviceset="0.1UF" device="-0603-25V-(+80/-20%)" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="0.1uF"/>
 <part name="U$13" library="microbuilder" deviceset="GND" device=""/>
-<part name="R8" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="10k"/>
+<part name="R8" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" override_package3d_urn="urn:adsk.eagle:package:39986452/2" override_package_urn="urn:adsk.eagle:footprint:39986453/1" value="10k"/>
 <part name="U$16" library="microbuilder" deviceset="GND" device=""/>
 <part name="SUPPLY5" library="SparkFun-Aesthetics" deviceset="3.3V" device=""/>
 <part name="U$17" library="microbuilder" deviceset="GND" device=""/>
 <part name="U$18" library="microbuilder" deviceset="GND" device=""/>
-<part name="C32" library="SparkFun-Capacitors" deviceset="10PF" device="-0603-50V-5%" value="0.22uF"/>
-<part name="C33" library="SparkFun-Capacitors" deviceset="10PF" device="-0603-50V-5%" value="0.1uF"/>
-<part name="C34" library="SparkFun-Capacitors" deviceset="10PF" device="-0603-50V-5%" value="1uF"/>
-<part name="C35" library="SparkFun-Capacitors" deviceset="10PF" device="-0603-50V-5%" value="0.1uF"/>
-<part name="Q3" library="SparkFun-DiscreteSemi" deviceset="TRANS_NPN" device="-MMBT2222AL" value="600mA/40V"/>
+<part name="C32" library="SparkFun-Capacitors" deviceset="10PF" device="-0603-50V-5%" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="0.22uF"/>
+<part name="C33" library="SparkFun-Capacitors" deviceset="10PF" device="-0603-50V-5%" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="0.1uF"/>
+<part name="C34" library="SparkFun-Capacitors" deviceset="10PF" device="-0603-50V-5%" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="1uF"/>
+<part name="C35" library="SparkFun-Capacitors" deviceset="10PF" device="-0603-50V-5%" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="0.1uF"/>
+<part name="Q3" library="SparkFun-DiscreteSemi" deviceset="TRANS_NPN" device="-MMBT2222AL" override_package3d_urn="urn:adsk.eagle:package:39993069/2" override_package_urn="urn:adsk.eagle:footprint:39993070/1" value="600mA/40V"/>
 <part name="SUPPLY17" library="SparkFun-Aesthetics" deviceset="3.3V" device=""/>
-<part name="R9" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="1k"/>
+<part name="R9" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" override_package3d_urn="urn:adsk.eagle:package:39986454/2" override_package_urn="urn:adsk.eagle:footprint:39986455/1" value="1k"/>
 <part name="GND38" library="SparkFun" deviceset="GND" device=""/>
-<part name="R5" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="1k"/>
-<part name="SP1" library="adafruit" deviceset="SPEAKER" device="/PS12"/>
-<part name="TP1" library="SparkFun-Connectors" deviceset="TEST-POINT" device="3X5"/>
-<part name="U1" library="IDEO-ICs" deviceset="IS31FL3731" device="QFN"/>
+<part name="R5" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" override_package3d_urn="urn:adsk.eagle:package:39986445/2" override_package_urn="urn:adsk.eagle:footprint:39986446/1" value="1k"/>
+<part name="SP1" library="adafruit" deviceset="SPEAKER" device="/PS12" override_package3d_urn="urn:adsk.eagle:package:39986456/2" override_package_urn="urn:adsk.eagle:footprint:39986457/1"/>
+<part name="TP1" library="SparkFun-Connectors" deviceset="TEST-POINT" device="3X5" override_package3d_urn="urn:adsk.eagle:package:39992987/2" override_package_urn="urn:adsk.eagle:footprint:39992988/1"/>
+<part name="U1" library="IDEO-ICs" deviceset="IS31FL3731" device="QFN" override_package3d_urn="urn:adsk.eagle:package:39986471/2" override_package_urn="urn:adsk.eagle:footprint:39986472/1"/>
 <part name="U$2" library="microbuilder" deviceset="GND" device=""/>
-<part name="R6" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="20k"/>
+<part name="R6" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" override_package3d_urn="urn:adsk.eagle:package:39986448/2" override_package_urn="urn:adsk.eagle:footprint:39986449/1" value="20k"/>
 <part name="U$3" library="microbuilder" deviceset="GND" device=""/>
-<part name="D33" library="TSOP36256" deviceset="TSOP36256" device="TT"/>
+<part name="D33" library="TSOP36256" deviceset="TSOP36256" device="TT" override_package3d_urn="urn:adsk.eagle:package:39984500/2" override_package_urn="urn:adsk.eagle:footprint:39984501/1"/>
 <part name="D27" library="VSMB2020X01" deviceset="VSMB2020X01" device="" override_package3d_urn="urn:adsk.eagle:package:39905680/2" override_package_urn="urn:adsk.eagle:footprint:39905681/1"/>
 <part name="D28" library="VSMB2020X01" deviceset="VSMB2020X01" device="" override_package3d_urn="urn:adsk.eagle:package:39905717/2" override_package_urn="urn:adsk.eagle:footprint:39905718/1"/>
-<part name="R19" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="10k"/>
+<part name="R19" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" override_package3d_urn="urn:adsk.eagle:package:39986442/2" override_package_urn="urn:adsk.eagle:footprint:39986443/1" value="10k"/>
 <part name="SUPPLY3" library="SparkFun-Aesthetics" deviceset="3.3V" device=""/>
-<part name="R20" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="100"/>
+<part name="R20" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" override_package3d_urn="urn:adsk.eagle:package:39986442/2" override_package_urn="urn:adsk.eagle:footprint:39986443/1" value="100"/>
 <part name="GND11" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND17" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="R21" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="8.2"/>
-<part name="R22" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="240"/>
+<part name="R21" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" override_package3d_urn="urn:adsk.eagle:package:39986442/2" override_package_urn="urn:adsk.eagle:footprint:39986443/1" value="8.2"/>
+<part name="R22" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" override_package3d_urn="urn:adsk.eagle:package:39986442/2" override_package_urn="urn:adsk.eagle:footprint:39986443/1" value="240"/>
 <part name="S3" library="TL3340AF160QG" deviceset="TL3340AF160QG" device="" override_package3d_urn="urn:adsk.eagle:package:39905701/2" override_package_urn="urn:adsk.eagle:footprint:39905702/1"/>
 <part name="GND37" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="C6" library="SparkFun-Capacitors" deviceset="10PF" device="-0603-50V-5%" value="0.1uF"/>
+<part name="C6" library="SparkFun-Capacitors" deviceset="10PF" device="-0603-50V-5%" override_package3d_urn="urn:adsk.eagle:package:39984511/2" override_package_urn="urn:adsk.eagle:footprint:39984512/1" value="0.1uF"/>
 <part name="GND41" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="Q5" library="Rob-DiscreteSemi" deviceset="MOSFET-NCH" device="-RUC002N05HZGT116" package3d_urn="urn:adsk.eagle:package:37041050/6"/>
 <part name="Q6" library="Rob-DiscreteSemi" deviceset="MOSFET-NCH" device="-RUC002N05HZGT116" package3d_urn="urn:adsk.eagle:package:37041050/6"/>
-<part name="R23" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="22"/>
+<part name="R23" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" override_package3d_urn="urn:adsk.eagle:package:39986442/2" override_package_urn="urn:adsk.eagle:footprint:39986443/1" value="22"/>
 <part name="SUPPLY4" library="SparkFun-Aesthetics" deviceset="3.3V" device=""/>
-<part name="R24" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="100K"/>
+<part name="R24" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" override_package3d_urn="urn:adsk.eagle:package:39986442/2" override_package_urn="urn:adsk.eagle:footprint:39986443/1" value="100K"/>
 <part name="GND42" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="R25" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="100K"/>
-<part name="R26" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" value="22"/>
+<part name="R25" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" override_package3d_urn="urn:adsk.eagle:package:39986442/2" override_package_urn="urn:adsk.eagle:footprint:39986443/1" value="100K"/>
+<part name="R26" library="SparkFun-Resistors" deviceset="10KOHM" device="-0603-1/10W-1%" override_package3d_urn="urn:adsk.eagle:package:39986442/2" override_package_urn="urn:adsk.eagle:footprint:39986443/1" value="22"/>
 <part name="GND43" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="SUPPLY6" library="SparkFun-Aesthetics" deviceset="3.3V" device=""/>
 </parts>
