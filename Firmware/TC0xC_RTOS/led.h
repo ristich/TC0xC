@@ -3,6 +3,9 @@
 #include <Arduino.h>
 #include "rtos.h"
 #include "TC_IS31FL3731.h"
+#include "hal.h"
+
+#define I2C_ADDR 0x74
 
 typedef enum LED_Error
 {
@@ -26,4 +29,4 @@ typedef struct LED_Object
     uint8_t brightness;        // brightness of LEDs
 } LED_Object;
 
-LED_Error LED_init(TC_IS31FL3731 *leds);
+LED_Error LED_init(LED_Object *leds);

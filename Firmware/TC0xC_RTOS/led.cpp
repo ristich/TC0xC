@@ -5,10 +5,9 @@ void set_LED_mode(LED_Object *leds);
 
 static void rotate_leds(LED_Object *leds, TickType_t time);
 
-// const TickType_t Delay_ms = 500;
-// const uint32_t Brightness = 10;
+TC_IS31FL3731 led_controller = TC_IS31FL3731();
 
-LED_Error LED_init(TC_IS31FL3731 *control)
+LED_Error LED_init(LED_Object *leds)
 {
     static bool initialized = false;
     if (initialized)
@@ -16,14 +15,22 @@ LED_Error LED_init(TC_IS31FL3731 *control)
         return LED_SUCCESS;
     }
 
-    static LED_Object leds{
-        .controller = control,
-        .mode = LED_MODE_ROTATE,
-        .delay_ms = 500,
-        .brightness = 10,
-    };
+    // init pins for led driver
+    pinMode(I2C_SDA, OUTPUT);
+    pinMode(I2C_SCL, OUTPUT);
+    pinMode(LED_SDB, OUTPUT);
+    digitalWrite(LED_SDB, HIGH);
 
-    xTaskCreatePinnedToCore(LED_task, "LED_task", 2048, &leds, tskIDLE_PRIORITY + 2, NULL, app_cpu);
+    // init led driver
+    led_controller.begin(I2C_SDA, I2C_SCL);
+    leds->controller = &led_controller;
+
+    // init led setting defaults
+    leds->mode = LED_MODE_ROTATE;
+    leds->delay_ms = 500;
+    leds->brightness = 10;
+
+    xTaskCreatePinnedToCore(LED_task, "LED_task", 2048, leds, tskIDLE_PRIORITY + 2, NULL, app_cpu);
 
     return LED_SUCCESS;
 }
@@ -31,6 +38,7 @@ LED_Error LED_init(TC_IS31FL3731 *control)
 void LED_task(void *pvParameters)
 {
     LED_Object *leds = (LED_Object *)pvParameters;
+    // (void)leds;
 
     while (1)
     {
