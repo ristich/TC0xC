@@ -6,6 +6,11 @@
 #define CLI_ARG_COUNT_MAX 7
 #define BUFFER_SIZE 160
 
+typedef enum CLI_Error
+{
+    CLI_SUCCESS = 0,
+} CLI_Error;
+
 // cli object to be passed around for cli access
 typedef struct CLI_Object
 {
@@ -24,10 +29,5 @@ typedef struct CLI_Command
     const char *cmd_desc; // command description
     cmd_cb_t cmd_cb;      // callback function
 } CLI_Command;
-
-typedef enum CLI_Error
-{
-    CLI_SUCCESS = 0,
-} CLI_Error;
 
 CLI_Error CLI_init(HardwareSerial *serial);

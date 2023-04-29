@@ -18,9 +18,9 @@ static const uint8_t CMD_Count = sizeof(CMD_List) / sizeof(CLI_Command);
 
 /**
  * @brief initialize and start command-line interface task
- * 
+ *
  * @param serial pointer to a running serial interface
- * @return CLI_Error 
+ * @return CLI_Error
  */
 CLI_Error CLI_init(HardwareSerial *serial)
 {
@@ -46,9 +46,9 @@ CLI_Error CLI_init(HardwareSerial *serial)
 
 /**
  * @brief funning task that handles CLI functionality
- * 
+ *
  * @note this function should never return
- * 
+ *
  * @param pvParameters pointer to CLI_Object containing CLI and application data
  */
 static void CLI_task(void *pvParameters)
@@ -79,7 +79,7 @@ static void CLI_task(void *pvParameters)
 
 /**
  * @brief process byte received by serial interface
- * 
+ *
  * @param cli_obj pointer to cli object
  * @param rxByte serial byte received
  * @return true complete command was received
@@ -124,7 +124,7 @@ static bool process_byte(CLI_Object *cli_obj, char rxByte)
 
 /**
  * @brief validate and handle command
- * 
+ *
  * @param cli_obj pointer to CLI object
  * @param cmd_list array of CLI commands
  * @param cmd_count number of CLI commands
@@ -148,7 +148,7 @@ static void CLI_handle_command(CLI_Object *cli_obj, const CLI_Command *cmd_list,
 
 /**
  * @brief test CLI command callback
- * 
+ *
  * @param cli_obj pointer to CLI object
  * @param nargs number of arguments
  * @param args array of arguments
@@ -160,7 +160,7 @@ static void CLI_Test(CLI_Object *cli_obj, uint8_t nargs, char **args)
 
 /**
  * @brief help CLI command callback
- * 
+ *
  * @param cli_obj pointer to CLI object
  * @param nargs number of arguments
  * @param args array of arguments
