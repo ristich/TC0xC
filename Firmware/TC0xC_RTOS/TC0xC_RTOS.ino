@@ -4,8 +4,6 @@
 
 // static SemaphoreHandle_t state_mutex;
 // static SemaphoreHandle_t state_sem;
-// TaskHandle_t Handle_Task_CLI;
-// TaskHandle_t Handle_Task_LEDs;
 
 typedef struct
 {
@@ -25,7 +23,7 @@ void setup()
 
   // task initializations
   LED_init(&Badge.leds);
-  CLI_init(&Serial);
+  CLI_init(&Serial, &Badge.leds);
 }
 
 void loop()

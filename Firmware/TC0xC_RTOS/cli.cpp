@@ -8,10 +8,15 @@ static void CLI_handle_command(CLI_Object *cli_obj, const CLI_Command *cmd_list,
 static void CLI_Test(CLI_Object *cli_obj, uint8_t nargs, char **args);
 static void CLI_Help(CLI_Object *cli_obj, uint8_t nargs, char **args);
 
+static void LED_Brightness(CLI_Object *cli_obj, uint8_t nargs, char **args);
+static void LED_Delay(CLI_Object *cli_obj, uint8_t nargs, char **args);
+
 // list of commands, descriptions, and callback functions
 static const CLI_Command CMD_List[] = {
     {.cmd_name = "test", .cmd_desc = "hello world", .cmd_cb = CLI_Test},
     {.cmd_name = "help", .cmd_desc = "list commands", .cmd_cb = CLI_Help},
+    {.cmd_name = "brightness", .cmd_desc = "set led brightness", .cmd_cb = LED_Brightness},
+    {.cmd_name = "delay", .cmd_desc = "set led delay (in ms)", .cmd_cb = LED_Delay},
 };
 // number of commands
 static const uint8_t CMD_Count = sizeof(CMD_List) / sizeof(CLI_Command);
@@ -22,7 +27,7 @@ static const uint8_t CMD_Count = sizeof(CMD_List) / sizeof(CLI_Command);
  * @param serial pointer to a running serial interface
  * @return CLI_Error
  */
-CLI_Error CLI_init(HardwareSerial *serial)
+CLI_Error CLI_init(HardwareSerial *serial, LED_Object *leds)
 {
     static bool initialized = false;
     if (initialized)
@@ -32,6 +37,7 @@ CLI_Error CLI_init(HardwareSerial *serial)
 
     // create CLI object to pass around for serial and buffer acccess
     static CLI_Object cli_obj{
+        .leds = leds,
         .serial = serial,
         .rx_buffer = {0},
         .rx_len = 0,
@@ -131,18 +137,51 @@ static bool process_byte(CLI_Object *cli_obj, char rxByte)
  */
 static void CLI_handle_command(CLI_Object *cli_obj, const CLI_Command *cmd_list, uint8_t cmd_count)
 {
+    bool command_found = false;
+    uint8_t nargs = 0;
+    char *pch;
+    char *args[CLI_ARG_COUNT_MAX];
+
+    // parse arguments
+    args[nargs] = cli_obj->rx_buffer;
+    pch = strpbrk(cli_obj->rx_buffer, " ");
+    nargs++;
+    if (pch)
+    {
+        *pch = '\0';
+    }
+
     for (int i = 0; i < cmd_count; i++)
     {
         if (strcmp((char *)cli_obj->rx_buffer, cmd_list[i].cmd_name) == 0)
         {
-            cli_obj->serial->print("command found: ");
-            cli_obj->serial->println(cli_obj->rx_buffer);
+            command_found = true;
+            // cli_obj->serial->print("command found: ");
+            // cli_obj->serial->println(cli_obj->rx_buffer);
+            while (pch != NULL)
+            {
+                args[nargs] = pch + 1;
+                *pch = '\0';
+                pch = strpbrk(cli_obj->rx_buffer, " ");
+                nargs++;
+                if (nargs >= CLI_ARG_COUNT_MAX)
+                {
+                    break;
+                }
+            }
 
             if (cmd_list[i].cmd_cb != NULL)
             {
-                cmd_list[i].cmd_cb(cli_obj, 0, NULL);
+                cmd_list[i].cmd_cb(cli_obj, nargs - 1, args);
             }
         }
+    }
+
+    if (command_found == false)
+    {
+        cli_obj->serial->print("ERR: unknown command '");
+        cli_obj->serial->print(cli_obj->rx_buffer);
+        cli_obj->serial->println("'");
     }
 }
 
@@ -175,4 +214,37 @@ static void CLI_Help(CLI_Object *cli_obj, uint8_t nargs, char **args)
         cli_obj->serial->print(name);
         cli_obj->serial->println(CMD_List[i].cmd_desc);
     }
+}
+
+static void LED_Brightness(CLI_Object *cli_obj, uint8_t nargs, char **args)
+{
+    if (nargs != 1)
+    {
+        cli_obj->serial->print("ERR: expected 1 argument, received ");
+        cli_obj->serial->println(nargs);
+        return;
+    }
+
+    uint8_t brightness = strtol(args[1], NULL, 10);
+    cli_obj->leds->brightness = brightness;
+
+    cli_obj->serial->print("LED brightness set to: ");
+    cli_obj->serial->println(brightness);
+}
+
+static void LED_Delay(CLI_Object *cli_obj, uint8_t nargs, char **args)
+{
+    if (nargs != 1)
+    {
+        cli_obj->serial->print("ERR: expected 1 argument, received ");
+        cli_obj->serial->println(nargs);
+        return;
+    }
+
+    uint32_t delay = strtoul(args[1], NULL, 10);
+    cli_obj->leds->delay_ms = delay;
+
+    cli_obj->serial->print("LED delay set to: ");
+    cli_obj->serial->print(delay);
+    cli_obj->serial->println("ms");
 }

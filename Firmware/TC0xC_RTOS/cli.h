@@ -2,6 +2,7 @@
 
 #include <Arduino.h>
 #include "rtos.h"
+#include "led.h"
 
 #define CLI_ARG_COUNT_MAX 7
 #define BUFFER_SIZE 160
@@ -14,6 +15,7 @@ typedef enum CLI_Error
 // cli object to be passed around for cli access
 typedef struct CLI_Object
 {
+    LED_Object *leds;            // pointer to led object
     HardwareSerial *serial;      // pointer to serial interface
     char rx_buffer[BUFFER_SIZE]; // received serial input
     uint8_t rx_len;              // current input length
@@ -30,4 +32,4 @@ typedef struct CLI_Command
     cmd_cb_t cmd_cb;      // callback function
 } CLI_Command;
 
-CLI_Error CLI_init(HardwareSerial *serial);
+CLI_Error CLI_init(HardwareSerial *serial, LED_Object *leds);
