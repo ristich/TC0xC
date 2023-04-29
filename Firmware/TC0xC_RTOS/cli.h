@@ -22,7 +22,7 @@ typedef struct CLI_Object
 } CLI_Object;
 
 // cli callback function template
-typedef void (*cmd_cb_t)(CLI_Object *cli_obj, uint8_t nargs, char **args);
+typedef void (*cmd_cb_t)(CLI_Object *cli, uint8_t nargs, char **args);
 
 // command template
 typedef struct CLI_Command
@@ -32,4 +32,4 @@ typedef struct CLI_Command
     cmd_cb_t cmd_cb;      // callback function
 } CLI_Command;
 
-CLI_Error CLI_init(HardwareSerial *serial, LED_Object *leds);
+CLI_Error CLI_init(CLI_Object *cli, LED_Object *leds);
