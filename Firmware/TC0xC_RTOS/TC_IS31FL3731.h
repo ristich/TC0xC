@@ -9,40 +9,32 @@
 #define ISSI_ADDR_DEFAULT 0x74
 
 #define ISSI_REG_CONFIG 0x00
-#define ISSI_REG_CONFIG_PICTUREMODE 0x00
-#define ISSI_REG_CONFIG_AUTOPLAYMODE 0x08
-#define ISSI_REG_CONFIG_AUDIOPLAYMODE 0x18
+#define CONFIG_MODE_SHIFT 3u
+#define CONFIG_MODE_MASK 0x18
+#define CONFIG_MODE_PICTURE (0x00 << CONFIG_MODE_SHIFT)
+#define CONFIG_MODE_AUTOPLAY (0x01 << CONFIG_MODE_SHIFT)
+#define CONFIG_MODE_AUDIOPLAY (0x10 << CONFIG_MODE_SHIFT)
+#define CONFIG_FRAME_SHIFT 0u
+#define CONFIG_FRAME_MASK 0x07
 
-#define ISSI_CONF_PICTUREMODE 0x00
-#define ISSI_CONF_AUTOFRAMEMODE 0x04
-#define ISSI_CONF_AUDIOMODE 0x08
+#define ISSI_REG_PICTURE_DISPLAY 0x01
+#define PICTURE_FRAME_MASK 0x07
 
-#define ISSI_REG_PICTUREFRAME 0x01
+#define ISSI_REG_AUTO_CONTROL1 0x02
+#define AUTO_CONTROL_LOOPS_SHIFT 4u
+#define AUTO_CONTROL_LOOPS_MASK 0x70
+#define AUTO_CONTROL_FRAMES_SHIFT 0u
+#define AUTO_CONTROL_FRAMES_MASK 0x07
+
+#define ISSI_REG_AUTO_CONTROL2 0x03
+#define AUTO_CONTROL_DELAY_SHIFT 0u
+#define AUTO_CONTROL_DELAY_MASK 0x3F
 
 #define ISSI_REG_SHUTDOWN 0x0A
 #define ISSI_REG_AUDIOSYNC 0x06
 
 #define ISSI_COMMANDREGISTER 0xFD
 #define ISSI_BANK_FUNCTIONREG 0x0B // aka 'page nine' :face-palm:
-
-// LED position defines
-#define LED_UP1 1u
-#define LED_UP2 2u
-#define LED_UP3 3u
-#define LED_UP4 4u
-#define UP_LED 1u
-#define RIGHT_LED 2u
-#define DOWN_LED 3u
-#define LEFT_LED 4u
-#define SELECT_LED 5u
-#define START_LED 6u
-#define B_LED 7u
-#define A_LED 8u
-#define SEAT1_LED 9u
-#define SEAT2_LED 10u
-#define SEAT3_LED 11u
-#define SEAT4_LED 12u
-#define SEAT5_LED 13u
 
 typedef enum
 {
@@ -54,6 +46,14 @@ typedef enum
   LED_COL_ELEVEN,
 } led_col_t;
 
+// Function settings
+typedef enum
+{
+  Display_Mode_Picture,
+  Display_Mode_Auto_Play,
+  Display_Mode_Audio_Play,
+} Display_Mode;
+
 /**************************************************************************/
 /*!
     @brief Constructor for generic IS31FL3731 breakout version
@@ -64,23 +64,29 @@ class TC_IS31FL3731
 public:
   TC_IS31FL3731(uint8_t driver = IC_3731) { _ledDriver = driver; }
   bool begin(uint8_t sdaPin, uint8_t sclPin, uint8_t addr = ISSI_ADDR_DEFAULT);
-  void clear(void);
 
+  void setDisplayMode(Display_Mode mode);
+
+  void setPictureFrame(uint8_t frame);
+
+  void setAutoPlayStart(uint8_t frame);
+  void setAutoPlayFrames(uint8_t frames);
+  void setAutoPlayLoops(uint8_t loops);
+  void setAutoPlayDelay(uint16_t delay_ms);
+
+  void audioSync(bool sync);
+
+  void clear(uint8_t bank = 0);
   void setLEDPWM(uint8_t lednum, uint8_t pwm, uint8_t bank = 0);
   void setAllLEDPWM(uint8_t pwm, uint8_t bank = 0);
   void setColumn(led_col_t col, uint8_t pwm, uint8_t bank = 0);
-  void setLED(uint8_t led, uint8_t set, uint8_t bank = 0);
-
-  void audioSync(bool sync);
-  void setFrame(uint8_t b);
-  void displayFrame(uint8_t frame);
-  void writeRegister8(uint8_t bank, uint8_t reg, uint8_t data);
+  void setBadgeLED(uint8_t led, uint8_t set, uint8_t bank = 0);
 
 protected:
   void selectBank(uint8_t bank);
-  // void writeRegister8(uint8_t bank, uint8_t reg, uint8_t data);
+  void modifyRegister8(uint8_t bank, uint8_t reg, uint8_t val, uint8_t mask);
+  void writeRegister8(uint8_t bank, uint8_t reg, uint8_t val);
   uint8_t readRegister8(uint8_t bank, uint8_t reg);
   uint8_t _ledDriver;
   uint8_t _i2caddr; ///< The I2C address we expect to find the chip
-  uint8_t _frame;   ///< The frame (of 8) we are currently addressing
 };

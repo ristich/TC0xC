@@ -15,8 +15,8 @@ static void LED_Delay(CLI_Object *cli, uint8_t nargs, char **args);
 static const CLI_Command CMD_List[] = {
     {.cmd_name = "test", .cmd_desc = "hello world", .cmd_cb = CLI_Test},
     {.cmd_name = "help", .cmd_desc = "list commands", .cmd_cb = CLI_Help},
-    {.cmd_name = "brightness", .cmd_desc = "set led brightness", .cmd_cb = LED_Brightness},
-    {.cmd_name = "delay", .cmd_desc = "set led delay (in ms)", .cmd_cb = LED_Delay},
+    {.cmd_name = "brightness", .cmd_desc = "set led brightness [0 - 255]", .cmd_cb = LED_Brightness},
+    {.cmd_name = "delay", .cmd_desc = "set led delay (in ms) [0 - 693]", .cmd_cb = LED_Delay},
 };
 // number of commands
 static const uint8_t CMD_Count = sizeof(CMD_List) / sizeof(CLI_Command);
@@ -34,6 +34,8 @@ CLI_Error CLI_init(CLI_Object *cli, LED_Object *leds)
     {
         return CLI_SUCCESS;
     }
+
+    xSemaphoreTake(leds->update_sem, portMAX_DELAY);
 
     Serial.begin(115200);
     vTaskDelay(1000 / portTICK_PERIOD_MS);
@@ -225,10 +227,25 @@ static void LED_Brightness(CLI_Object *cli, uint8_t nargs, char **args)
         return;
     }
 
-    uint8_t brightness = strtol(args[1], NULL, 10);
-    cli->leds->brightness = brightness;
+    if (cli->leds->initialized == false)
+    {
+        cli->serial->println("ERR: led driver uninitialized");
+        return;
+    }
 
-    cli->serial->print("LED brightness set to: ");
+    uint32_t brightness = strtoul(args[1], NULL, 10);
+    if (brightness > 255)
+    {
+        brightness = 255;
+    }
+    cli->leds->brightness = (uint8_t)(brightness & 0xFF);
+
+    // signal to led driver there's an update
+    xSemaphoreGive(cli->leds->update_sem);
+    vTaskDelay(10);
+    xSemaphoreTake(cli->leds->update_sem, portMAX_DELAY);
+
+    cli->serial->print("LED brightness set to ");
     cli->serial->println(brightness);
 }
 
@@ -241,10 +258,25 @@ static void LED_Delay(CLI_Object *cli, uint8_t nargs, char **args)
         return;
     }
 
-    uint32_t delay = strtoul(args[1], NULL, 10);
-    cli->leds->delay_ms = delay;
+    if (cli->leds->initialized == false)
+    {
+        cli->serial->println("ERR: led driver uninitialized");
+        return;
+    }
 
-    cli->serial->print("LED delay set to: ");
+    uint32_t delay = strtoul(args[1], NULL, 10);
+    if (delay > 693)
+    {
+        delay = 693;
+    }
+    cli->leds->delay_ms = (uint16_t)(delay & 0xFFFF);
+
+    // signal to led driver there's an update
+    xSemaphoreGive(cli->leds->update_sem);
+    vTaskDelay(10);
+    xSemaphoreTake(cli->leds->update_sem, portMAX_DELAY);
+
+    cli->serial->print("LED delay set to ");
     cli->serial->print(delay);
     cli->serial->println("ms");
 }
