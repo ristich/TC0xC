@@ -16,7 +16,7 @@ typedef enum
 {
     LED_MODE_OFF = 0,
     LED_MODE_ROTATE,
-    LED_MODE_BURST,
+    LED_MODE_BLINK,
     LED_MODE_RESET,
 } led_mode_t;
 

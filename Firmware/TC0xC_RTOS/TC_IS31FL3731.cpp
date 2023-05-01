@@ -103,6 +103,8 @@ void TC_IS31FL3731::setLEDPWM(uint8_t lednum, uint8_t pwm, uint8_t bank)
 /**************************************************************************/
 void TC_IS31FL3731::setAllLEDPWM(uint8_t pwm, uint8_t bank)
 {
+  selectBank(bank);
+
   for (uint8_t i = 0; i < 6; i++)
   {
     Wire.beginTransmission(_i2caddr);
