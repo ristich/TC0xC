@@ -2,11 +2,19 @@
 
 static void LED_task(void *pvParameters);
 void set_LED_mode(LED_Object *leds);
+void init_timer(LED_Object *leds);
+void ARDUINO_ISR_ATTR onTimer();
 
+// LED modes
 static void rotate_leds(LED_Object *leds);
 static void blink_leds(LED_Object *leds);
 
+// constants
+const uint32_t Alarm_Interval_Long = 70000;  // 7s
+const uint32_t Alarm_Interval_Short = 50000; // 5s
+
 TC_IS31FL3731 led_controller = TC_IS31FL3731();
+volatile SemaphoreHandle_t timerSemaphore;
 
 LED_Error LED_init(LED_Object *leds)
 {
@@ -16,6 +24,8 @@ LED_Error LED_init(LED_Object *leds)
     }
 
     leds->update_sem = xSemaphoreCreateBinary();
+
+    init_timer(leds);
 
     // init pins for led driver
     pinMode(I2C_SDA, OUTPUT);
@@ -40,12 +50,27 @@ LED_Error LED_init(LED_Object *leds)
     return LED_SUCCESS;
 }
 
+void init_timer(LED_Object *leds)
+{
+    // Create semaphore to inform us when the timer has fired
+    timerSemaphore = xSemaphoreCreateBinary();
+
+    // use first timer with 10kHz clock
+    leds->message_timer = timerBegin(0, 8000, true);
+    timerAttachInterrupt(leds->message_timer, &onTimer, true);
+
+    // Set alarm to trigger after 10s
+    timerAlarmWrite(leds->message_timer, Alarm_Interval_Long, true);
+
+    // Start an alarm
+    timerAlarmEnable(leds->message_timer);
+}
+
 void LED_task(void *pvParameters)
 {
     LED_Object *leds = (LED_Object *)pvParameters;
     set_LED_mode(leds);
-    static const TickType_t alert_period_ms = 30000; // 30s time between alerts
-    static TickType_t next_alert_time_ms = alert_period_ms;
+    static bool alarm_is_long = true;
 
     // signal to cli that leds are set up
     xSemaphoreGive(leds->update_sem);
@@ -55,17 +80,21 @@ void LED_task(void *pvParameters)
 
     while (1)
     {
-        TickType_t task_time_ms = xTaskGetTickCount();
-
         // check an update
-        if (xSemaphoreTake(leds->update_sem, 10))
+        if (xSemaphoreTake(leds->update_sem, 0) == pdTRUE)
         {
             set_LED_mode(leds);
             xSemaphoreGive(leds->update_sem);
         }
-        
-        if (task_time_ms > next_alert_time_ms)
+
+        if (xSemaphoreTake(timerSemaphore, 0) == pdTRUE)
         {
+            alarm_is_long = !alarm_is_long;
+            if (alarm_is_long)
+                timerAlarmWrite(leds->message_timer, Alarm_Interval_Long, true);
+            else
+                timerAlarmWrite(leds->message_timer, Alarm_Interval_Short, true);
+
             leds->controller->setAllLEDPWM(0);
             leds->controller->setDisplayMode(Display_Mode_Picture);
             leds->controller->setPictureFrame(0);
@@ -81,7 +110,6 @@ void LED_task(void *pvParameters)
             leds->controller->setAllLEDPWM(leds->brightness);
             vTaskDelay(500);
 
-            next_alert_time_ms = task_time_ms + alert_period_ms;
             set_LED_mode(leds);
         }
     }
@@ -98,7 +126,7 @@ void set_LED_mode(LED_Object *leds)
     case LED_MODE_ROTATE:
         rotate_leds(leds);
         break;
-    
+
     case LED_MODE_BLINK:
         blink_leds(leds);
         break;
@@ -146,6 +174,12 @@ static void blink_leds(LED_Object *leds)
     leds->controller->setAllLEDPWM(0, 2);
 
     leds->controller->setAllLEDPWM(leds->brightness, 2);
-    
+
     leds->controller->setDisplayMode(Display_Mode_Auto_Play);
+}
+
+void ARDUINO_ISR_ATTR onTimer()
+{
+    // use semaphore to alert loop of timer trigger
+    xSemaphoreGiveFromISR(timerSemaphore, NULL);
 }
