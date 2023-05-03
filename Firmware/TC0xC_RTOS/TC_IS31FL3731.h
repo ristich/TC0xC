@@ -38,20 +38,55 @@
 
 typedef enum
 {
-  LED_COL_TWELVE = 0,
-  LED_COL_ONE,
-  LED_COL_FIVE,
-  LED_COL_SIX,
-  LED_COL_SEVEN,
-  LED_COL_ELEVEN,
+    LED_COL_TWELVE = 0,
+    LED_COL_ONE,
+    LED_COL_FIVE,
+    LED_COL_SIX,
+    LED_COL_SEVEN,
+    LED_COL_ELEVEN,
 } led_col_t;
+
+typedef union
+{
+    struct
+    {
+        uint32_t a : 1;
+        uint32_t b : 1;
+        uint32_t c : 1;
+        uint32_t d : 1;
+        uint32_t e : 1;
+        uint32_t f : 1;
+        uint32_t g : 1;
+        uint32_t h : 1;
+        uint32_t i : 1;
+        uint32_t j : 1;
+        uint32_t k : 1;
+        uint32_t l : 1;
+        uint32_t m : 1;
+        uint32_t n : 1;
+        uint32_t o : 1;
+        uint32_t p : 1;
+        uint32_t q : 1;
+        uint32_t r : 1;
+        uint32_t s : 1;
+        uint32_t t : 1;
+        uint32_t u : 1;
+        uint32_t v : 1;
+        uint32_t w : 1;
+        uint32_t x : 1;
+        uint32_t y : 1;
+        uint32_t z : 1;
+        uint32_t res : 6; // unused
+    };
+    uint32_t val;
+} led_ctrl_t;
 
 // Function settings
 typedef enum
 {
-  Display_Mode_Picture,
-  Display_Mode_Auto_Play,
-  Display_Mode_Audio_Play,
+    Display_Mode_Picture,
+    Display_Mode_Auto_Play,
+    Display_Mode_Audio_Play,
 } Display_Mode;
 
 /**************************************************************************/
@@ -62,31 +97,33 @@ typedef enum
 class TC_IS31FL3731
 {
 public:
-  TC_IS31FL3731(uint8_t driver = IC_3731) { _ledDriver = driver; }
-  bool begin(uint8_t sdaPin, uint8_t sclPin, uint8_t addr = ISSI_ADDR_DEFAULT);
+    TC_IS31FL3731(uint8_t driver = IC_3731) { _ledDriver = driver; }
+    bool begin(uint8_t sdaPin, uint8_t sclPin, uint8_t addr = ISSI_ADDR_DEFAULT);
 
-  void setDisplayMode(Display_Mode mode);
+    void setDisplayMode(Display_Mode mode);
 
-  void setPictureFrame(uint8_t frame);
+    void setPictureFrame(uint8_t frame);
 
-  void setAutoPlayStart(uint8_t frame);
-  void setAutoPlayFrames(uint8_t frames);
-  void setAutoPlayLoops(uint8_t loops);
-  void setAutoPlayDelay(uint16_t delay_ms);
+    void setAutoPlayStart(uint8_t frame);
+    void setAutoPlayFrames(uint8_t frames);
+    void setAutoPlayLoops(uint8_t loops);
+    void setAutoPlayDelay(uint16_t delay_ms);
 
-  void audioSync(bool sync);
+    void audioSync(bool sync);
 
-  void clear(uint8_t bank = 0);
-  void setLEDPWM(uint8_t lednum, uint8_t pwm, uint8_t bank = 0);
-  void setAllLEDPWM(uint8_t pwm, uint8_t bank = 0);
-  void setColumn(led_col_t col, uint8_t pwm, uint8_t bank = 0);
-  void setBadgeLED(uint8_t led, uint8_t set, uint8_t bank = 0);
+    void clear(uint8_t bank = 0);
+    void setLEDPWM(uint8_t lednum, uint8_t pwm, uint8_t bank = 0);
+    void setAllLEDPWM(uint8_t pwm, uint8_t bank = 0);
+    void setColumn(led_col_t col, uint8_t pwm, uint8_t bank = 0);
+    void setBadgeLED(uint8_t led, uint8_t set, uint8_t bank = 0);
+    void setBadgeLEDs(uint32_t config, uint8_t pwm, uint8_t bank = 0);
+    void setBadgeLetter(char letter, uint8_t pwm, uint8_t bank = 0);
 
 protected:
-  void selectBank(uint8_t bank);
-  void modifyRegister8(uint8_t bank, uint8_t reg, uint8_t val, uint8_t mask);
-  void writeRegister8(uint8_t bank, uint8_t reg, uint8_t val);
-  uint8_t readRegister8(uint8_t bank, uint8_t reg);
-  uint8_t _ledDriver;
-  uint8_t _i2caddr; ///< The I2C address we expect to find the chip
+    void selectBank(uint8_t bank);
+    void modifyRegister8(uint8_t bank, uint8_t reg, uint8_t val, uint8_t mask);
+    void writeRegister8(uint8_t bank, uint8_t reg, uint8_t val);
+    uint8_t readRegister8(uint8_t bank, uint8_t reg);
+    uint8_t _ledDriver;
+    uint8_t _i2caddr; ///< The I2C address we expect to find the chip
 };

@@ -69,8 +69,19 @@ void init_timer(LED_Object *leds)
 void LED_task(void *pvParameters)
 {
     LED_Object *leds = (LED_Object *)pvParameters;
-    set_LED_mode(leds);
-    static bool alarm_is_long = true;
+    // set_LED_mode(leds);
+    // const uint8_t arr[24] = {0x57,0x47,0x37,0x27,0x58,0x48,0x28,0x38,0x59,0x49,0x39,0x29,0x54,0x44,0x34,0x24,0x55,0x45,0x35,0x25,0x56,0x46,0x36,0x26};
+    // leds->controller->setBadgeLEDs((uint32_t)0x111111, 10);
+    leds->controller->setBadgeLetter('h', 10);
+    vTaskDelay(500);
+    leds->controller->setBadgeLetter('e', 10);
+    vTaskDelay(500);
+    leds->controller->setBadgeLetter('l', 10);
+    vTaskDelay(500);
+    leds->controller->setBadgeLetter('l', 10);
+    vTaskDelay(500);
+    leds->controller->setBadgeLetter('o', 10);
+    // static bool alarm_is_long = true;
 
     // signal to cli that leds are set up
     xSemaphoreGive(leds->update_sem);
@@ -87,31 +98,31 @@ void LED_task(void *pvParameters)
             xSemaphoreGive(leds->update_sem);
         }
 
-        if (xSemaphoreTake(timerSemaphore, 0) == pdTRUE)
-        {
-            alarm_is_long = !alarm_is_long;
-            if (alarm_is_long)
-                timerAlarmWrite(leds->message_timer, Alarm_Interval_Long, true);
-            else
-                timerAlarmWrite(leds->message_timer, Alarm_Interval_Short, true);
+        // if (xSemaphoreTake(timerSemaphore, 0) == pdTRUE)
+        // {
+        //     alarm_is_long = !alarm_is_long;
+        //     if (alarm_is_long)
+        //         timerAlarmWrite(leds->message_timer, Alarm_Interval_Long, true);
+        //     else
+        //         timerAlarmWrite(leds->message_timer, Alarm_Interval_Short, true);
 
-            leds->controller->setAllLEDPWM(0);
-            leds->controller->setDisplayMode(Display_Mode_Picture);
-            leds->controller->setPictureFrame(0);
-            vTaskDelay(500);
-            leds->controller->setAllLEDPWM(leds->brightness);
-            vTaskDelay(500);
-            leds->controller->setAllLEDPWM(0);
-            vTaskDelay(500);
-            leds->controller->setAllLEDPWM(leds->brightness);
-            vTaskDelay(500);
-            leds->controller->setAllLEDPWM(0);
-            vTaskDelay(500);
-            leds->controller->setAllLEDPWM(leds->brightness);
-            vTaskDelay(500);
+        //     leds->controller->setAllLEDPWM(0);
+        //     leds->controller->setDisplayMode(Display_Mode_Picture);
+        //     leds->controller->setPictureFrame(0);
+        //     vTaskDelay(500);
+        //     leds->controller->setAllLEDPWM(leds->brightness);
+        //     vTaskDelay(500);
+        //     leds->controller->setAllLEDPWM(0);
+        //     vTaskDelay(500);
+        //     leds->controller->setAllLEDPWM(leds->brightness);
+        //     vTaskDelay(500);
+        //     leds->controller->setAllLEDPWM(0);
+        //     vTaskDelay(500);
+        //     leds->controller->setAllLEDPWM(leds->brightness);
+        //     vTaskDelay(500);
 
-            set_LED_mode(leds);
-        }
+        //     set_LED_mode(leds);
+        // }
     }
 }
 

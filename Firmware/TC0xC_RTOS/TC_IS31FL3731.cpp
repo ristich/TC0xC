@@ -13,45 +13,45 @@ uint8_t LEDRegUsed = 0x3F;
 /**************************************************************************/
 bool TC_IS31FL3731::begin(uint8_t sdaPin, uint8_t sclPin, uint8_t addr)
 {
-  Wire.begin(sdaPin, sclPin, 400000);
+    Wire.begin(sdaPin, sclPin, 400000);
 
-  _i2caddr = addr;
+    _i2caddr = addr;
 
-  // A basic scanner, see if it ACK's
-  Wire.beginTransmission(_i2caddr);
-  if (Wire.endTransmission() != 0)
-  {
-    return false;
-  }
-
-  // shutdown
-  writeRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_SHUTDOWN, 0x00);
-
-  delay(10);
-
-  // out of shutdown
-  writeRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_SHUTDOWN, 0x01);
-
-  // picture mode
-  writeRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_CONFIG,
-                 CONFIG_MODE_PICTURE);
-  setPictureFrame(0);
-
-  for (int i = 0; i < 8; i++)
-  {
-    // set PWM value to 0 for each LED
-    setAllLEDPWM(0, i);
-
-    // turn on only the LEDs we have available
-    for (uint8_t j = 0; j < 4; j++)
+    // A basic scanner, see if it ACK's
+    Wire.beginTransmission(_i2caddr);
+    if (Wire.endTransmission() != 0)
     {
-      writeRegister8(i, LEDRegAddr[j], LEDRegUsed);
+        return false;
     }
-  }
 
-  audioSync(false);
+    // shutdown
+    writeRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_SHUTDOWN, 0x00);
 
-  return true;
+    delay(10);
+
+    // out of shutdown
+    writeRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_SHUTDOWN, 0x01);
+
+    // picture mode
+    writeRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_CONFIG,
+                   CONFIG_MODE_PICTURE);
+    setPictureFrame(0);
+
+    for (int i = 0; i < 8; i++)
+    {
+        // set PWM value to 0 for each LED
+        setAllLEDPWM(0, i);
+
+        // turn on only the LEDs we have available
+        for (uint8_t j = 0; j < 4; j++)
+        {
+            writeRegister8(i, LEDRegAddr[j], LEDRegUsed);
+        }
+    }
+
+    audioSync(false);
+
+    return true;
 }
 
 /**************************************************************************/
@@ -64,17 +64,17 @@ bool TC_IS31FL3731::begin(uint8_t sdaPin, uint8_t sclPin, uint8_t addr)
 /**************************************************************************/
 void TC_IS31FL3731::clear(uint8_t bank)
 {
-  for (uint8_t i = 0; i < 6; i++)
-  {
-    Wire.beginTransmission(_i2caddr);
-    Wire.write((byte)0x24 + i * 24);
-    // write 24 bytes at once
-    for (uint8_t j = 0; j < 24; j++)
+    for (uint8_t i = 0; i < 6; i++)
     {
-      Wire.write((byte)0);
+        Wire.beginTransmission(_i2caddr);
+        Wire.write((byte)0x24 + i * 24);
+        // write 24 bytes at once
+        for (uint8_t j = 0; j < 24; j++)
+        {
+            Wire.write((byte)0);
+        }
+        Wire.endTransmission();
     }
-    Wire.endTransmission();
-  }
 }
 
 /**************************************************************************/
@@ -88,9 +88,9 @@ void TC_IS31FL3731::clear(uint8_t bank)
 /**************************************************************************/
 void TC_IS31FL3731::setLEDPWM(uint8_t lednum, uint8_t pwm, uint8_t bank)
 {
-  if (lednum >= 144)
-    return;
-  writeRegister8(bank, 0x24 + lednum, pwm);
+    if (lednum >= 144)
+        return;
+    writeRegister8(bank, 0x24 + lednum, pwm);
 }
 
 /**************************************************************************/
@@ -103,70 +103,70 @@ void TC_IS31FL3731::setLEDPWM(uint8_t lednum, uint8_t pwm, uint8_t bank)
 /**************************************************************************/
 void TC_IS31FL3731::setAllLEDPWM(uint8_t pwm, uint8_t bank)
 {
-  selectBank(bank);
+    selectBank(bank);
 
-  for (uint8_t i = 0; i < 6; i++)
-  {
-    Wire.beginTransmission(_i2caddr);
-    Wire.write((byte)0x24 + i * 24);
-    // write 24 bytes at once
-    for (uint8_t j = 0; j < 24; j++)
+    for (uint8_t i = 0; i < 6; i++)
     {
-      Wire.write((byte)pwm);
+        Wire.beginTransmission(_i2caddr);
+        Wire.write((byte)0x24 + i * 24);
+        // write 24 bytes at once
+        for (uint8_t j = 0; j < 24; j++)
+        {
+            Wire.write((byte)pwm);
+        }
+        Wire.endTransmission();
     }
-    Wire.endTransmission();
-  }
 }
 
 void TC_IS31FL3731::setColumn(led_col_t col, uint8_t pwm, uint8_t bank)
 {
-  switch (col)
-  {
-  case LED_COL_SEVEN:
-    writeRegister8(bank, 0x24, pwm);
-    writeRegister8(bank, 0x34, pwm);
-    writeRegister8(bank, 0x44, pwm);
-    writeRegister8(bank, 0x54, pwm);
-    break;
+    switch (col)
+    {
+    case LED_COL_SEVEN:
+        writeRegister8(bank, 0x24, pwm);
+        writeRegister8(bank, 0x34, pwm);
+        writeRegister8(bank, 0x44, pwm);
+        writeRegister8(bank, 0x54, pwm);
+        break;
 
-  case LED_COL_SIX:
-    writeRegister8(bank, 0x25, pwm);
-    writeRegister8(bank, 0x35, pwm);
-    writeRegister8(bank, 0x45, pwm);
-    writeRegister8(bank, 0x55, pwm);
-    break;
+    case LED_COL_SIX:
+        writeRegister8(bank, 0x25, pwm);
+        writeRegister8(bank, 0x35, pwm);
+        writeRegister8(bank, 0x45, pwm);
+        writeRegister8(bank, 0x55, pwm);
+        break;
 
-  case LED_COL_FIVE:
-    writeRegister8(bank, 0x26, pwm);
-    writeRegister8(bank, 0x36, pwm);
-    writeRegister8(bank, 0x46, pwm);
-    writeRegister8(bank, 0x56, pwm);
-    break;
+    case LED_COL_FIVE:
+        writeRegister8(bank, 0x26, pwm);
+        writeRegister8(bank, 0x36, pwm);
+        writeRegister8(bank, 0x46, pwm);
+        writeRegister8(bank, 0x56, pwm);
+        break;
 
-  case LED_COL_ONE:
-    writeRegister8(bank, 0x27, pwm);
-    writeRegister8(bank, 0x37, pwm);
-    writeRegister8(bank, 0x47, pwm);
-    writeRegister8(bank, 0x57, pwm);
-    break;
+    case LED_COL_ONE:
+        writeRegister8(bank, 0x27, pwm);
+        writeRegister8(bank, 0x37, pwm);
+        writeRegister8(bank, 0x47, pwm);
+        writeRegister8(bank, 0x57, pwm);
+        break;
 
-  case LED_COL_TWELVE:
-    writeRegister8(bank, 0x28, pwm);
-    writeRegister8(bank, 0x38, pwm);
-    writeRegister8(bank, 0x48, pwm);
-    writeRegister8(bank, 0x58, pwm);
-    break;
+    case LED_COL_TWELVE:
+        writeRegister8(bank, 0x28, pwm);
+        writeRegister8(bank, 0x38, pwm);
+        writeRegister8(bank, 0x48, pwm);
+        writeRegister8(bank, 0x58, pwm);
+        break;
 
-  case LED_COL_ELEVEN:
-    writeRegister8(bank, 0x29, pwm);
-    writeRegister8(bank, 0x39, pwm);
-    writeRegister8(bank, 0x49, pwm);
-    writeRegister8(bank, 0x59, pwm);
-    break;
+    case LED_COL_ELEVEN:
+        writeRegister8(bank, 0x29, pwm);
+        writeRegister8(bank, 0x39, pwm);
+        writeRegister8(bank, 0x49, pwm);
+        writeRegister8(bank, 0x59, pwm);
+        break;
 
-  default:
-    break;
-  }
+    default:
+        break;
+    }
 }
 
 /**************************************************************************/
@@ -179,15 +179,56 @@ void TC_IS31FL3731::setColumn(led_col_t col, uint8_t pwm, uint8_t bank)
 /**************************************************************************/
 void TC_IS31FL3731::setBadgeLED(uint8_t led, uint8_t pwm, uint8_t bank)
 {
-  switch (led)
-  {
-  case 0:
-    writeRegister8(bank, 0x78, pwm);
-    break;
+    selectBank(bank);
+    // switch (led)
+    // {
+    // case 0:
+    //     writeRegister8(bank, 0x78, pwm);
+    //     break;
 
-  default:
-    break;
-  }
+    // default:
+    //     break;
+    // }
+
+    Wire.beginTransmission(_i2caddr);
+    Wire.write((byte)led);
+    Wire.write((byte)pwm);
+    Wire.endTransmission();
+}
+
+/**
+ * @brief Set all Badge leds at once
+ *
+ * @param config leds to set
+ * @param pwm pwm value to set to
+ * @param bank  the bank/frame to set the data in
+ */
+void TC_IS31FL3731::setBadgeLEDs(uint32_t config, uint8_t pwm, uint8_t bank)
+{
+    selectBank(bank);
+    const uint8_t led_addrs[24] = {0x57, 0x47, 0x37, 0x27, 0x58, 0x48, 0x28, 0x38, 0x59, 0x49, 0x39, 0x29, 0x54, 0x44, 0x34, 0x24, 0x55, 0x45, 0x35, 0x25, 0x56, 0x46, 0x36, 0x26};
+
+    // light up a through x
+    for (uint8_t i = 0; i < 24; i++)
+    {
+        uint8_t led_set = (config >> i) & 0x1;
+        if (led_set)
+        {
+            Wire.beginTransmission(_i2caddr);
+            Wire.write((byte)led_addrs[i]);
+            Wire.write((byte)pwm);
+            Wire.endTransmission();
+        }
+    }
+}
+
+void TC_IS31FL3731::setBadgeLetter(char letter, uint8_t pwm, uint8_t bank)
+{
+    if (letter >= 'a' && letter <= 'z')
+    {
+        uint32_t config = 1 << (letter - 'a');
+        setBadgeLEDs(config, pwm, bank);
+    }
 }
 
 /**************************************************************************/
@@ -199,17 +240,17 @@ void TC_IS31FL3731::setBadgeLED(uint8_t led, uint8_t pwm, uint8_t bank)
 /**************************************************************************/
 void TC_IS31FL3731::setDisplayMode(Display_Mode mode)
 {
-  uint8_t newMode = CONFIG_MODE_PICTURE;
+    uint8_t newMode = CONFIG_MODE_PICTURE;
 
-  if (mode == Display_Mode_Auto_Play)
-    newMode = CONFIG_MODE_AUTOPLAY;
-  else if (mode == Display_Mode_Audio_Play)
-    newMode = CONFIG_MODE_AUDIOPLAY;
+    if (mode == Display_Mode_Auto_Play)
+        newMode = CONFIG_MODE_AUTOPLAY;
+    else if (mode == Display_Mode_Audio_Play)
+        newMode = CONFIG_MODE_AUDIOPLAY;
 
-  modifyRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_CONFIG, newMode,
-                  CONFIG_MODE_MASK);
+    modifyRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_CONFIG, newMode,
+                    CONFIG_MODE_MASK);
 
-  return;
+    return;
 }
 
 /**************************************************************************/
@@ -220,15 +261,15 @@ void TC_IS31FL3731::setDisplayMode(Display_Mode mode)
 /**************************************************************************/
 void TC_IS31FL3731::setAutoPlayStart(uint8_t frame)
 {
-  if (frame > 7)
-  {
-    frame = 0;
-  }
+    if (frame > 7)
+    {
+        frame = 0;
+    }
 
-  modifyRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_CONFIG, frame,
-                  CONFIG_FRAME_MASK);
+    modifyRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_CONFIG, frame,
+                    CONFIG_FRAME_MASK);
 
-  return;
+    return;
 }
 
 /**************************************************************************/
@@ -239,16 +280,16 @@ void TC_IS31FL3731::setAutoPlayStart(uint8_t frame)
 /**************************************************************************/
 void TC_IS31FL3731::setAutoPlayLoops(uint8_t loops)
 {
-  if (loops > 7)
-  {
-    loops = 0;
-  }
-  uint8_t newVal = loops << AUTO_CONTROL_LOOPS_SHIFT;
+    if (loops > 7)
+    {
+        loops = 0;
+    }
+    uint8_t newVal = loops << AUTO_CONTROL_LOOPS_SHIFT;
 
-  modifyRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_AUTO_CONTROL1, newVal,
-                  AUTO_CONTROL_LOOPS_MASK);
+    modifyRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_AUTO_CONTROL1, newVal,
+                    AUTO_CONTROL_LOOPS_MASK);
 
-  return;
+    return;
 }
 
 /**************************************************************************/
@@ -259,15 +300,15 @@ void TC_IS31FL3731::setAutoPlayLoops(uint8_t loops)
 /**************************************************************************/
 void TC_IS31FL3731::setAutoPlayFrames(uint8_t frames)
 {
-  if (frames > 7)
-  {
-    frames = 0;
-  }
+    if (frames > 7)
+    {
+        frames = 0;
+    }
 
-  modifyRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_AUTO_CONTROL1, frames,
-                  AUTO_CONTROL_FRAMES_MASK);
+    modifyRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_AUTO_CONTROL1, frames,
+                    AUTO_CONTROL_FRAMES_MASK);
 
-  return;
+    return;
 }
 
 /**************************************************************************/
@@ -278,15 +319,15 @@ void TC_IS31FL3731::setAutoPlayFrames(uint8_t frames)
 /**************************************************************************/
 void TC_IS31FL3731::setAutoPlayDelay(uint16_t delay_ms)
 {
-  if (delay_ms > 693)
-  {
-    delay_ms = 693;
-  }
-  uint8_t newVal = (delay_ms / 11);
+    if (delay_ms > 693)
+    {
+        delay_ms = 693;
+    }
+    uint8_t newVal = (delay_ms / 11);
 
-  writeRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_AUTO_CONTROL2, newVal);
+    writeRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_AUTO_CONTROL2, newVal);
 
-  return;
+    return;
 }
 
 /**************************************************************************/
@@ -297,12 +338,12 @@ void TC_IS31FL3731::setAutoPlayDelay(uint16_t delay_ms)
 /**************************************************************************/
 void TC_IS31FL3731::setPictureFrame(uint8_t frame)
 {
-  if (frame > 7)
-  {
-    frame = 0;
-  }
+    if (frame > 7)
+    {
+        frame = 0;
+    }
 
-  writeRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_PICTURE_DISPLAY, frame);
+    writeRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_PICTURE_DISPLAY, frame);
 }
 
 /**************************************************************************/
@@ -313,10 +354,10 @@ void TC_IS31FL3731::setPictureFrame(uint8_t frame)
 /**************************************************************************/
 void TC_IS31FL3731::selectBank(uint8_t bank)
 {
-  Wire.beginTransmission(_i2caddr);
-  Wire.write((byte)ISSI_COMMANDREGISTER);
-  Wire.write(bank);
-  Wire.endTransmission();
+    Wire.beginTransmission(_i2caddr);
+    Wire.write((byte)ISSI_COMMANDREGISTER);
+    Wire.write(bank);
+    Wire.endTransmission();
 }
 
 /**************************************************************************/
@@ -327,14 +368,14 @@ void TC_IS31FL3731::selectBank(uint8_t bank)
 /**************************************************************************/
 void TC_IS31FL3731::audioSync(bool sync)
 {
-  if (sync)
-  {
-    writeRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_AUDIOSYNC, 0x1);
-  }
-  else
-  {
-    writeRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_AUDIOSYNC, 0x0);
-  }
+    if (sync)
+    {
+        writeRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_AUDIOSYNC, 0x1);
+    }
+    else
+    {
+        writeRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_AUDIOSYNC, 0x0);
+    }
 }
 
 /**************************************************************************/
@@ -349,10 +390,10 @@ void TC_IS31FL3731::audioSync(bool sync)
 void TC_IS31FL3731::modifyRegister8(uint8_t bank, uint8_t reg, uint8_t val,
                                     uint8_t mask)
 {
-  uint8_t currReg = readRegister8(bank, reg);
-  currReg &= ~(mask);
-  val |= currReg;
-  writeRegister8(bank, reg, val);
+    uint8_t currReg = readRegister8(bank, reg);
+    currReg &= ~(mask);
+    val |= currReg;
+    writeRegister8(bank, reg, val);
 }
 
 /**************************************************************************/
@@ -365,12 +406,12 @@ void TC_IS31FL3731::modifyRegister8(uint8_t bank, uint8_t reg, uint8_t val,
 /**************************************************************************/
 void TC_IS31FL3731::writeRegister8(uint8_t bank, uint8_t reg, uint8_t val)
 {
-  selectBank(bank);
+    selectBank(bank);
 
-  Wire.beginTransmission(_i2caddr);
-  Wire.write((byte)reg);
-  Wire.write((byte)val);
-  Wire.endTransmission();
+    Wire.beginTransmission(_i2caddr);
+    Wire.write((byte)reg);
+    Wire.write((byte)val);
+    Wire.endTransmission();
 }
 
 /**************************************************************************/
@@ -383,16 +424,16 @@ void TC_IS31FL3731::writeRegister8(uint8_t bank, uint8_t reg, uint8_t val)
 /**************************************************************************/
 uint8_t TC_IS31FL3731::readRegister8(uint8_t bank, uint8_t reg)
 {
-  uint8_t x;
+    uint8_t x;
 
-  selectBank(bank);
+    selectBank(bank);
 
-  Wire.beginTransmission(_i2caddr);
-  Wire.write((byte)reg);
-  Wire.endTransmission();
+    Wire.beginTransmission(_i2caddr);
+    Wire.write((byte)reg);
+    Wire.endTransmission();
 
-  Wire.requestFrom(_i2caddr, (size_t)1);
-  x = Wire.read();
+    Wire.requestFrom(_i2caddr, (size_t)1);
+    x = Wire.read();
 
-  return x;
+    return x;
 }
