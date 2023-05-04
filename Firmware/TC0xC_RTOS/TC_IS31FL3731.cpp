@@ -221,11 +221,13 @@ void TC_IS31FL3731::setBadgeLetter(char letter, uint8_t pwm, uint8_t bank)
     {
         uint8_t config = letter - 'a';
         setBadgeLED(config, pwm, bank);
-    } else if (letter == 'y')
+    }
+    else if (letter == 'y')
     {
         uint32_t config = 0x800001;
         setBadgeLEDs(config, pwm, bank);
-    } else if (letter == 'z')
+    }
+    else if (letter == 'z')
     {
         uint32_t config = 0x800002;
         setBadgeLEDs(config, pwm, bank);
@@ -234,7 +236,7 @@ void TC_IS31FL3731::setBadgeLetter(char letter, uint8_t pwm, uint8_t bank)
 
 void TC_IS31FL3731::setBadgeMessage(char *message, uint8_t message_len, uint8_t pwm, uint16_t delay_ms, uint8_t bank)
 {
-    for (uint8_t i=0; i<message_len; i++)
+    for (uint8_t i = 0; i < message_len; i++)
     {
         clear();
         vTaskDelay(10);

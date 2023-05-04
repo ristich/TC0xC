@@ -13,7 +13,7 @@ static void blink_leds(LED_Object *leds);
 const uint32_t Alarm_Interval_Long = 70000;  // 7s
 const uint32_t Alarm_Interval_Short = 50000; // 5s
 const uint8_t message_brightness = 100;
-const uint16_t message_delay_ms = 550;
+const uint16_t message_delay_ms = 150;
 
 TC_IS31FL3731 led_controller = TC_IS31FL3731();
 volatile SemaphoreHandle_t timerSemaphore;
