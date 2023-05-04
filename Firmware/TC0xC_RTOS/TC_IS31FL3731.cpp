@@ -64,12 +64,12 @@ bool TC_IS31FL3731::begin(uint8_t sdaPin, uint8_t sclPin, uint8_t addr)
 /**************************************************************************/
 void TC_IS31FL3731::clear(uint8_t bank)
 {
-    for (uint8_t i = 0; i < 6; i++)
+    for (uint8_t i = 0; i < 4; i++)
     {
         Wire.beginTransmission(_i2caddr);
-        Wire.write((byte)0x24 + i * 24);
+        Wire.write((byte)0x24 + i * 16);
         // write 24 bytes at once
-        for (uint8_t j = 0; j < 24; j++)
+        for (uint8_t j = 0; j < 6; j++)
         {
             Wire.write((byte)0);
         }
@@ -81,16 +81,16 @@ void TC_IS31FL3731::clear(uint8_t bank)
 /*!
     @brief Low level accesssor - sets a 8-bit PWM pixel value to a bank location
     does not handle rotation, x/y or any rearrangements!
-    @param lednum The offset into the bank that corresponds to the LED
+    @param led The offset into the bank that corresponds to the LED
     @param pwm brightnes, from 0 (off) to 255 (max on)
     @param bank The bank/frame we will set the data in
 */
 /**************************************************************************/
-void TC_IS31FL3731::setLEDPWM(uint8_t lednum, uint8_t pwm, uint8_t bank)
+void TC_IS31FL3731::setLEDPWM(uint8_t led, uint8_t pwm, uint8_t bank)
 {
-    if (lednum >= 144)
+    if (led >= 144)
         return;
-    writeRegister8(bank, 0x24 + lednum, pwm);
+    writeRegister8(bank, 0x24 + led, pwm);
 }
 
 /**************************************************************************/
@@ -105,12 +105,12 @@ void TC_IS31FL3731::setAllLEDPWM(uint8_t pwm, uint8_t bank)
 {
     selectBank(bank);
 
-    for (uint8_t i = 0; i < 6; i++)
+    for (uint8_t i = 0; i < 4; i++)
     {
         Wire.beginTransmission(_i2caddr);
-        Wire.write((byte)0x24 + i * 24);
-        // write 24 bytes at once
-        for (uint8_t j = 0; j < 24; j++)
+        Wire.write((byte)0x24 + i * 16);
+        // write 6 bytes at once
+        for (uint8_t j = 0; j < 6; j++)
         {
             Wire.write((byte)pwm);
         }
@@ -172,26 +172,20 @@ void TC_IS31FL3731::setColumn(led_col_t col, uint8_t pwm, uint8_t bank)
 /**************************************************************************/
 /*!
     @brief Sets the LED intensity/PWM for the single color LEDs
-    @param led LED to set
+    @param lednum Badge LED to set [0 - 23]
     @param pwm PWM value for LED from 0 (off) to 255 (max on)
     @param bank The bank/frame we will set the data in
 */
 /**************************************************************************/
-void TC_IS31FL3731::setBadgeLED(uint8_t led, uint8_t pwm, uint8_t bank)
+void TC_IS31FL3731::setBadgeLED(uint8_t lednum, uint8_t pwm, uint8_t bank)
 {
-    selectBank(bank);
-    // switch (led)
-    // {
-    // case 0:
-    //     writeRegister8(bank, 0x78, pwm);
-    //     break;
+    if (lednum > 23)
+        return;
 
-    // default:
-    //     break;
-    // }
+    selectBank(bank);
 
     Wire.beginTransmission(_i2caddr);
-    Wire.write((byte)led);
+    Wire.write(led_addrs[lednum]);
     Wire.write((byte)pwm);
     Wire.endTransmission();
 }
@@ -206,7 +200,6 @@ void TC_IS31FL3731::setBadgeLED(uint8_t led, uint8_t pwm, uint8_t bank)
 void TC_IS31FL3731::setBadgeLEDs(uint32_t config, uint8_t pwm, uint8_t bank)
 {
     selectBank(bank);
-    const uint8_t led_addrs[24] = {0x57, 0x47, 0x37, 0x27, 0x58, 0x48, 0x28, 0x38, 0x59, 0x49, 0x39, 0x29, 0x54, 0x44, 0x34, 0x24, 0x55, 0x45, 0x35, 0x25, 0x56, 0x46, 0x36, 0x26};
 
     // light up a through x
     for (uint8_t i = 0; i < 24; i++)
@@ -224,10 +217,29 @@ void TC_IS31FL3731::setBadgeLEDs(uint32_t config, uint8_t pwm, uint8_t bank)
 
 void TC_IS31FL3731::setBadgeLetter(char letter, uint8_t pwm, uint8_t bank)
 {
-    if (letter >= 'a' && letter <= 'z')
+    if (letter >= 'a' && letter <= 'x')
     {
-        uint32_t config = 1 << (letter - 'a');
+        uint8_t config = letter - 'a';
+        setBadgeLED(config, pwm, bank);
+    } else if (letter == 'y')
+    {
+        uint32_t config = 0x800001;
         setBadgeLEDs(config, pwm, bank);
+    } else if (letter == 'z')
+    {
+        uint32_t config = 0x800002;
+        setBadgeLEDs(config, pwm, bank);
+    }
+}
+
+void TC_IS31FL3731::setBadgeMessage(char *message, uint8_t message_len, uint8_t pwm, uint16_t delay_ms, uint8_t bank)
+{
+    for (uint8_t i=0; i<message_len; i++)
+    {
+        clear();
+        vTaskDelay(10);
+        setBadgeLetter(message[i], pwm, bank);
+        vTaskDelay(delay_ms);
     }
 }
 

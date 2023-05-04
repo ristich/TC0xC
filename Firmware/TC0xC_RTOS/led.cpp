@@ -12,6 +12,8 @@ static void blink_leds(LED_Object *leds);
 // constants
 const uint32_t Alarm_Interval_Long = 70000;  // 7s
 const uint32_t Alarm_Interval_Short = 50000; // 5s
+const uint8_t message_brightness = 100;
+const uint16_t message_delay_ms = 550;
 
 TC_IS31FL3731 led_controller = TC_IS31FL3731();
 volatile SemaphoreHandle_t timerSemaphore;
@@ -69,19 +71,8 @@ void init_timer(LED_Object *leds)
 void LED_task(void *pvParameters)
 {
     LED_Object *leds = (LED_Object *)pvParameters;
-    // set_LED_mode(leds);
-    // const uint8_t arr[24] = {0x57,0x47,0x37,0x27,0x58,0x48,0x28,0x38,0x59,0x49,0x39,0x29,0x54,0x44,0x34,0x24,0x55,0x45,0x35,0x25,0x56,0x46,0x36,0x26};
-    // leds->controller->setBadgeLEDs((uint32_t)0x111111, 10);
-    leds->controller->setBadgeLetter('h', 10);
-    vTaskDelay(500);
-    leds->controller->setBadgeLetter('e', 10);
-    vTaskDelay(500);
-    leds->controller->setBadgeLetter('l', 10);
-    vTaskDelay(500);
-    leds->controller->setBadgeLetter('l', 10);
-    vTaskDelay(500);
-    leds->controller->setBadgeLetter('o', 10);
-    // static bool alarm_is_long = true;
+    set_LED_mode(leds);
+    static bool alarm_is_long = true;
 
     // signal to cli that leds are set up
     xSemaphoreGive(leds->update_sem);
@@ -98,31 +89,29 @@ void LED_task(void *pvParameters)
             xSemaphoreGive(leds->update_sem);
         }
 
-        // if (xSemaphoreTake(timerSemaphore, 0) == pdTRUE)
-        // {
-        //     alarm_is_long = !alarm_is_long;
-        //     if (alarm_is_long)
-        //         timerAlarmWrite(leds->message_timer, Alarm_Interval_Long, true);
-        //     else
-        //         timerAlarmWrite(leds->message_timer, Alarm_Interval_Short, true);
+        if (xSemaphoreTake(timerSemaphore, 0) == pdTRUE)
+        {
+            alarm_is_long = !alarm_is_long;
 
-        //     leds->controller->setAllLEDPWM(0);
-        //     leds->controller->setDisplayMode(Display_Mode_Picture);
-        //     leds->controller->setPictureFrame(0);
-        //     vTaskDelay(500);
-        //     leds->controller->setAllLEDPWM(leds->brightness);
-        //     vTaskDelay(500);
-        //     leds->controller->setAllLEDPWM(0);
-        //     vTaskDelay(500);
-        //     leds->controller->setAllLEDPWM(leds->brightness);
-        //     vTaskDelay(500);
-        //     leds->controller->setAllLEDPWM(0);
-        //     vTaskDelay(500);
-        //     leds->controller->setAllLEDPWM(leds->brightness);
-        //     vTaskDelay(500);
+            leds->controller->setAllLEDPWM(0);
+            leds->controller->setDisplayMode(Display_Mode_Picture);
+            leds->controller->setPictureFrame(0);
 
-        //     set_LED_mode(leds);
-        // }
+            if (alarm_is_long)
+            {
+                timerAlarmWrite(leds->message_timer, Alarm_Interval_Long, true);
+                char message[] = "helloworld";
+                leds->controller->setBadgeMessage(message, (sizeof(message) - 1), message_brightness, message_delay_ms);
+            }
+            else
+            {
+                timerAlarmWrite(leds->message_timer, Alarm_Interval_Short, true);
+                char message[] = "foobar";
+                leds->controller->setBadgeMessage(message, (sizeof(message) - 1), message_brightness, message_delay_ms);
+            }
+
+            set_LED_mode(leds);
+        }
     }
 }
 

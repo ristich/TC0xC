@@ -46,40 +46,10 @@ typedef enum
     LED_COL_ELEVEN,
 } led_col_t;
 
-typedef union
-{
-    struct
-    {
-        uint32_t a : 1;
-        uint32_t b : 1;
-        uint32_t c : 1;
-        uint32_t d : 1;
-        uint32_t e : 1;
-        uint32_t f : 1;
-        uint32_t g : 1;
-        uint32_t h : 1;
-        uint32_t i : 1;
-        uint32_t j : 1;
-        uint32_t k : 1;
-        uint32_t l : 1;
-        uint32_t m : 1;
-        uint32_t n : 1;
-        uint32_t o : 1;
-        uint32_t p : 1;
-        uint32_t q : 1;
-        uint32_t r : 1;
-        uint32_t s : 1;
-        uint32_t t : 1;
-        uint32_t u : 1;
-        uint32_t v : 1;
-        uint32_t w : 1;
-        uint32_t x : 1;
-        uint32_t y : 1;
-        uint32_t z : 1;
-        uint32_t res : 6; // unused
-    };
-    uint32_t val;
-} led_ctrl_t;
+// 0 - 23 as they appear on plastics
+const uint8_t led_addrs[24] = {0x57, 0x47, 0x37, 0x27, 0x58, 0x48, 0x28, 0x38,
+                               0x59, 0x49, 0x39, 0x29, 0x54, 0x44, 0x34, 0x24,
+                               0x55, 0x45, 0x35, 0x25, 0x56, 0x46, 0x36, 0x26};
 
 // Function settings
 typedef enum
@@ -112,12 +82,13 @@ public:
     void audioSync(bool sync);
 
     void clear(uint8_t bank = 0);
-    void setLEDPWM(uint8_t lednum, uint8_t pwm, uint8_t bank = 0);
+    void setLEDPWM(uint8_t led, uint8_t pwm, uint8_t bank = 0);
     void setAllLEDPWM(uint8_t pwm, uint8_t bank = 0);
     void setColumn(led_col_t col, uint8_t pwm, uint8_t bank = 0);
-    void setBadgeLED(uint8_t led, uint8_t set, uint8_t bank = 0);
+    void setBadgeLED(uint8_t lednum, uint8_t set, uint8_t bank = 0);
     void setBadgeLEDs(uint32_t config, uint8_t pwm, uint8_t bank = 0);
     void setBadgeLetter(char letter, uint8_t pwm, uint8_t bank = 0);
+    void setBadgeMessage(char *message, uint8_t message_len, uint8_t pwm, uint16_t delay_ms, uint8_t bank = 0);
 
 protected:
     void selectBank(uint8_t bank);
