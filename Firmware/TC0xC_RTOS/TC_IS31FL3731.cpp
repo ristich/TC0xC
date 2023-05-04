@@ -238,6 +238,10 @@ void TC_IS31FL3731::setBadgeMessage(char *message, uint8_t message_len, uint8_t 
 {
     for (uint8_t i = 0; i < message_len; i++)
     {
+        // check for string end
+        if (message[i] == 0)
+            return;
+        
         clear();
         vTaskDelay(10);
         setBadgeLetter(message[i], pwm, bank);

@@ -12,8 +12,13 @@ static void blink_leds(LED_Object *leds);
 // constants
 const uint32_t Alarm_Interval_Long = 70000;  // 7s
 const uint32_t Alarm_Interval_Short = 50000; // 5s
-const uint8_t message_brightness = 100;
-const uint16_t message_delay_ms = 150;
+const uint8_t Message_Brightness = 100;
+const uint16_t Message_Delay_ms = 150;
+const uint8_t MAX_MESSAGE_LEN = 20;
+const uint8_t TOTAL_MESSAGES = 3;
+char Messages[TOTAL_MESSAGES][MAX_MESSAGE_LEN] = {"helloworld",
+                                                  "foobar",
+                                                  "abcxzy"};
 
 TC_IS31FL3731 led_controller = TC_IS31FL3731();
 volatile SemaphoreHandle_t timerSemaphore;
@@ -73,6 +78,7 @@ void LED_task(void *pvParameters)
     LED_Object *leds = (LED_Object *)pvParameters;
     set_LED_mode(leds);
     static bool alarm_is_long = true;
+    static uint8_t message_index = 0;
 
     // signal to cli that leds are set up
     xSemaphoreGive(leds->update_sem);
@@ -91,24 +97,20 @@ void LED_task(void *pvParameters)
 
         if (xSemaphoreTake(timerSemaphore, 0) == pdTRUE)
         {
-            alarm_is_long = !alarm_is_long;
+            if (alarm_is_long)
+                timerAlarmWrite(leds->message_timer, Alarm_Interval_Short, true);
+            else
+                timerAlarmWrite(leds->message_timer, Alarm_Interval_Long, true);
 
             leds->controller->setAllLEDPWM(0);
             leds->controller->setDisplayMode(Display_Mode_Picture);
             leds->controller->setPictureFrame(0);
+            leds->controller->setBadgeMessage(Messages[message_index], MAX_MESSAGE_LEN, Message_Brightness, Message_Delay_ms);
 
-            if (alarm_is_long)
-            {
-                timerAlarmWrite(leds->message_timer, Alarm_Interval_Long, true);
-                char message[] = "helloworld";
-                leds->controller->setBadgeMessage(message, (sizeof(message) - 1), message_brightness, message_delay_ms);
-            }
-            else
-            {
-                timerAlarmWrite(leds->message_timer, Alarm_Interval_Short, true);
-                char message[] = "foobar";
-                leds->controller->setBadgeMessage(message, (sizeof(message) - 1), message_brightness, message_delay_ms);
-            }
+            alarm_is_long = !alarm_is_long;
+            message_index++;
+            if (message_index >= TOTAL_MESSAGES)
+                message_index = 0;
 
             set_LED_mode(leds);
         }
