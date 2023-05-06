@@ -20,14 +20,23 @@ void setup()
 
 void loop()
 {
+    static bool button_is_pressed = false;
     // vTaskDelay(1000 / portTICK_PERIOD_MS);
 
     // Badge.cli.serial->print(".");
     xSemaphoreTake(Badge.leds.event_sem, 0);
-    if(touchInterrupt())
+    if (button_is_pressed == false)
     {
-        Badge.cli.serial->println("test");
-        xSemaphoreGive(Badge.leds.event_sem);
+        if (touchInterrupt())
+        {
+            Badge.cli.serial->println("test");
+            xTaskNotify(Badge.leds.task_handle, 1, eSetValueWithOverwrite);
+            button_is_pressed = true;
+        }
+    }
+    else if (touchRead(SELECT_TOUCH) > TOUCH_THRESH)
+    {
+        button_is_pressed = false;
     }
 
     vTaskDelay(100);
@@ -36,16 +45,20 @@ void loop()
 // simple debounce check for touch sensing
 //   gpioPin: gpio or touch number
 //   threshold: threshold for touchRead
-uint8_t checkTouch(uint8_t gpioPin, uint8_t threshold) {
-  if (touchRead(gpioPin) <= threshold) {
-    if (touchRead(gpioPin) <= threshold) {
-      if (touchRead(gpioPin) <= threshold) {
-        return 1;
-      }
+uint8_t checkTouch(uint8_t gpioPin, uint8_t threshold)
+{
+    if (touchRead(gpioPin) <= threshold)
+    {
+        if (touchRead(gpioPin) <= threshold)
+        {
+            if (touchRead(gpioPin) <= threshold)
+            {
+                return 1;
+            }
+        }
     }
-  }
 
-  return 0;
+    return 0;
 }
 
 bool touchInterrupt()

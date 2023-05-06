@@ -117,7 +117,7 @@ void LED_task(void *pvParameters)
             set_LED_mode(leds);
         }
 
-        if (xSemaphoreTake(leds->event_sem, 0) == pdTRUE)
+        if (xTaskNotifyWait(0,0,NULL,0) == pdTRUE)
         {
             leds->controller->setAllLEDPWM(0);
             leds->controller->setDisplayMode(Display_Mode_Picture);
