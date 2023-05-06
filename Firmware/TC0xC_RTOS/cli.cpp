@@ -68,7 +68,7 @@ static void CLI_task(void *pvParameters)
 
     while (1)
     {
-        if (cli->serial->available())
+        while (cli->serial->available())
         {
             char r = cli->serial->read();
             if (process_byte(cli, r))
@@ -81,7 +81,7 @@ static void CLI_task(void *pvParameters)
                 cli->rx_buffer[0] = 0;
             }
         }
-        vTaskDelay(10 / portTICK_PERIOD_MS);
+        vTaskDelay(100);
     }
 }
 

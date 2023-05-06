@@ -10,8 +10,8 @@ static void rotate_leds(LED_Object *leds);
 static void blink_leds(LED_Object *leds);
 
 // constants
-const uint32_t Alarm_Interval_Long = 70000;  // 7s
-const uint32_t Alarm_Interval_Short = 50000; // 5s
+const uint32_t Alarm_Interval_Long = 4200000;  // 7 min
+const uint32_t Alarm_Interval_Short = 3000000; // 5 min
 const uint8_t Message_Brightness = 100;
 const uint16_t Message_Delay_ms = 150;
 const uint8_t MAX_MESSAGE_LEN = 20;
@@ -31,6 +31,7 @@ LED_Error LED_init(LED_Object *leds)
     }
 
     leds->update_sem = xSemaphoreCreateBinary();
+    leds->event_sem = xSemaphoreCreateBinary();
 
     init_timer(leds);
 
@@ -46,11 +47,10 @@ LED_Error LED_init(LED_Object *leds)
 
     // init led setting defaults
     leds->mode = LED_MODE_ROTATE;
-    // leds->mode = LED_MODE_BLINK;
     leds->delay_ms = 500;
     leds->brightness = 10;
 
-    xTaskCreatePinnedToCore(LED_task, "LED_task", 2048, leds, tskIDLE_PRIORITY + 2, NULL, app_cpu);
+    xTaskCreatePinnedToCore(LED_task, "LED_task", 2048, leds, tskIDLE_PRIORITY + 2, &leds->task_handle, app_cpu);
 
     leds->initialized = true;
 
@@ -82,6 +82,7 @@ void LED_task(void *pvParameters)
 
     // signal to cli that leds are set up
     xSemaphoreGive(leds->update_sem);
+    xSemaphoreGive(leds->event_sem);
 
     // wait for cli to init
     vTaskDelay(500 / portTICK_PERIOD_MS);
@@ -95,6 +96,7 @@ void LED_task(void *pvParameters)
             xSemaphoreGive(leds->update_sem);
         }
 
+        // check for timed message
         if (xSemaphoreTake(timerSemaphore, 0) == pdTRUE)
         {
             if (alarm_is_long)
@@ -114,6 +116,20 @@ void LED_task(void *pvParameters)
 
             set_LED_mode(leds);
         }
+
+        if (xSemaphoreTake(leds->event_sem, 0) == pdTRUE)
+        {
+            leds->controller->setAllLEDPWM(0);
+            leds->controller->setDisplayMode(Display_Mode_Picture);
+            leds->controller->setPictureFrame(0);
+
+            leds->controller->setAllLEDPWM(100);
+            vTaskDelay(500);
+            xSemaphoreGive(leds->event_sem);
+
+            set_LED_mode(leds);
+        }
+        vTaskDelay(100);
     }
 }
 
