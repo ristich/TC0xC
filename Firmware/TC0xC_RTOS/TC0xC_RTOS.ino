@@ -26,16 +26,11 @@ void loop()
     if (new_presses)
     {
         xTaskNotify(Badge.leds.task_handle, 1, eSetValueWithOverwrite);
-        if (new_presses & 0x1)
-            Badge.cli.serial->println("down");
-        if (new_presses & 0x2)
-            Badge.cli.serial->println("left");
-        if (new_presses & 0x4)
-            Badge.cli.serial->println("up");
-        if (new_presses & 0x8)
-            Badge.cli.serial->println("right");
-        if (new_presses & 0x10)
-            Badge.cli.serial->println("select");
+        for (uint8_t i = 0; i<TOTAL_BUTTONS; i++)
+        {
+            if (new_presses & Buttons[i].mask)
+                Badge.cli.serial->println(Buttons[i].name);
+        }
         if (check_Konami())
             // todo: flag
             Badge.cli.serial->println("Hadouken!");

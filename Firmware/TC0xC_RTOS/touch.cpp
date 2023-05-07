@@ -53,7 +53,7 @@ uint8_t get_button_states(uint8_t *new_presses, uint8_t *new_releases)
 
     for (uint8_t i = 0; i < TOTAL_BUTTONS; i++)
     {
-        if (is_touched(Button_Pins[i], TOUCH_THRESH))
+        if (is_touched(Buttons[i].pin, TOUCH_THRESH))
         {
             current_presses |= (1 << i);
         }
@@ -88,15 +88,15 @@ uint8_t get_button_states(uint8_t *new_presses, uint8_t *new_releases)
 bool check_Konami()
 {
     const static uint8_t konami_buffer[KONAMI_LENGTH] = {
-        UP_BUTTON,
-        UP_BUTTON,
-        DOWN_BUTTON,
-        DOWN_BUTTON,
-        LEFT_BUTTON,
-        RIGHT_BUTTON,
-        LEFT_BUTTON,
-        RIGHT_BUTTON,
-        SELECT_BUTTON,
+        UP_BIT,
+        UP_BIT,
+        DOWN_BIT,
+        DOWN_BIT,
+        LEFT_BIT,
+        RIGHT_BIT,
+        LEFT_BIT,
+        RIGHT_BIT,
+        SELECT_BIT,
     };
 
     bool is_konami = true;

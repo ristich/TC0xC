@@ -6,18 +6,31 @@
 #define TOUCH_THRESH 25
 #define KONAMI_LENGTH 9
 
-// typedef struct
-
-typedef enum buttons
+typedef enum Button_Bit
 {
-    DOWN_BUTTON = 0,
-    LEFT_BUTTON,
-    UP_BUTTON,
-    RIGHT_BUTTON,
-    SELECT_BUTTON,
-} buttons;
+    DOWN_BIT = 0,
+    LEFT_BIT,
+    UP_BIT,
+    RIGHT_BIT,
+    SELECT_BIT,
+    TOTAL_BUTTONS,
+} Button_Bit;
 
-const uint8_t Button_Pins[TOTAL_BUTTONS]{DOWN_TOUCH, LEFT_TOUCH, UP_TOUCH, RIGHT_TOUCH, SELECT_TOUCH};
+typedef struct Touch_Button
+{
+    const uint8_t pin;    // GPIO pin number
+    const Button_Bit bit; // bit number
+    const uint8_t mask;   // bit mask
+    const char *name;     // name of button
+} Touch_Button;
+
+const Touch_Button Buttons[TOTAL_BUTTONS]{
+    {DOWN_TOUCH, DOWN_BIT, (1 << DOWN_BIT), "Down"},
+    {LEFT_TOUCH, LEFT_BIT, (1 << LEFT_BIT), "Left"},
+    {UP_TOUCH, UP_BIT, (1 << UP_BIT), "Up"},
+    {RIGHT_TOUCH, RIGHT_BIT, (1 << RIGHT_BIT), "Right"},
+    {SELECT_TOUCH, SELECT_BIT, (1 << SELECT_BIT), "Select"},
+};
 
 uint8_t get_button_states(uint8_t *new_presses, uint8_t *new_releases);
 bool check_Konami();

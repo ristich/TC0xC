@@ -13,4 +13,3 @@
 #define UP_TOUCH T3
 #define RIGHT_TOUCH T4
 #define SELECT_TOUCH T6
-#define TOTAL_BUTTONS 5
