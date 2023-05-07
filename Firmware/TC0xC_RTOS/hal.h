@@ -1,11 +1,11 @@
 #pragma once
 
 // i2c pins
-#define I2C_SDA 23u
-#define I2C_SCL 18u
+#define I2C_SDA_PIN 23u
+#define I2C_SCL_PIN 18u
 
 // led driver pins
-#define LED_SDB 22u
+#define LED_SDB_PIN 22u
 
 // touch buttons
 #define DOWN_TOUCH T5
@@ -13,3 +13,7 @@
 #define UP_TOUCH T3
 #define RIGHT_TOUCH T4
 #define SELECT_TOUCH T6
+
+// buzzer
+#define BUZZER_PIN 5u
+#define BUZZER_CHANNEL 0u

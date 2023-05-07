@@ -1,9 +1,6 @@
 #pragma once
 
-#include <Arduino.h>
-#include "rtos.h"
 #include "TC_IS31FL3731.h"
-#include "hal.h"
 
 #define I2C_ADDR 0x74
 

@@ -1,4 +1,7 @@
+#include <Arduino.h>
+#include "rtos.h"
 #include "led.h"
+#include "hal.h"
 
 static void LED_task(void *pvParameters);
 void set_LED_mode(LED_Object *leds);
@@ -16,6 +19,7 @@ const uint8_t Message_Brightness = 100;
 const uint16_t Message_Delay_ms = 150;
 const uint8_t MAX_MESSAGE_LEN = 20;
 const uint8_t TOTAL_MESSAGES = 3;
+// todo: change these to c7five messages
 char Messages[TOTAL_MESSAGES][MAX_MESSAGE_LEN] = {"helloworld",
                                                   "foobar",
                                                   "abcxzy"};
@@ -35,13 +39,13 @@ LED_Error LED_init(LED_Object *leds)
     init_timer(leds);
 
     // init pins for led driver
-    pinMode(I2C_SDA, OUTPUT);
-    pinMode(I2C_SCL, OUTPUT);
-    pinMode(LED_SDB, OUTPUT);
-    digitalWrite(LED_SDB, HIGH);
+    pinMode(I2C_SDA_PIN, OUTPUT);
+    pinMode(I2C_SCL_PIN, OUTPUT);
+    pinMode(LED_SDB_PIN, OUTPUT);
+    digitalWrite(LED_SDB_PIN, HIGH);
 
     // init led driver
-    led_controller.begin(I2C_SDA, I2C_SCL);
+    led_controller.begin(I2C_SDA_PIN, I2C_SCL_PIN);
     leds->controller = &led_controller;
 
     // init led setting defaults
@@ -115,14 +119,15 @@ void LED_task(void *pvParameters)
             set_LED_mode(leds);
         }
 
-        if (xTaskNotifyWait(0,0,NULL,0) == pdTRUE)
+        if (xTaskNotifyWaitIndexed(0, 0, 0, NULL, 0) == pdTRUE)
         {
             leds->controller->setAllLEDPWM(0);
             leds->controller->setDisplayMode(Display_Mode_Picture);
             leds->controller->setPictureFrame(0);
 
             leds->controller->setAllLEDPWM(100);
-            vTaskDelay(500);
+            vTaskDelay(1000);
+            xTaskNotifyStateClearIndexed(leds->task_handle, 0);
 
             set_LED_mode(leds);
         }

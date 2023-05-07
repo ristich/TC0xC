@@ -1,4 +1,6 @@
 #include "cli.h"
+#include <Arduino.h>
+#include "rtos.h"
 
 static void CLI_task(void *pvParameters);
 static bool process_byte(CLI_Object *cli, char rxByte);

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <Arduino.h>
-#include "rtos.h"
 #include "led.h"
 
 #define CLI_ARG_COUNT_MAX 7
