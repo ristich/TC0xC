@@ -85,6 +85,16 @@ uint8_t get_button_states(uint8_t *new_presses, uint8_t *new_releases)
     return current_presses;
 }
 
+/**
+ * @brief checks to see if the last sequence of button presses was the
+ *  Konami code
+ * 
+ * @note it is up to the programmer to call this after a new press is
+ *  registered
+ * 
+ * @return true Konami code was entered
+ * @return false Konami code was not entered
+ */
 bool check_Konami()
 {
     const static uint8_t konami_buffer[KONAMI_LENGTH] = {
