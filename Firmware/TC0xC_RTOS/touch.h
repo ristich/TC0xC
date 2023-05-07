@@ -6,6 +6,8 @@
 #define TOUCH_THRESH 25
 #define KONAMI_LENGTH 9
 
+// typedef struct
+
 typedef enum buttons
 {
     DOWN_BUTTON = 0,
@@ -18,4 +20,4 @@ typedef enum buttons
 const uint8_t Button_Pins[TOTAL_BUTTONS]{DOWN_TOUCH, LEFT_TOUCH, UP_TOUCH, RIGHT_TOUCH, SELECT_TOUCH};
 
 uint8_t get_button_states(uint8_t *new_presses, uint8_t *new_releases);
-bool checkKonami();
+bool check_Konami();
