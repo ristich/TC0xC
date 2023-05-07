@@ -3,6 +3,26 @@
 #include "pitches.h"
 #include "audio.h"
 
+const tone_t button_down[] = {
+    {NOTE_C6, 200},
+};
+
+const tone_t button_left[] = {
+    {NOTE_D6, 200},
+};
+
+const tone_t button_up[] = {
+    {NOTE_E6, 200},
+};
+
+const tone_t button_right[] = {
+    {NOTE_F6, 200},
+};
+
+const tone_t button_select[] = {
+    {NOTE_G6, 200},
+};
+
 const tone_t foo[] = {
     {NOTE_C6, 200},
     {NOTE_D6, 200},

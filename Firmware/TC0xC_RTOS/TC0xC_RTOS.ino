@@ -29,11 +29,13 @@ void loop()
     if (new_presses)
     {
         xTaskNotifyIndexed(Badge.leds.task_handle, 0, 0, eSetValueWithoutOverwrite);
-        xTaskNotifyIndexed(Badge.audio.task_handle, 0, 0, eSetValueWithoutOverwrite);
-        for (uint8_t i = 0; i<TOTAL_BUTTONS; i++)
+        for (uint8_t i = 0; i < TOTAL_BUTTONS; i++)
         {
             if (new_presses & Buttons[i].mask)
+            {
+                xTaskNotifyIndexed(Badge.audio.task_handle, 0, i, eSetValueWithoutOverwrite);
                 Badge.cli.serial->println(Buttons[i].name);
+            }
         }
         if (check_Konami())
             // todo: flag

@@ -82,6 +82,8 @@ void LED_task(void *pvParameters)
     set_LED_mode(leds);
     static bool alarm_is_long = true;
     static uint8_t message_index = 0;
+    uint32_t led_event = 0;
+    uint32_t *pLed_event = &led_event;
 
     // signal to cli that leds are set up
     xSemaphoreGive(leds->update_sem);
@@ -119,14 +121,17 @@ void LED_task(void *pvParameters)
             set_LED_mode(leds);
         }
 
-        if (xTaskNotifyWaitIndexed(0, 0, 0, NULL, 0) == pdTRUE)
+        if (xTaskNotifyWaitIndexed(0, 0, 0, pLed_event, 0) == pdTRUE)
         {
-            leds->controller->setAllLEDPWM(0);
-            leds->controller->setDisplayMode(Display_Mode_Picture);
-            leds->controller->setPictureFrame(0);
+            if (led_event == 0)
+            {
+                leds->controller->setAllLEDPWM(0);
+                leds->controller->setDisplayMode(Display_Mode_Picture);
+                leds->controller->setPictureFrame(0);
 
-            leds->controller->setAllLEDPWM(100);
-            vTaskDelay(1000);
+                leds->controller->setAllLEDPWM(100);
+                vTaskDelay(200);
+            }
             xTaskNotifyStateClearIndexed(leds->task_handle, 0);
 
             set_LED_mode(leds);
