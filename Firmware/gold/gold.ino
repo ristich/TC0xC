@@ -1,5 +1,4 @@
 #include <WiFi.h>
-//#include <WiFiClient.h>
 #include <IRCClient.h>
 #include "rtos.h"
 #include "led.h"
@@ -120,6 +119,7 @@ void setup()
   Serial.println(WiFi.macAddress());  
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP()); 
+  sprintf(NICK, "t%06X", (uint32_t)(ESP.getEfuseMac() >> 24));
   client.setCallback(command_handler);
   client.setSentCallback(debugSentCallback); 
 
