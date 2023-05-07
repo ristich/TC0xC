@@ -13,6 +13,4 @@
 #define UP_TOUCH T3
 #define RIGHT_TOUCH T4
 #define SELECT_TOUCH T6
-
-// touch button tresholds
-#define TOUCH_THRESH 25
+#define TOTAL_BUTTONS 5

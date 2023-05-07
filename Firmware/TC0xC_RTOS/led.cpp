@@ -31,7 +31,6 @@ LED_Error LED_init(LED_Object *leds)
     }
 
     leds->update_sem = xSemaphoreCreateBinary();
-    leds->event_sem = xSemaphoreCreateBinary();
 
     init_timer(leds);
 
@@ -82,7 +81,6 @@ void LED_task(void *pvParameters)
 
     // signal to cli that leds are set up
     xSemaphoreGive(leds->update_sem);
-    xSemaphoreGive(leds->event_sem);
 
     // wait for cli to init
     vTaskDelay(500 / portTICK_PERIOD_MS);
@@ -125,7 +123,6 @@ void LED_task(void *pvParameters)
 
             leds->controller->setAllLEDPWM(100);
             vTaskDelay(500);
-            xSemaphoreGive(leds->event_sem);
 
             set_LED_mode(leds);
         }

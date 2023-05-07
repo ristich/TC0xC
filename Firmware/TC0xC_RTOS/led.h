@@ -27,7 +27,6 @@ typedef struct LED_Object
     TaskHandle_t task_handle;     // task handle
     hw_timer_t *message_timer;    // alarm for detecting when to show message
     SemaphoreHandle_t update_sem; // alert for new value updates
-    SemaphoreHandle_t event_sem;  // alert for new event
     TC_IS31FL3731 *controller;    // pointer to serial interface
     led_mode_t mode;              // current set mode
     uint16_t delay_ms;            // delay between LED changes
