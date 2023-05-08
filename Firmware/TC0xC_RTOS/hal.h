@@ -15,5 +15,7 @@
 #define SELECT_TOUCH T6
 
 // buzzer
-#define BUZZER_PIN 5u
-#define BUZZER_CHANNEL 0u
+#define BUZZER_PIN 5
+#define BUZZER_CHANNEL 0
+#define BUZZER_DEFAULT_FREQ 4000
+#define BUZZER_RESOLUTION 10

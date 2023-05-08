@@ -23,7 +23,11 @@ Audio_Error audio_init(Audio_Object *audio)
     if (audio->initialized)
         return AUDIO_SUCCESS;
 
-    tone(BUZZER_PIN, 0);
+    pinMode(BUZZER_PIN, OUTPUT);
+
+    ledcSetup(BUZZER_CHANNEL, BUZZER_DEFAULT_FREQ, BUZZER_RESOLUTION);
+    ledcAttachPin(BUZZER_PIN, BUZZER_CHANNEL);
+    ledcWriteTone(BUZZER_CHANNEL, 0);
 
     xTaskCreatePinnedToCore(audio_task, "audio_task", 2048, audio, tskIDLE_PRIORITY + 2, &audio->task_handle, app_cpu);
 
@@ -59,10 +63,9 @@ void play_song(uint32_t index)
     song_t const *song = &songs[index];
     while (note_index < song->length)
     {
-        // using tone's duration parameter messes with task notify
-        tone(BUZZER_PIN, song->notes[note_index].note);
+        ledcWriteTone(BUZZER_CHANNEL, song->notes[note_index].note);
         vTaskDelay(song->notes[note_index].hold);
         note_index++;
     }
-    noTone(BUZZER_PIN);
+    ledcWriteTone(BUZZER_CHANNEL, 0);
 }

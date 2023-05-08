@@ -1,10 +1,16 @@
 #pragma once
 
+#include "cli.h"
 #include "hal.h"
 
 // touch button tresholds
 #define TOUCH_THRESH 25
 #define KONAMI_LENGTH 9
+
+typedef enum Touch_Error
+{
+    TOUCH_SUCCESS = 0,
+} Touch_Error;
 
 typedef enum Button_Bit
 {
@@ -32,5 +38,14 @@ const Touch_Button Buttons[TOTAL_BUTTONS]{
     {SELECT_TOUCH, SELECT_BIT, (1 << SELECT_BIT), "Select"},
 };
 
-uint8_t get_button_states(uint8_t *new_presses, uint8_t *new_releases);
-bool check_Konami();
+typedef struct Touch_Object
+{
+    bool initialized;
+    TaskHandle_t led_handle;
+    TaskHandle_t audio_handle;
+    CLI_Object *cli;
+} Touch_Object;
+
+Touch_Error touch_init(Touch_Object *touch, CLI_Object *cli, TaskHandle_t led_handle, TaskHandle_t audio_handle);
+// uint8_t get_button_states(uint8_t *new_presses, uint8_t *new_releases);
+// bool check_Konami();

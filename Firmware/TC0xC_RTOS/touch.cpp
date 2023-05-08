@@ -5,6 +5,57 @@
 static uint8_t touch_buffer[KONAMI_LENGTH] = {0};
 static uint8_t touch_buffer_index = 0;
 
+void touch_task(void *pvParameters);
+uint8_t is_touched(uint8_t gpioPin, uint8_t threshold);
+uint8_t get_button_states(uint8_t *new_presses, uint8_t *new_releases);
+bool check_Konami();
+
+Touch_Error touch_init(Touch_Object *touch, CLI_Object *cli, TaskHandle_t led_handle, TaskHandle_t audio_handle)
+{
+    if (touch->initialized)
+        return TOUCH_SUCCESS;
+
+    touch->cli = cli;
+    touch->led_handle = led_handle;
+    touch->audio_handle = audio_handle;
+    
+    xTaskCreatePinnedToCore(touch_task, "touch_task", 2048, touch, tskIDLE_PRIORITY + 2, NULL, app_cpu);
+
+    touch->initialized = true;
+
+    return TOUCH_SUCCESS;
+}
+
+void touch_task(void *pvParameters)
+{
+    Touch_Object *touch = (Touch_Object*)pvParameters;
+
+    uint8_t new_presses = 0;
+    uint8_t new_releases = 0;
+
+    while(1)
+    {
+        get_button_states(&new_presses, &new_releases);
+        if (new_presses)
+        {
+            xTaskNotifyIndexed(touch->led_handle, 0, 0, eSetValueWithoutOverwrite);
+            for (uint8_t i = 0; i < TOTAL_BUTTONS; i++)
+            {
+                if (new_presses & Buttons[i].mask)
+                {
+                    xTaskNotifyIndexed(touch->audio_handle, 0, i, eSetValueWithoutOverwrite);
+                    touch->cli->serial->println(Buttons[i].name);
+                }
+            }
+            if (check_Konami())
+                // todo: flag
+                touch->cli->serial->println("Hadouken!");
+        }
+
+        vTaskDelay(100);
+    }
+}
+
 /**
  * @brief simple debounce check for touch sensing
  *
@@ -88,10 +139,10 @@ uint8_t get_button_states(uint8_t *new_presses, uint8_t *new_releases)
 /**
  * @brief checks to see if the last sequence of button presses was the
  *  Konami code
- * 
+ *
  * @note it is up to the programmer to call this after a new press is
  *  registered
- * 
+ *
  * @return true Konami code was entered
  * @return false Konami code was not entered
  */
