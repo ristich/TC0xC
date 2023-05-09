@@ -1,9 +1,15 @@
 #include <WiFi.h>
 #include <IRCClient.h>
+#include <IRremoteESP8266.h>
+#include <IRsend.h>
+#include <Update.h>
 #include "rtos.h"
 #include "led.h"
 #include "cli.h"
 #include "sound.h"
+#include "touch.h"
+#include "audio.h"
+#include "tag.h"
 
 const char* ssid = "FACEPLANT";
 const char* pass = "FACEPLANT";
@@ -18,6 +24,9 @@ typedef struct
 {
     LED_Object leds;
     CLI_Object cli;
+    Audio_Object audio;
+    Touch_Object touch;
+    Player_Object player;
 } Badge_Object;
 
 Badge_Object Badge = {0};
@@ -61,30 +70,12 @@ void command_handler(IRCMessage ircMessage) {
   //      client.sendMessage(ircMessage.parameters, "keep on rollin' babeh");   
   // }
 
-  // if (ircMessage.text == "!alert") 
-  // {
-  //       alert(tcleds);
-  //       client.sendMessage(ircMessage.parameters, "alert! missing child");   
-  //       tcleds.setTextBotColor(0x01, random(0,255), random(0,255), random(0,255));
-  //       tcleds.setTextTopColor(0x01, random(0,255), random(0,255), random(0,255));
-  //       tcleds.setTextBotColor(0x64, random(0,255), random(0,255), random(0,255));
-  //       tcleds.setTextTopColor(0x64, random(0,255), random(0,255), random(0,255));
-  //       tcleds.setTextBotColor(0x20, random(0,255), random(0,255), random(0,255));
-  //       tcleds.setTextTopColor(0x20, random(0,255), random(0,255), random(0,255));
-  //       tcleds.setTextBotColor(0x10, random(0,255), random(0,255), random(0,255));
-  //       tcleds.setTextTopColor(0x10, random(0,255), random(0,255), random(0,255));
-  //       tcleds.setTextBotColor(0x08, random(0,255), random(0,255), random(0,255));
-  //       tcleds.setTextTopColor(0x08, random(0,255), random(0,255), random(0,255));
-  //       tcleds.setTextBotColor(0x04, random(0,255), random(0,255), random(0,255));
-  //       tcleds.setTextTopColor(0x04, random(0,255), random(0,255), random(0,255));
-  //       tcleds.setTextBotColor(0x02, random(0,255), random(0,255), random(0,255));
-  //       tcleds.setTextTopColor(0x02, random(0,255), random(0,255), random(0,255));
-  // }
+
 
   if(ircMessage.text == "!update")
      {
       client.sendMessage(ircMessage.parameters, "attempting update");
-      //execOTA();
+      execOTA();
       delay(10000);
       client.sendMessage(ircMessage.parameters, "update failed");
      }
@@ -119,7 +110,7 @@ void setup()
   Serial.println(WiFi.macAddress());  
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP()); 
-  sprintf(NICK, "t%06X", (uint32_t)(ESP.getEfuseMac() >> 24));
+  sprintf(NICK, "TC%06X", (uint32_t)(ESP.getEfuseMac() >> 24));
   client.setCallback(command_handler);
   client.setSentCallback(debugSentCallback); 
 
