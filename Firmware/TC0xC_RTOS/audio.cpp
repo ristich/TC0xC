@@ -12,11 +12,11 @@ const song_t songs[] = {
     {button_up, sizeof(button_up) / sizeof(tone_t)},
     {button_right, sizeof(button_right) / sizeof(tone_t)},
     {button_select, sizeof(button_select) / sizeof(tone_t)},
-    {foo, sizeof(foo) / sizeof(tone_t)},
-    {bar, sizeof(bar) / sizeof(tone_t)}};
+    {stage_complete, sizeof(stage_complete) / sizeof(tone_t)},
+    {rick, sizeof(rick) / sizeof(tone_t)}};
 
 void audio_task(void *pvParameters);
-void play_song(uint32_t index);
+Song_Error play_song(uint32_t *index);
 
 Audio_Error audio_init(Audio_Object *audio)
 {
@@ -38,34 +38,40 @@ Audio_Error audio_init(Audio_Object *audio)
 
 void audio_task(void *pvParameters)
 {
-    Audio_Object *audio = (Audio_Object *)pvParameters;
+    // Audio_Object *audio = (Audio_Object *)pvParameters;
     uint32_t song_index;
     uint32_t *pSong_index = &song_index;
 
     while (1)
     {
-        song_index = 0;
+        song_index = TOTAL_SONGS;
         if (xTaskNotifyWaitIndexed(0, 0, 0, pSong_index, 0) == pdTRUE)
         {
-            play_song(song_index);
-            xTaskNotifyStateClearIndexed(audio->task_handle, 0);
+            song_index = RICK_SONG;
+            while(play_song(pSong_index) == SONG_INTERRUPTED);
         }
         vTaskDelay(10);
     }
 }
 
-void play_song(uint32_t index)
+Song_Error play_song(uint32_t *index)
 {
-    if (index >= TOTAL_SONGS)
-        return;
+    if (*index >= TOTAL_SONGS)
+        return SONG_INDEX_TOO_HIGH;
 
     uint32_t note_index = 0;
-    song_t const *song = &songs[index];
+    song_t const *song = &songs[*index];
     while (note_index < song->length)
     {
         ledcWriteTone(BUZZER_CHANNEL, song->notes[note_index].note);
-        vTaskDelay(song->notes[note_index].hold);
+        if (xTaskNotifyWaitIndexed(0, 0, 0, index, song->notes[note_index].hold) == pdTRUE)
+        {
+            ledcWriteTone(BUZZER_CHANNEL, 0);
+            return SONG_INTERRUPTED;
+        }
         note_index++;
     }
+    
     ledcWriteTone(BUZZER_CHANNEL, 0);
+    return SONG_COMPLETE;
 }

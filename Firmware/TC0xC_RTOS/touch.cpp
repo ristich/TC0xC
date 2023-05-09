@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "rtos.h"
 #include "touch.h"
+#include "audio.h"
 
 static uint8_t touch_buffer[KONAMI_LENGTH] = {0};
 static uint8_t touch_buffer_index = 0;
@@ -49,6 +50,7 @@ void touch_task(void *pvParameters)
             }
             if (check_Konami())
                 // todo: flag
+                xTaskNotifyIndexed(touch->audio_handle, 0, STAGE_COMPLETE_SONG, eSetValueWithoutOverwrite);
                 touch->cli->serial->println("Hadouken!");
         }
 
