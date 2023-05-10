@@ -34,8 +34,6 @@ LED_Error LED_init(LED_Object *leds)
         return LED_SUCCESS;
     }
 
-    leds->update_sem = xSemaphoreCreateBinary();
-
     init_timer(leds);
 
     // init pins for led driver
@@ -69,10 +67,8 @@ void init_timer(LED_Object *leds)
     leds->message_timer = timerBegin(0, 8000, true);
     timerAttachInterrupt(leds->message_timer, &onTimer, true);
 
-    // Set alarm to trigger after 10s
+    // Set alarm to trigger after interval to display message
     timerAlarmWrite(leds->message_timer, Alarm_Interval_Long, true);
-
-    // Start an alarm
     timerAlarmEnable(leds->message_timer);
 }
 
@@ -85,21 +81,11 @@ void LED_task(void *pvParameters)
     uint32_t led_event = 0;
     uint32_t *pLed_event = &led_event;
 
-    // signal to cli that leds are set up
-    xSemaphoreGive(leds->update_sem);
-
     // wait for cli to init
     vTaskDelay(500 / portTICK_PERIOD_MS);
 
     while (1)
     {
-        // check an update
-        if (xSemaphoreTake(leds->update_sem, 0) == pdTRUE)
-        {
-            set_LED_mode(leds);
-            xSemaphoreGive(leds->update_sem);
-        }
-
         // check for timed message
         if (xSemaphoreTake(timerSemaphore, 0) == pdTRUE)
         {
@@ -123,7 +109,13 @@ void LED_task(void *pvParameters)
 
         if (xTaskNotifyWaitIndexed(0, 0, 0, pLed_event, 0) == pdTRUE)
         {
-            if (led_event == 0)
+            // don't need to call this right now, since set_LED_mode gets called any
+            // time there is an alert currently
+            // if (led_event == LED_UPDATE)
+            // {
+            //     set_LED_mode(leds);
+            // }
+            if (led_event == LED_BUTTON_PRESS)
             {
                 leds->controller->setAllLEDPWM(0);
                 leds->controller->setDisplayMode(Display_Mode_Picture);
@@ -136,7 +128,7 @@ void LED_task(void *pvParameters)
 
             set_LED_mode(leds);
         }
-        vTaskDelay(100);
+        vTaskDelay(10);
     }
 }
 

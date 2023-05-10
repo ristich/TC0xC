@@ -39,7 +39,7 @@ void touch_task(void *pvParameters)
         get_button_states(&new_presses, &new_releases);
         if (new_presses)
         {
-            xTaskNotifyIndexed(touch->led_handle, 0, 0, eSetValueWithoutOverwrite);
+            xTaskNotifyIndexed(touch->led_handle, 0, LED_BUTTON_PRESS, eSetValueWithoutOverwrite);
             for (uint8_t i = 0; i < TOTAL_BUTTONS; i++)
             {
                 if (new_presses & Buttons[i].mask)

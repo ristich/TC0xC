@@ -50,7 +50,7 @@ void audio_task(void *pvParameters)
         {
             while(play_song(pSong_index) == SONG_INTERRUPTED);
         }
-        vTaskDelay(10);
+        vTaskDelay(100);
     }
 }
 
