@@ -16,6 +16,6 @@
 
 // buzzer
 #define BUZZER_PIN 5
-#define BUZZER_CHANNEL 0
+#define BUZZER_CHANNEL 2
 #define BUZZER_DEFAULT_FREQ 4000
 #define BUZZER_RESOLUTION 10

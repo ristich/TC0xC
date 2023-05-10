@@ -21,7 +21,8 @@ typedef enum Song_Error
 
 typedef enum Song_Index
 {
-    DOWN_BTN_SONG = 0,
+    NO_SONG = 0,
+    DOWN_BTN_SONG,
     LEFT_BTN_SONG,
     UP_BTN_SONG,
     RIGHT_BTN_SONG,

@@ -3,6 +3,10 @@
 #include "pitches.h"
 #include "audio.h"
 
+const tone_t silence[] = {
+    {0, 0},
+};
+
 const tone_t button_down[] = {
     {NOTE_C6, 200},
 };

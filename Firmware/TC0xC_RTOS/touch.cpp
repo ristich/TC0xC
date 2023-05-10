@@ -19,7 +19,7 @@ Touch_Error touch_init(Touch_Object *touch, CLI_Object *cli, TaskHandle_t led_ha
     touch->cli = cli;
     touch->led_handle = led_handle;
     touch->audio_handle = audio_handle;
-    
+
     xTaskCreatePinnedToCore(touch_task, "touch_task", 2048, touch, tskIDLE_PRIORITY + 2, NULL, app_cpu);
 
     touch->initialized = true;
@@ -29,12 +29,12 @@ Touch_Error touch_init(Touch_Object *touch, CLI_Object *cli, TaskHandle_t led_ha
 
 void touch_task(void *pvParameters)
 {
-    Touch_Object *touch = (Touch_Object*)pvParameters;
+    Touch_Object *touch = (Touch_Object *)pvParameters;
 
     uint8_t new_presses = 0;
     uint8_t new_releases = 0;
 
-    while(1)
+    while (1)
     {
         get_button_states(&new_presses, &new_releases);
         if (new_presses)
@@ -44,14 +44,16 @@ void touch_task(void *pvParameters)
             {
                 if (new_presses & Buttons[i].mask)
                 {
-                    xTaskNotifyIndexed(touch->audio_handle, 0, i, eSetValueWithoutOverwrite);
+                    xTaskNotifyIndexed(touch->audio_handle, 0, (i + 1), eSetValueWithoutOverwrite);
                     touch->cli->serial->println(Buttons[i].name);
                 }
             }
             if (check_Konami())
+            {
                 // todo: flag
-                xTaskNotifyIndexed(touch->audio_handle, 0, STAGE_COMPLETE_SONG, eSetValueWithoutOverwrite);
+                xTaskNotifyIndexed(touch->audio_handle, 0, STAGE_COMPLETE_SONG, eSetValueWithOverwrite);
                 touch->cli->serial->println("Hadouken!");
+            }
         }
 
         vTaskDelay(100);
@@ -126,10 +128,14 @@ uint8_t get_button_states(uint8_t *new_presses, uint8_t *new_releases)
                     touch_buffer[touch_buffer_index] = i;
                     touch_buffer_index++;
                     if (touch_buffer_index >= KONAMI_LENGTH)
+                    {
                         touch_buffer_index = 0;
+                    }
                 }
                 else
+                {
                     *new_releases |= (1 << i);
+                }
             }
         }
     }
@@ -167,7 +173,9 @@ bool check_Konami()
     {
         uint8_t check_index = (touch_buffer_index + i) % KONAMI_LENGTH;
         if (touch_buffer[check_index] != konami_buffer[i])
+        {
             is_konami = false;
+        }
     }
 
     return is_konami;
