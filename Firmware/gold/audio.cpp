@@ -7,12 +7,14 @@
 
 const song_t songs[] = {
     // it's important that button songs be at the start in this order
+    {silence, sizeof(silence) / sizeof(tone_t)},
     {button_down, sizeof(button_down) / sizeof(tone_t)},
     {button_left, sizeof(button_left) / sizeof(tone_t)},
     {button_up, sizeof(button_up) / sizeof(tone_t)},
     {button_right, sizeof(button_right) / sizeof(tone_t)},
     {button_select, sizeof(button_select) / sizeof(tone_t)},
     {stage_complete, sizeof(stage_complete) / sizeof(tone_t)},
+    {hit, sizeof(hit) / sizeof(tone_t)},
     {rick, sizeof(rick) / sizeof(tone_t)}};
 
 void audio_task(void *pvParameters);
@@ -44,13 +46,12 @@ void audio_task(void *pvParameters)
 
     while (1)
     {
-        song_index = TOTAL_SONGS;
+        song_index = NO_SONG;
         if (xTaskNotifyWaitIndexed(0, 0, 0, pSong_index, 0) == pdTRUE)
         {
-            song_index = RICK_SONG;
             while(play_song(pSong_index) == SONG_INTERRUPTED);
         }
-        vTaskDelay(10);
+        vTaskDelay(100);
     }
 }
 

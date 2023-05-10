@@ -1,11 +1,31 @@
+#include <Arduino.h>
+#include "rtos.h"
 #include "led.h"
+#include "hal.h"
 
 static void LED_task(void *pvParameters);
 void set_LED_mode(LED_Object *leds);
+void init_timer(LED_Object *leds);
+void ARDUINO_ISR_ATTR onTimer();
 
+// LED modes
 static void rotate_leds(LED_Object *leds);
+static void blink_leds(LED_Object *leds);
+
+// constants
+const uint32_t Alarm_Interval_Long = 4200000;  // 7 min
+const uint32_t Alarm_Interval_Short = 3000000; // 5 min
+const uint8_t Message_Brightness = 100;
+const uint16_t Message_Delay_ms = 150;
+const uint8_t MAX_MESSAGE_LEN = 20;
+const uint8_t TOTAL_MESSAGES = 3;
+// todo: change these to c7five messages
+char Messages[TOTAL_MESSAGES][MAX_MESSAGE_LEN] = {"helloworld",
+                                                  "foobar",
+                                                  "abcxzy"};
 
 TC_IS31FL3731 led_controller = TC_IS31FL3731();
+volatile SemaphoreHandle_t timerSemaphore;
 
 LED_Error LED_init(LED_Object *leds)
 {
@@ -14,16 +34,16 @@ LED_Error LED_init(LED_Object *leds)
         return LED_SUCCESS;
     }
 
-    leds->update_sem = xSemaphoreCreateBinary();
+    init_timer(leds);
 
     // init pins for led driver
-    pinMode(I2C_SDA, OUTPUT);
-    pinMode(I2C_SCL, OUTPUT);
-    pinMode(LED_SDB, OUTPUT);
-    digitalWrite(LED_SDB, HIGH);
+    pinMode(I2C_SDA_PIN, OUTPUT);
+    pinMode(I2C_SCL_PIN, OUTPUT);
+    pinMode(LED_SDB_PIN, OUTPUT);
+    digitalWrite(LED_SDB_PIN, HIGH);
 
     // init led driver
-    led_controller.begin(I2C_SDA, I2C_SCL);
+    led_controller.begin(I2C_SDA_PIN, I2C_SCL_PIN);
     leds->controller = &led_controller;
 
     // init led setting defaults
@@ -31,32 +51,84 @@ LED_Error LED_init(LED_Object *leds)
     leds->delay_ms = 500;
     leds->brightness = 10;
 
-    xTaskCreatePinnedToCore(LED_task, "LED_task", 2048, leds, tskIDLE_PRIORITY + 2, NULL, app_cpu);
+    xTaskCreatePinnedToCore(LED_task, "LED_task", 2048, leds, tskIDLE_PRIORITY + 2, &leds->task_handle, app_cpu);
 
     leds->initialized = true;
 
     return LED_SUCCESS;
 }
 
+void init_timer(LED_Object *leds)
+{
+    // Create semaphore to inform us when the timer has fired
+    timerSemaphore = xSemaphoreCreateBinary();
+
+    // use first timer with 10kHz clock
+    leds->message_timer = timerBegin(0, 8000, true);
+    timerAttachInterrupt(leds->message_timer, &onTimer, true);
+
+    // Set alarm to trigger after interval to display message
+    timerAlarmWrite(leds->message_timer, Alarm_Interval_Long, true);
+    timerAlarmEnable(leds->message_timer);
+}
+
 void LED_task(void *pvParameters)
 {
     LED_Object *leds = (LED_Object *)pvParameters;
-    rotate_leds(leds);
-
-    // signal to cli that leds are set up
-    xSemaphoreGive(leds->update_sem);
+    set_LED_mode(leds);
+    static bool alarm_is_long = true;
+    static uint8_t message_index = 0;
+    uint32_t led_event = 0;
+    uint32_t *pLed_event = &led_event;
 
     // wait for cli to init
     vTaskDelay(500 / portTICK_PERIOD_MS);
 
     while (1)
     {
-        // wait for an update
-        if (xSemaphoreTake(leds->update_sem, portMAX_DELAY))
+        // check for timed message
+        if (xSemaphoreTake(timerSemaphore, 0) == pdTRUE)
         {
+            if (alarm_is_long)
+                timerAlarmWrite(leds->message_timer, Alarm_Interval_Short, true);
+            else
+                timerAlarmWrite(leds->message_timer, Alarm_Interval_Long, true);
+
+            leds->controller->setAllLEDPWM(0);
+            leds->controller->setDisplayMode(Display_Mode_Picture);
+            leds->controller->setPictureFrame(0);
+            leds->controller->setBadgeMessage(Messages[message_index], MAX_MESSAGE_LEN, Message_Brightness, Message_Delay_ms);
+
+            alarm_is_long = !alarm_is_long;
+            message_index++;
+            if (message_index >= TOTAL_MESSAGES)
+                message_index = 0;
+
             set_LED_mode(leds);
-            xSemaphoreGive(leds->update_sem);
         }
+
+        if (xTaskNotifyWaitIndexed(0, 0, 0, pLed_event, 0) == pdTRUE)
+        {
+            // don't need to call this right now, since set_LED_mode gets called any
+            // time there is an alert currently
+            // if (led_event == LED_UPDATE)
+            // {
+            //     set_LED_mode(leds);
+            // }
+            if (led_event == LED_BUTTON_PRESS)
+            {
+                leds->controller->setAllLEDPWM(0);
+                leds->controller->setDisplayMode(Display_Mode_Picture);
+                leds->controller->setPictureFrame(0);
+
+                leds->controller->setAllLEDPWM(100);
+                vTaskDelay(200);
+            }
+            xTaskNotifyStateClearIndexed(leds->task_handle, 0);
+
+            set_LED_mode(leds);
+        }
+        vTaskDelay(10);
     }
 }
 
@@ -70,6 +142,10 @@ void set_LED_mode(LED_Object *leds)
 
     case LED_MODE_ROTATE:
         rotate_leds(leds);
+        break;
+
+    case LED_MODE_BLINK:
+        blink_leds(leds);
         break;
 
     default:
@@ -102,4 +178,25 @@ static void rotate_leds(LED_Object *leds)
 
     // showtime!
     leds->controller->setDisplayMode(Display_Mode_Auto_Play);
+}
+
+static void blink_leds(LED_Object *leds)
+{
+    leds->controller->setAutoPlayFrames(2);
+    leds->controller->setAutoPlayLoops(0);
+    leds->controller->setAutoPlayDelay(leds->delay_ms);
+    leds->controller->setAutoPlayStart(1);
+
+    leds->controller->setAllLEDPWM(0, 1);
+    leds->controller->setAllLEDPWM(0, 2);
+
+    leds->controller->setAllLEDPWM(leds->brightness, 2);
+
+    leds->controller->setDisplayMode(Display_Mode_Auto_Play);
+}
+
+void ARDUINO_ISR_ATTR onTimer()
+{
+    // use semaphore to alert loop of timer trigger
+    xSemaphoreGiveFromISR(timerSemaphore, NULL);
 }

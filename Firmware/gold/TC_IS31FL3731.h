@@ -38,20 +38,25 @@
 
 typedef enum
 {
-  LED_COL_TWELVE = 0,
-  LED_COL_ONE,
-  LED_COL_FIVE,
-  LED_COL_SIX,
-  LED_COL_SEVEN,
-  LED_COL_ELEVEN,
+    LED_COL_TWELVE = 0,
+    LED_COL_ONE,
+    LED_COL_FIVE,
+    LED_COL_SIX,
+    LED_COL_SEVEN,
+    LED_COL_ELEVEN,
 } led_col_t;
+
+// 0 - 23 as they appear on plastics
+const uint8_t led_addrs[24] = {0x57, 0x47, 0x37, 0x27, 0x58, 0x48, 0x28, 0x38,
+                               0x59, 0x49, 0x39, 0x29, 0x54, 0x44, 0x34, 0x24,
+                               0x55, 0x45, 0x35, 0x25, 0x56, 0x46, 0x36, 0x26};
 
 // Function settings
 typedef enum
 {
-  Display_Mode_Picture,
-  Display_Mode_Auto_Play,
-  Display_Mode_Audio_Play,
+    Display_Mode_Picture,
+    Display_Mode_Auto_Play,
+    Display_Mode_Audio_Play,
 } Display_Mode;
 
 /**************************************************************************/
@@ -62,31 +67,34 @@ typedef enum
 class TC_IS31FL3731
 {
 public:
-  TC_IS31FL3731(uint8_t driver = IC_3731) { _ledDriver = driver; }
-  bool begin(uint8_t sdaPin, uint8_t sclPin, uint8_t addr = ISSI_ADDR_DEFAULT);
+    TC_IS31FL3731(uint8_t driver = IC_3731) { _ledDriver = driver; }
+    bool begin(uint8_t sdaPin, uint8_t sclPin, uint8_t addr = ISSI_ADDR_DEFAULT);
 
-  void setDisplayMode(Display_Mode mode);
+    void setDisplayMode(Display_Mode mode);
 
-  void setPictureFrame(uint8_t frame);
+    void setPictureFrame(uint8_t frame);
 
-  void setAutoPlayStart(uint8_t frame);
-  void setAutoPlayFrames(uint8_t frames);
-  void setAutoPlayLoops(uint8_t loops);
-  void setAutoPlayDelay(uint16_t delay_ms);
+    void setAutoPlayStart(uint8_t frame);
+    void setAutoPlayFrames(uint8_t frames);
+    void setAutoPlayLoops(uint8_t loops);
+    void setAutoPlayDelay(uint16_t delay_ms);
 
-  void audioSync(bool sync);
+    void audioSync(bool sync);
 
-  void clear(uint8_t bank = 0);
-  void setLEDPWM(uint8_t lednum, uint8_t pwm, uint8_t bank = 0);
-  void setAllLEDPWM(uint8_t pwm, uint8_t bank = 0);
-  void setColumn(led_col_t col, uint8_t pwm, uint8_t bank = 0);
-  void setBadgeLED(uint8_t led, uint8_t set, uint8_t bank = 0);
+    void clear(uint8_t bank = 0);
+    void setLEDPWM(uint8_t led, uint8_t pwm, uint8_t bank = 0);
+    void setAllLEDPWM(uint8_t pwm, uint8_t bank = 0);
+    void setColumn(led_col_t col, uint8_t pwm, uint8_t bank = 0);
+    void setBadgeLED(uint8_t lednum, uint8_t set, uint8_t bank = 0);
+    void setBadgeLEDs(uint32_t config, uint8_t pwm, uint8_t bank = 0);
+    void setBadgeLetter(char letter, uint8_t pwm, uint8_t bank = 0);
+    void setBadgeMessage(char *message, uint8_t message_len, uint8_t pwm, uint16_t delay_ms, uint8_t bank = 0);
 
 protected:
-  void selectBank(uint8_t bank);
-  void modifyRegister8(uint8_t bank, uint8_t reg, uint8_t val, uint8_t mask);
-  void writeRegister8(uint8_t bank, uint8_t reg, uint8_t val);
-  uint8_t readRegister8(uint8_t bank, uint8_t reg);
-  uint8_t _ledDriver;
-  uint8_t _i2caddr; ///< The I2C address we expect to find the chip
+    void selectBank(uint8_t bank);
+    void modifyRegister8(uint8_t bank, uint8_t reg, uint8_t val, uint8_t mask);
+    void writeRegister8(uint8_t bank, uint8_t reg, uint8_t val);
+    uint8_t readRegister8(uint8_t bank, uint8_t reg);
+    uint8_t _ledDriver;
+    uint8_t _i2caddr; ///< The I2C address we expect to find the chip
 };

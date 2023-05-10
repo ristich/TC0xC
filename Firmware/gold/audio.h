@@ -21,12 +21,14 @@ typedef enum Song_Error
 
 typedef enum Song_Index
 {
-    DOWN_BTN_SONG = 0,
+    NO_SONG = 0,
+    DOWN_BTN_SONG,
     LEFT_BTN_SONG,
     UP_BTN_SONG,
     RIGHT_BTN_SONG,
     SELECT_BTN_SONG,
     STAGE_COMPLETE_SONG,
+    HIT_SONG,
     RICK_SONG,
     TOTAL_SONGS, // should always be last
 } Song_Index;

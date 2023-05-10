@@ -47,5 +47,3 @@ typedef struct Touch_Object
 } Touch_Object;
 
 Touch_Error touch_init(Touch_Object *touch, CLI_Object *cli, TaskHandle_t led_handle, TaskHandle_t audio_handle);
-// uint8_t get_button_states(uint8_t *new_presses, uint8_t *new_releases);
-// bool check_Konami();

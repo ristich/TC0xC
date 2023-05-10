@@ -19,7 +19,7 @@ typedef struct {
     uint8_t livesRemaining;
 } Player_Object;
 
-void initializePlayer(Player_Object* player, const char* playerName, uint8_t initialHealth, uint8_t initialLives);
+void Player_init(Player_Object* player, const char* playerName, uint8_t initialHealth, uint8_t initialLives);
 DamageNode* createDamageNode(uint8_t amount, const char* attacker);
 void addDamage(Player_Object* player, uint8_t amount, const char* attacker);
 void takeDamage(Player_Object* player, const char* attacker, uint8_t amount);

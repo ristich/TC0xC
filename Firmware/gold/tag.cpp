@@ -3,7 +3,7 @@
 #include "tag.h"
 
 
-void initializePlayer(Player_Object* player, const char* playerName, uint8_t initialHealth, uint8_t initialLives){
+void Player_init(Player_Object* player, const char* playerName, uint8_t initialHealth, uint8_t initialLives){
     strncpy(player->id, playerName, 9);
     player->health = initialHealth;
     player->damageList = NULL;

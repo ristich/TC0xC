@@ -1,4 +1,6 @@
 #include "cli.h"
+#include <Arduino.h>
+#include "rtos.h"
 
 static void CLI_task(void *pvParameters);
 static bool process_byte(CLI_Object *cli, char rxByte);
@@ -35,8 +37,6 @@ CLI_Error CLI_init(CLI_Object *cli, LED_Object *leds)
         return CLI_SUCCESS;
     }
 
-    xSemaphoreTake(leds->update_sem, portMAX_DELAY);
-
     Serial.begin(115200);
     vTaskDelay(1000 / portTICK_PERIOD_MS);
 
@@ -68,7 +68,7 @@ static void CLI_task(void *pvParameters)
 
     while (1)
     {
-        if (cli->serial->available())
+        while (cli->serial->available())
         {
             char r = cli->serial->read();
             if (process_byte(cli, r))
@@ -81,7 +81,7 @@ static void CLI_task(void *pvParameters)
                 cli->rx_buffer[0] = 0;
             }
         }
-        vTaskDelay(10 / portTICK_PERIOD_MS);
+        vTaskDelay(100);
     }
 }
 
@@ -241,9 +241,7 @@ static void LED_Brightness(CLI_Object *cli, uint8_t nargs, char **args)
     cli->leds->brightness = (uint8_t)(brightness & 0xFF);
 
     // signal to led driver there's an update
-    xSemaphoreGive(cli->leds->update_sem);
-    vTaskDelay(10);
-    xSemaphoreTake(cli->leds->update_sem, portMAX_DELAY);
+    xTaskNotifyIndexed(cli->leds->task_handle, 0, LED_UPDATE, eSetValueWithoutOverwrite);
 
     cli->serial->print("LED brightness set to ");
     cli->serial->println(brightness);
@@ -272,9 +270,7 @@ static void LED_Delay(CLI_Object *cli, uint8_t nargs, char **args)
     cli->leds->delay_ms = (uint16_t)(delay & 0xFFFF);
 
     // signal to led driver there's an update
-    xSemaphoreGive(cli->leds->update_sem);
-    vTaskDelay(10);
-    xSemaphoreTake(cli->leds->update_sem, portMAX_DELAY);
+    xTaskNotifyIndexed(cli->leds->task_handle, 0, LED_UPDATE, eSetValueWithoutOverwrite);
 
     cli->serial->print("LED delay set to ");
     cli->serial->print(delay);
