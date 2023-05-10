@@ -44,62 +44,6 @@ typedef struct
 Badge_Object Badge = {0};
 
 
-void command_handler(IRCMessage ircMessage) {
-  // PRIVMSG ignoring CTCP messages
-  if (ircMessage.command == "PRIVMSG" && ircMessage.text[0] != '\001') {
-    String message("<" + ircMessage.nick + "> " + ircMessage.text);
-    Serial.println(message);
-  }
-  
-  // reset command
-  if (ircMessage.text == "!restart") {
-     client.sendMessage(ircMessage.parameters,  String(NICK) + " restarting in 3 seconds");
-     client.sendRaw("PART #dev");
-     client.sendRaw("QUIT");
-     delay(3000);
-     ESP.restart();
-  }
-
-  // uptime (in clock cycles)
-   if (ircMessage.text == "!uptime") {
-     client.sendMessage(ircMessage.parameters, "live for "+ String(ESP.getCycleCount()) + " cycles");
-  }
-
-  // report sketch versions and size
-  if (ircMessage.text == "!firmware") {
-    client.sendMessage(ircMessage.parameters, "hash " + ESP.getSketchMD5() + " " + ESP.getSketchSize() +" bytes");
-  }  
-
-  if (ircMessage.text == "!boot") 
-  {
-       boss(BUZZER_PIN); 
-       client.sendMessage(ircMessage.parameters, "playing boot animation");   
-  }
-
-  // if (ircMessage.text == "!roll") 
-  // {
-  //      rollEm(tcleds, 0);
-  //      client.sendMessage(ircMessage.parameters, "keep on rollin' babeh");   
-  // }
-
-
-
-  if(ircMessage.text == "!update")
-     {
-      client.sendMessage(ircMessage.parameters, "attempting update on ");
-      getLocalTime(&timeinfo);
-      char time_buff[28];
-      strftime(time_buff, sizeof(time_buff), "%a, %d %b %y %H:%M:%S", &timeinfo);
-      client.sendMessage(ircMessage.parameters, time_buff);
-      execOTA();
-      delay(10000);
-      client.sendMessage(ircMessage.parameters, "update failed");
-     }
-} 
-
-void debugSentCallback(String data) {
-  Serial.println(data);
-}
 
 void setup()
 {
@@ -110,6 +54,7 @@ void setup()
     LED_init(&Badge.leds);
     CLI_init(&Badge.cli, &Badge.leds);
     Player_init(&Badge.player, NICK, MAX_HEALTH, LIVES);
+    audio_init(&Badge.audio);
     //touch_init here fails an assert as soon as wifi connects
     Badge.state = MAIN_MENU;
     // Opening animations here
@@ -142,9 +87,8 @@ void setup()
   Serial.print(" locked and loaded @ ");
   configTime((-5*60*60), 0, NTP_SERVER);
   printLocalTime();
-  
-  //xTaskNotifyIndexed(Badge.audio.task_handle, 0, HIT_SONG, eSetValueWithOverwrite); // this causes an assertion issue also
-
+ 
+ // xTaskNotifyIndexed(Badge.audio.task_handle, 0, HIT_SONG, eSetValueWithOverwrite); 
   // initializing touch here makes the system "stable" until a touch is handled then fails: assert failed: xTaskGenericNotify tasks.c:5545 (xTaskToNotify)
   touch_init(&Badge.touch, &Badge.cli, Badge.leds.task_handle, Badge.audio.task_handle);
  
