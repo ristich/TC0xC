@@ -20,6 +20,10 @@
 #define BUZZER_DEFAULT_FREQ 4000
 #define BUZZER_RESOLUTION 10
 
+// IR pins
+#define IR_TX_PIN 4u
+#define IR_RX_PIN 25u
+
 // networking
 #define IRC_SERVER "irl.depaul.edu"
 #define IRC_PORT 6667

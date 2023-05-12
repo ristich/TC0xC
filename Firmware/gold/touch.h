@@ -43,7 +43,8 @@ typedef struct Touch_Object
     bool initialized;
     TaskHandle_t led_handle;
     TaskHandle_t audio_handle;
+    TaskHandle_t ir_handle;
     CLI_Object *cli;
 } Touch_Object;
 
-Touch_Error touch_init(Touch_Object *touch, CLI_Object *cli, TaskHandle_t led_handle, TaskHandle_t audio_handle);
+Touch_Error touch_init(Touch_Object *touch, CLI_Object *cli, TaskHandle_t led_handle, TaskHandle_t audio_handle, TaskHandle_t ir_handle);

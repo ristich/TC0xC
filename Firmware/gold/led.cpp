@@ -9,6 +9,7 @@ void init_timer(LED_Object *leds);
 void ARDUINO_ISR_ATTR onTimer();
 
 // LED modes
+static void boot_sequence(LED_Object *leds);
 static void rotate_leds(LED_Object *leds);
 static void blink_leds(LED_Object *leds);
 
@@ -17,10 +18,10 @@ const uint32_t Alarm_Interval_Long = 4200000;  // 7 min
 const uint32_t Alarm_Interval_Short = 3000000; // 5 min
 const uint8_t Message_Brightness = 100;
 const uint16_t Message_Delay_ms = 150;
-const uint8_t MAX_MESSAGE_LEN = 20;
+const uint8_t MAX_MESSAGE_LEN = 50;
 const uint8_t TOTAL_MESSAGES = 3;
 // todo: change these to c7five messages
-char Messages[TOTAL_MESSAGES][MAX_MESSAGE_LEN] = {"helloworld",
+char Messages[TOTAL_MESSAGES][MAX_MESSAGE_LEN] = {"up up down down left right left right b a start",
                                                   "foobar",
                                                   "abcxzy"};
 
@@ -75,6 +76,7 @@ void init_timer(LED_Object *leds)
 void LED_task(void *pvParameters)
 {
     LED_Object *leds = (LED_Object *)pvParameters;
+    boot_sequence(leds);
     set_LED_mode(leds);
     static bool alarm_is_long = true;
     static uint8_t message_index = 0;
@@ -152,6 +154,40 @@ void set_LED_mode(LED_Object *leds)
         leds->controller->setAllLEDPWM(0);
         break;
     }
+}
+
+static void boot_sequence(LED_Object *leds)
+{
+    leds->controller->clear();
+    uint16_t i, j;
+    uint32_t led_rings[4] = {0x888888, 0x444444, 0x222222, 0x111111};
+    const TickType_t blink_delay_ms = 400;
+    const TickType_t hold_delay_ms = 1000;
+    for (i = 0; i < 4; i++)
+    {
+        for (j = 0; j < 3; j++)
+        {
+            leds->controller->setBadgeLEDs(led_rings[i], leds->brightness);
+            vTaskDelay(blink_delay_ms);
+            leds->controller->clear();
+            vTaskDelay(blink_delay_ms);
+        }
+    }
+    j = 0;
+    for (i = 512; i > 0; i -= 32)
+    {
+        leds->controller->clear();
+        leds->controller->setColumn((led_col_t)j, leds->brightness, 0);
+        vTaskDelay(i);
+        j = (j + 1) % LED_COL_COUNT;
+    }
+    leds->controller->setAllLEDPWM(leds->brightness);
+    vTaskDelay(hold_delay_ms);
+    leds->controller->clear();
+    vTaskDelay(blink_delay_ms);
+    char boot_message[] = "welcome to thotcon";
+    leds->controller->setBadgeMessage(boot_message, sizeof(boot_message)/sizeof(char),Message_Brightness, Message_Delay_ms);
+    leds->controller->clear();
 }
 
 static void rotate_leds(LED_Object *leds)

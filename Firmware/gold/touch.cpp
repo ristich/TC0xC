@@ -11,7 +11,7 @@ uint8_t is_touched(uint8_t gpioPin, uint8_t threshold);
 uint8_t get_button_states(uint8_t *new_presses, uint8_t *new_releases);
 bool check_Konami();
 
-Touch_Error touch_init(Touch_Object *touch, CLI_Object *cli, TaskHandle_t led_handle, TaskHandle_t audio_handle)
+Touch_Error touch_init(Touch_Object *touch, CLI_Object *cli, TaskHandle_t led_handle, TaskHandle_t audio_handle, TaskHandle_t ir_handle)
 {
     if (touch->initialized)
         return TOUCH_SUCCESS;
@@ -19,6 +19,7 @@ Touch_Error touch_init(Touch_Object *touch, CLI_Object *cli, TaskHandle_t led_ha
     touch->cli = cli;
     touch->led_handle = led_handle;
     touch->audio_handle = audio_handle;
+    touch->ir_handle = ir_handle;
 
     xTaskCreatePinnedToCore(touch_task, "touch_task", 2048, touch, tskIDLE_PRIORITY + 2, NULL, app_cpu);
 
@@ -46,6 +47,7 @@ void touch_task(void *pvParameters)
                 {
                     xTaskNotifyIndexed(touch->audio_handle, 0, (i + 1), eSetValueWithoutOverwrite);
                     touch->cli->serial->println(Buttons[i].name);
+                    xTaskNotifyIndexed(touch->ir_handle, 0, 0, eSetValueWithoutOverwrite);
 
                     
                 }

@@ -44,6 +44,7 @@ typedef enum
     LED_COL_SIX,
     LED_COL_SEVEN,
     LED_COL_ELEVEN,
+    LED_COL_COUNT,
 } led_col_t;
 
 // 0 - 23 as they appear on plastics

@@ -11,6 +11,7 @@
 #include "touch.h"
 #include "audio.h"
 #include "tag.h"
+#include "ir.h"
 
 const char* ssid = "FACEPLANT"; //TODO Update for Con Wifi
 const char* pass = "FACEPLANT";
@@ -38,23 +39,26 @@ typedef struct
     Audio_Object audio;
     Touch_Object touch;
     Player_Object player;
+    IR_Object ir;
     State state;
 } Badge_Object;
 
 Badge_Object Badge = {0};
 
-
+IRsend irsend(IR_TX_PIN);
 
 void setup()
 {
     //variable builds
     sprintf(NICK, "TC%06X", (uint32_t)(ESP.getEfuseMac() >> 24));
+    delay(3000);
     // Badge object initializations
     pinMode(BUZZER_PIN,OUTPUT);
     LED_init(&Badge.leds);
     CLI_init(&Badge.cli, &Badge.leds);
     Player_init(&Badge.player, NICK, MAX_HEALTH, LIVES);
     audio_init(&Badge.audio);
+    
     //touch_init here fails an assert as soon as wifi connects
     Badge.state = MAIN_MENU;
     // Opening animations here
@@ -90,8 +94,9 @@ void setup()
  
  // xTaskNotifyIndexed(Badge.audio.task_handle, 0, HIT_SONG, eSetValueWithOverwrite); 
   // initializing touch here makes the system "stable" until a touch is handled then fails: assert failed: xTaskGenericNotify tasks.c:5545 (xTaskToNotify)
-  touch_init(&Badge.touch, &Badge.cli, Badge.leds.task_handle, Badge.audio.task_handle);
- 
+  ir_init(&Badge.ir);
+  touch_init(&Badge.touch, &Badge.cli, Badge.leds.task_handle, Badge.audio.task_handle, Badge.ir.task_handle);
+
 }
 
 void loop()
