@@ -46,6 +46,8 @@ void touch_task(void *pvParameters)
                 {
                     xTaskNotifyIndexed(touch->audio_handle, 0, (i + 1), eSetValueWithoutOverwrite);
                     touch->cli->serial->println(Buttons[i].name);
+
+                    
                 }
             }
             if (check_Konami())
