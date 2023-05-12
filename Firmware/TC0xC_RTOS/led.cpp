@@ -17,10 +17,10 @@ const uint32_t Alarm_Interval_Long = 4200000;  // 7 min
 const uint32_t Alarm_Interval_Short = 3000000; // 5 min
 const uint8_t Message_Brightness = 100;
 const uint16_t Message_Delay_ms = 150;
-const uint8_t MAX_MESSAGE_LEN = 20;
+const uint8_t MAX_MESSAGE_LEN = 50;
 const uint8_t TOTAL_MESSAGES = 3;
 // todo: change these to c7five messages
-char Messages[TOTAL_MESSAGES][MAX_MESSAGE_LEN] = {"helloworld",
+char Messages[TOTAL_MESSAGES][MAX_MESSAGE_LEN] = {"up up down down left right left right b a start",
                                                   "foobar",
                                                   "abcxzy"};
 
