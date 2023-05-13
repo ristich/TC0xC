@@ -17,12 +17,12 @@ static void LED_Pattern(CLI_Object *cli, uint8_t nargs, char **args);
 
 // list of commands, descriptions, and callback functions
 static const CLI_Command CMD_List[] = {
-    {.cmd_name = "test", .cmd_desc = "hello world", .cmd_cb = CLI_Test, .hidden=true},
-    {.cmd_name = "help", .cmd_desc = "list commands", .cmd_cb = CLI_Help, .hidden=false},
-    {.cmd_name = "brightness", .cmd_desc = "set led brightness [0 - 255]", .cmd_cb = LED_Brightness, .hidden=false},
-    {.cmd_name = "delay", .cmd_desc = "set led delay (in ms) [0 - 693]", .cmd_cb = LED_Delay, .hidden=false},
-    {.cmd_name = "pattern", .cmd_desc = "set led pattern [0 - 6]", .cmd_cb = LED_Pattern, .hidden=false},
-    {.cmd_name = "flag", .cmd_desc = "print flag", .cmd_cb = CLI_Flag, .hidden=true},
+    {.cmd_name = "test", .cmd_desc = "hello world", .cmd_cb = CLI_Test, .hidden = true},
+    {.cmd_name = "help", .cmd_desc = "list commands", .cmd_cb = CLI_Help, .hidden = false},
+    {.cmd_name = "brightness", .cmd_desc = "set led brightness [0 - 255]", .cmd_cb = LED_Brightness, .hidden = false},
+    {.cmd_name = "delay", .cmd_desc = "set led delay (in ms) [0 - 693]", .cmd_cb = LED_Delay, .hidden = false},
+    {.cmd_name = "pattern", .cmd_desc = "set led pattern [0 - 6]", .cmd_cb = LED_Pattern, .hidden = false},
+    {.cmd_name = "flag", .cmd_desc = "print flag", .cmd_cb = CLI_Flag, .hidden = true},
 };
 // number of commands
 static const uint8_t CMD_Count = sizeof(CMD_List) / sizeof(CLI_Command);
@@ -220,7 +220,16 @@ static void CLI_Help(CLI_Object *cli, uint8_t nargs, char **args)
             char name[20];
             snprintf(name, sizeof(name), "%-15s - ", CMD_List[i].cmd_name);
             cli->serial->print(name);
-            cli->serial->println(CMD_List[i].cmd_desc);
+            if (strcmp("pattern", CMD_List[i].cmd_name) == 0)
+            {
+                cli->serial->print("set led pattern [0 - ");
+                cli->serial->print(LED_MODE_TOTAL);
+                cli->serial->println("]");
+            }
+            else
+            {
+                cli->serial->println(CMD_List[i].cmd_desc);
+            }
         }
     }
 }
@@ -308,7 +317,9 @@ static void LED_Pattern(CLI_Object *cli, uint8_t nargs, char **args)
     uint32_t pattern = strtoul(args[1], NULL, 10);
     if (pattern >= LED_MODE_TOTAL)
     {
-        cli->serial->println("ERR: unknown pattern");
+        cli->serial->print("ERR: unknown pattern, max pattern number is ");
+        cli->serial->println(LED_MODE_TOTAL);
+        return;
     }
     cli->leds->mode = (led_mode_t)(pattern & 0xFF);
 
