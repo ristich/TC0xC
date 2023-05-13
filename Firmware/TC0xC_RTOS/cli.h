@@ -28,6 +28,7 @@ typedef struct CLI_Command
     const char *cmd_name; // command name
     const char *cmd_desc; // command description
     cmd_cb_t cmd_cb;      // callback function
+    bool hidden;          // hidden from help menu
 } CLI_Command;
 
 CLI_Error CLI_init(CLI_Object *cli, LED_Object *leds);

@@ -9,6 +9,7 @@ static void CLI_handle_command(CLI_Object *cli, const CLI_Command *cmd_list, uin
 // command callback funcations
 static void CLI_Test(CLI_Object *cli, uint8_t nargs, char **args);
 static void CLI_Help(CLI_Object *cli, uint8_t nargs, char **args);
+static void CLI_Flag(CLI_Object *cli, uint8_t nargs, char **args);
 
 static void LED_Brightness(CLI_Object *cli, uint8_t nargs, char **args);
 static void LED_Delay(CLI_Object *cli, uint8_t nargs, char **args);
@@ -16,11 +17,12 @@ static void LED_Pattern(CLI_Object *cli, uint8_t nargs, char **args);
 
 // list of commands, descriptions, and callback functions
 static const CLI_Command CMD_List[] = {
-    {.cmd_name = "test", .cmd_desc = "hello world", .cmd_cb = CLI_Test},
-    {.cmd_name = "help", .cmd_desc = "list commands", .cmd_cb = CLI_Help},
-    {.cmd_name = "brightness", .cmd_desc = "set led brightness [0 - 255]", .cmd_cb = LED_Brightness},
-    {.cmd_name = "delay", .cmd_desc = "set led delay (in ms) [0 - 693]", .cmd_cb = LED_Delay},
-    {.cmd_name = "pattern", .cmd_desc = "set led pattern [0 - 6]", .cmd_cb = LED_Pattern},
+    {.cmd_name = "test", .cmd_desc = "hello world", .cmd_cb = CLI_Test, .hidden=true},
+    {.cmd_name = "help", .cmd_desc = "list commands", .cmd_cb = CLI_Help, .hidden=false},
+    {.cmd_name = "brightness", .cmd_desc = "set led brightness [0 - 255]", .cmd_cb = LED_Brightness, .hidden=false},
+    {.cmd_name = "delay", .cmd_desc = "set led delay (in ms) [0 - 693]", .cmd_cb = LED_Delay, .hidden=false},
+    {.cmd_name = "pattern", .cmd_desc = "set led pattern [0 - 6]", .cmd_cb = LED_Pattern, .hidden=false},
+    {.cmd_name = "flag", .cmd_desc = "print flag", .cmd_cb = CLI_Flag, .hidden=true},
 };
 // number of commands
 static const uint8_t CMD_Count = sizeof(CMD_List) / sizeof(CLI_Command);
@@ -65,8 +67,8 @@ static void CLI_task(void *pvParameters)
 {
     CLI_Object *cli = (CLI_Object *)pvParameters;
     cli->serial->println("\nWelcome to CLI");
-    cli->serial->print("CMD count: ");
-    cli->serial->println(CMD_Count);
+    // cli->serial->print("CMD count: ");
+    // cli->serial->println(CMD_Count);
 
     while (1)
     {
@@ -210,14 +212,23 @@ static void CLI_Test(CLI_Object *cli, uint8_t nargs, char **args)
  */
 static void CLI_Help(CLI_Object *cli, uint8_t nargs, char **args)
 {
-    cli->serial->println("CLI help function");
+    cli->serial->println("Available CLI Commands");
     for (int i = 0; i < CMD_Count; i++)
     {
-        char name[20];
-        snprintf(name, sizeof(name), "%-15s - ", CMD_List[i].cmd_name);
-        cli->serial->print(name);
-        cli->serial->println(CMD_List[i].cmd_desc);
+        if (CMD_List[i].hidden == false)
+        {
+            char name[20];
+            snprintf(name, sizeof(name), "%-15s - ", CMD_List[i].cmd_name);
+            cli->serial->print(name);
+            cli->serial->println(CMD_List[i].cmd_desc);
+        }
     }
+}
+
+static void CLI_Flag(CLI_Object *cli, uint8_t nargs, char **args)
+{
+    // todo: flag
+    cli->serial->println("insert flag here.");
 }
 
 static void LED_Brightness(CLI_Object *cli, uint8_t nargs, char **args)
