@@ -12,6 +12,7 @@ static void CLI_Help(CLI_Object *cli, uint8_t nargs, char **args);
 
 static void LED_Brightness(CLI_Object *cli, uint8_t nargs, char **args);
 static void LED_Delay(CLI_Object *cli, uint8_t nargs, char **args);
+static void LED_Pattern(CLI_Object *cli, uint8_t nargs, char **args);
 
 // list of commands, descriptions, and callback functions
 static const CLI_Command CMD_List[] = {
@@ -19,6 +20,7 @@ static const CLI_Command CMD_List[] = {
     {.cmd_name = "help", .cmd_desc = "list commands", .cmd_cb = CLI_Help},
     {.cmd_name = "brightness", .cmd_desc = "set led brightness [0 - 255]", .cmd_cb = LED_Brightness},
     {.cmd_name = "delay", .cmd_desc = "set led delay (in ms) [0 - 693]", .cmd_cb = LED_Delay},
+    {.cmd_name = "pattern", .cmd_desc = "set led pattern [0 - 6]", .cmd_cb = LED_Pattern},
 };
 // number of commands
 static const uint8_t CMD_Count = sizeof(CMD_List) / sizeof(CLI_Command);
@@ -241,7 +243,7 @@ static void LED_Brightness(CLI_Object *cli, uint8_t nargs, char **args)
     cli->leds->brightness = (uint8_t)(brightness & 0xFF);
 
     // signal to led driver there's an update
-    xTaskNotifyIndexed(cli->leds->task_handle, 0, LED_UPDATE, eSetValueWithoutOverwrite);
+    xTaskNotifyIndexed(cli->leds->task_handle, 0, LED_UPDATE, eSetValueWithOverwrite);
 
     cli->serial->print("LED brightness set to ");
     cli->serial->println(brightness);
@@ -270,9 +272,38 @@ static void LED_Delay(CLI_Object *cli, uint8_t nargs, char **args)
     cli->leds->delay_ms = (uint16_t)(delay & 0xFFFF);
 
     // signal to led driver there's an update
-    xTaskNotifyIndexed(cli->leds->task_handle, 0, LED_UPDATE, eSetValueWithoutOverwrite);
+    xTaskNotifyIndexed(cli->leds->task_handle, 0, LED_UPDATE, eSetValueWithOverwrite);
 
     cli->serial->print("LED delay set to ");
     cli->serial->print(delay);
     cli->serial->println("ms");
+}
+
+static void LED_Pattern(CLI_Object *cli, uint8_t nargs, char **args)
+{
+    if (nargs != 1)
+    {
+        cli->serial->print("ERR: expected 1 argument, received ");
+        cli->serial->println(nargs);
+        return;
+    }
+
+    if (cli->leds->initialized == false)
+    {
+        cli->serial->println("ERR: led driver uninitialized");
+        return;
+    }
+
+    uint32_t pattern = strtoul(args[1], NULL, 10);
+    if (pattern >= LED_MODE_TOTAL)
+    {
+        cli->serial->println("ERR: unknown pattern");
+    }
+    cli->leds->mode = (led_mode_t)(pattern & 0xFF);
+
+    // signal to led driver there's an update
+    xTaskNotifyIndexed(cli->leds->task_handle, 0, LED_UPDATE, eSetValueWithOverwrite);
+
+    cli->serial->print("LED pattern set to ");
+    cli->serial->println(pattern);
 }

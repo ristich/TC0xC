@@ -12,9 +12,12 @@ typedef enum LED_Error
 typedef enum led_mode_t
 {
     LED_MODE_OFF = 0,
-    LED_MODE_ROTATE,
+    LED_MODE_ROTATE_CW,
+    LED_MODE_ROTATE_CCW,
     LED_MODE_BLINK,
-    LED_MODE_RESET,
+    LED_MODE_RINGS_OUT,
+    LED_MODE_RINGS_IN,
+    LED_MODE_TOTAL,
 } led_mode_t;
 
 typedef enum LED_Event

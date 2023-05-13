@@ -10,7 +10,9 @@ void ARDUINO_ISR_ATTR onTimer();
 
 // LED modes
 static void boot_sequence(LED_Object *leds);
-static void rotate_leds(LED_Object *leds);
+static void clear_leds(LED_Object *leds);
+static void rings_leds(LED_Object *leds, bool outward);
+static void rotate_leds(LED_Object *leds, bool clockwise);
 static void blink_leds(LED_Object *leds);
 
 // constants
@@ -48,7 +50,7 @@ LED_Error LED_init(LED_Object *leds)
     leds->controller = &led_controller;
 
     // init led setting defaults
-    leds->mode = LED_MODE_ROTATE;
+    leds->mode = LED_MODE_ROTATE_CW;
     leds->delay_ms = 500;
     leds->brightness = 10;
 
@@ -119,10 +121,7 @@ void LED_task(void *pvParameters)
             // }
             if (led_event == LED_BUTTON_PRESS)
             {
-                leds->controller->setAllLEDPWM(0);
-                leds->controller->setDisplayMode(Display_Mode_Picture);
-                leds->controller->setPictureFrame(0);
-
+                clear_leds(leds);
                 leds->controller->setAllLEDPWM(100);
                 vTaskDelay(200);
             }
@@ -139,19 +138,30 @@ void set_LED_mode(LED_Object *leds)
     switch (leds->mode)
     {
     case LED_MODE_OFF:
-        leds->controller->setAllLEDPWM(0);
+        clear_leds(leds);
         break;
 
-    case LED_MODE_ROTATE:
-        rotate_leds(leds);
+    case LED_MODE_ROTATE_CW:
+        rotate_leds(leds, true);
+        break;
+
+    case LED_MODE_ROTATE_CCW:
+        rotate_leds(leds, false);
         break;
 
     case LED_MODE_BLINK:
         blink_leds(leds);
         break;
 
+    case LED_MODE_RINGS_IN:
+        rings_leds(leds, false);
+        break;
+
+    case LED_MODE_RINGS_OUT:
+        rings_leds(leds, true);
+        break;
+
     default:
-        leds->controller->setAllLEDPWM(0);
         break;
     }
 }
@@ -160,7 +170,7 @@ static void boot_sequence(LED_Object *leds)
 {
     leds->controller->clear();
     uint16_t i, j;
-    uint32_t led_rings[4] = {0x888888, 0x444444, 0x222222, 0x111111};
+    uint32_t led_rings[4] = {LED_RING_INNER, LED_RING_MID_INNER, LED_RING_MID_OUTER, LED_RING_OUTER};
     const TickType_t blink_delay_ms = 400;
     const TickType_t hold_delay_ms = 1000;
     for (i = 0; i < 4; i++)
@@ -186,11 +196,49 @@ static void boot_sequence(LED_Object *leds)
     leds->controller->clear();
     vTaskDelay(blink_delay_ms);
     char boot_message[] = "welcome to thotcon";
-    leds->controller->setBadgeMessage(boot_message, sizeof(boot_message)/sizeof(char),Message_Brightness, Message_Delay_ms);
+    leds->controller->setBadgeMessage(boot_message, sizeof(boot_message) / sizeof(char), Message_Brightness, Message_Delay_ms);
     leds->controller->clear();
 }
 
-static void rotate_leds(LED_Object *leds)
+static void clear_leds(LED_Object *leds)
+{
+    leds->controller->setAllLEDPWM(0, 0);
+    leds->controller->setDisplayMode(Display_Mode_Picture);
+    leds->controller->setPictureFrame(0);
+}
+
+static void rings_leds(LED_Object *leds, bool outward)
+{
+    leds->controller->setAutoPlayFrames(4);
+    leds->controller->setAutoPlayLoops(0);
+    leds->controller->setAutoPlayDelay(leds->delay_ms);
+    leds->controller->setAutoPlayStart(1);
+
+    leds->controller->setAllLEDPWM(0, 1);
+    leds->controller->setAllLEDPWM(0, 2);
+    leds->controller->setAllLEDPWM(0, 3);
+    leds->controller->setAllLEDPWM(0, 4);
+
+    if (outward)
+    {
+        leds->controller->setBadgeLEDs(LED_RING_INNER, leds->brightness, 1);
+        leds->controller->setBadgeLEDs(LED_RING_MID_INNER, leds->brightness, 2);
+        leds->controller->setBadgeLEDs(LED_RING_MID_OUTER, leds->brightness, 3);
+        leds->controller->setBadgeLEDs(LED_RING_OUTER, leds->brightness, 4);
+    }
+    else
+    {
+        leds->controller->setBadgeLEDs(LED_RING_OUTER, leds->brightness, 1);
+        leds->controller->setBadgeLEDs(LED_RING_MID_OUTER, leds->brightness, 2);
+        leds->controller->setBadgeLEDs(LED_RING_MID_INNER, leds->brightness, 3);
+        leds->controller->setBadgeLEDs(LED_RING_INNER, leds->brightness, 4);
+    }
+
+    // showtime!
+    leds->controller->setDisplayMode(Display_Mode_Auto_Play);
+}
+
+static void rotate_leds(LED_Object *leds, bool clockwise)
 {
     leds->controller->setAutoPlayFrames(6);
     leds->controller->setAutoPlayLoops(0);
@@ -205,12 +253,24 @@ static void rotate_leds(LED_Object *leds)
     leds->controller->setAllLEDPWM(0, 6);
 
     // prepare the show
-    leds->controller->setColumn(LED_COL_TWELVE, leds->brightness, 1);
-    leds->controller->setColumn(LED_COL_ONE, leds->brightness, 2);
-    leds->controller->setColumn(LED_COL_FIVE, leds->brightness, 3);
-    leds->controller->setColumn(LED_COL_SIX, leds->brightness, 4);
-    leds->controller->setColumn(LED_COL_SEVEN, leds->brightness, 5);
-    leds->controller->setColumn(LED_COL_ELEVEN, leds->brightness, 6);
+    if (clockwise)
+    {
+        leds->controller->setColumn(LED_COL_TWELVE, leds->brightness, 1);
+        leds->controller->setColumn(LED_COL_ONE, leds->brightness, 2);
+        leds->controller->setColumn(LED_COL_FIVE, leds->brightness, 3);
+        leds->controller->setColumn(LED_COL_SIX, leds->brightness, 4);
+        leds->controller->setColumn(LED_COL_SEVEN, leds->brightness, 5);
+        leds->controller->setColumn(LED_COL_ELEVEN, leds->brightness, 6);
+    }
+    else
+    {
+        leds->controller->setColumn(LED_COL_TWELVE, leds->brightness, 1);
+        leds->controller->setColumn(LED_COL_ELEVEN, leds->brightness, 2);
+        leds->controller->setColumn(LED_COL_SEVEN, leds->brightness, 3);
+        leds->controller->setColumn(LED_COL_SIX, leds->brightness, 4);
+        leds->controller->setColumn(LED_COL_FIVE, leds->brightness, 5);
+        leds->controller->setColumn(LED_COL_ONE, leds->brightness, 6);
+    }
 
     // showtime!
     leds->controller->setDisplayMode(Display_Mode_Auto_Play);
