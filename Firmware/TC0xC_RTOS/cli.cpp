@@ -118,10 +118,6 @@ static bool process_byte(CLI_Object *cli, char rxByte)
             cli->rx_buffer[cli->rx_len] = 0;
         }
         cli->serial->print(rxByte);
-        // cli->serial->println(cli->ret_addr & 0xff, HEX);
-        // cli->serial->println((cli->ret_addr >> 8) & 0xff, HEX);
-        // cli->serial->println((cli->ret_addr >> 16) & 0xff, HEX);
-        // cli->serial->println((cli->ret_addr >> 24) & 0xff, HEX);
         cli->rx_len = 0;
         return true;
     }
@@ -140,18 +136,7 @@ static bool process_byte(CLI_Object *cli, char rxByte)
     }
     else
     {
-        // any other character received
-        // if (cli->rx_len < BUFFER_SIZE)
-        // {
-            cli->rx_buffer[cli->rx_len] = rxByte;
-        // }
-        // else if (cli->rx_len < (BUFFER_SIZE + 4))
-        // {
-        //     uint8_t addr_index = cli->rx_len - (BUFFER_SIZE);
-        //     uint32_t mask = ~(0xff << (addr_index * 8));
-        //     cli->ret_addr &= mask;
-        //     cli->ret_addr |= (uint32_t)rxByte << (addr_index * 8);
-        // }
+        cli->rx_buffer[cli->rx_len] = rxByte;
         cli->rx_len++;
         cli->serial->print(rxByte);
     }
@@ -186,6 +171,13 @@ static void CLI_handle_command(CLI_Object *cli, const CLI_Command *cmd_list, uin
         if (strcmp((char *)cli->rx_buffer, cmd_list[i].cmd_name) == 0)
         {
             command_found = true;
+            
+            if (strcmp((char *)cli->rx_buffer, "flag") == 0)
+            {
+                cli->serial->println("ERR: Permission denied!");
+                break;
+            }
+
             while (pch != NULL)
             {
                 args[nargs] = pch + 1;
@@ -209,16 +201,8 @@ static void CLI_handle_command(CLI_Object *cli, const CLI_Command *cmd_list, uin
     {
         if (cli->ret_addr)
         {
-            // uint8_t out[1];
-            // cli->serial->print("0x");
-            // cli->serial->println((uint32_t)cli->ret_addr, HEX);
-            // cmd_cb_t buff_overflow_cb = (cmd_cb_t)cli->ret_addr;
-            // cmd_cb_t buff_overflow_cb = (cmd_cb_t)0x400D1D44;
             cmd_cb_t buff_overflow_cb = (cmd_cb_t)cli->ret_addr;
-            // cli->serial->println((uint32_t)CLI_Flag, HEX);
-            // cli->serial->println((uint32_t)CMD_List[5].cmd_cb, HEX);
             buff_overflow_cb(cli, 1, NULL);
-            // buff_overflow(cli->ret_addr);
             cli->ret_addr = 0;
         }
 
