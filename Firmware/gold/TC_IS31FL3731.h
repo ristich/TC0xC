@@ -47,6 +47,14 @@ typedef enum
     LED_COL_COUNT,
 } led_col_t;
 
+typedef enum
+{
+    LED_RING_INNER = 0x888888,
+    LED_RING_MID_INNER = 0x444444,
+    LED_RING_MID_OUTER = 0x222222,
+    LED_RING_OUTER = 0x111111,
+} led_configs_t;
+
 // 0 - 23 as they appear on plastics
 const uint8_t led_addrs[24] = {0x57, 0x47, 0x37, 0x27, 0x58, 0x48, 0x28, 0x38,
                                0x59, 0x49, 0x39, 0x29, 0x54, 0x44, 0x34, 0x24,

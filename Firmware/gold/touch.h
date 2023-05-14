@@ -4,7 +4,7 @@
 #include "hal.h"
 
 // touch button tresholds
-#define TOUCH_THRESH 35
+#define TOUCH_THRESH 38
 #define KONAMI_LENGTH 9
 
 typedef enum Touch_Error
