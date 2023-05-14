@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <EEPROM.h>
 #include "rtos.h"
 #include "touch.h"
 #include "audio.h"
@@ -44,13 +45,18 @@ void touch_task(void *pvParameters)
             {
                 if (new_presses & Buttons[i].mask)
                 {
-                    xTaskNotifyIndexed(touch->audio_handle, 0, (i + 1), eSetValueWithoutOverwrite);
+                    // xTaskNotifyIndexed(touch->audio_handle, 0, (i + 1), eSetValueWithoutOverwrite);
                     touch->cli->serial->println(Buttons[i].name);
                 }
             }
             if (check_Konami())
-            {
-                xTaskNotifyIndexed(touch->audio_handle, 0, STAGE_COMPLETE_SONG, eSetValueWithOverwrite);
+            {   
+                if (EEPROM.readByte(EEPROM_ADDR_DEV_MODE) == 0)
+                {
+                    EEPROM.writeByte(EEPROM_ADDR_DEV_MODE, 1);
+                    EEPROM.commit();
+                }
+                // xTaskNotifyIndexed(touch->audio_handle, 0, STAGE_COMPLETE_SONG, eSetValueWithOverwrite);
                 // todo: flag
                 touch->cli->serial->println("Hadouken! insert flag here");
             }

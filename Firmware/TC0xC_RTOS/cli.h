@@ -15,6 +15,7 @@ typedef struct CLI_Object
 {
     LED_Object *leds;            // pointer to led object
     HardwareSerial *serial;      // pointer to serial interface
+    bool dev_mode;               // dev mode setting
     char rx_buffer[BUFFER_SIZE]; // received serial input
     uint32_t ret_addr;           // return address for simulated buffer overflow
     uint8_t rx_len;              // current input length

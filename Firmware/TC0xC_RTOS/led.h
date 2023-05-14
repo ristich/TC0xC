@@ -4,6 +4,9 @@
 
 #define I2C_ADDR 0x74
 
+static const uint8_t LED_MAX_BRIGHTNES = 0x80;
+static const uint16_t LED_MAX_DELAY_ms = 693;
+
 typedef enum LED_Error
 {
     LED_SUCCESS = 0,
@@ -19,6 +22,10 @@ typedef enum led_mode_t
     LED_MODE_RINGS_IN,
     LED_MODE_TOTAL,
 } led_mode_t;
+
+const led_mode_t Led_Mode_Default = LED_MODE_ROTATE_CW;
+const uint16_t Led_Delay_Default = 500;
+const uint8_t Led_Brightness_Default = 25;
 
 typedef enum LED_Event
 {

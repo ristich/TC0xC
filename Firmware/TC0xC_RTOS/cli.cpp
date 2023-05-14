@@ -1,6 +1,8 @@
 #include "cli.h"
 #include <Arduino.h>
+#include <EEPROM.h>
 #include "rtos.h"
+#include "hal.h"
 
 static void CLI_task(void *pvParameters);
 static bool process_byte(CLI_Object *cli, char rxByte);
@@ -11,6 +13,7 @@ char buff_overflow(uint32_t return_addr);
 static void CLI_Test(CLI_Object *cli, uint8_t nargs, char **args);
 static void CLI_Help(CLI_Object *cli, uint8_t nargs, char **args);
 static void CLI_Flag(CLI_Object *cli, uint8_t nargs, char **args);
+static void CLI_Reset(CLI_Object *cli, uint8_t nargs, char **args);
 
 static void LED_Brightness(CLI_Object *cli, uint8_t nargs, char **args);
 static void LED_Delay(CLI_Object *cli, uint8_t nargs, char **args);
@@ -20,14 +23,14 @@ static void LED_Pattern(CLI_Object *cli, uint8_t nargs, char **args);
 static const CLI_Command CMD_List[] = {
     {.cmd_name = "test", .cmd_desc = "hello world", .cmd_cb = CLI_Test, .cmd_hidden = true},
     {.cmd_name = "help", .cmd_desc = "list commands", .cmd_cb = CLI_Help, .cmd_hidden = false},
-    {.cmd_name = "brightness", .cmd_desc = "set led brightness [0 - 255]", .cmd_cb = LED_Brightness, .cmd_hidden = false},
+    {.cmd_name = "brightness", .cmd_desc = "set led brightness [0 - 128]", .cmd_cb = LED_Brightness, .cmd_hidden = false},
     {.cmd_name = "delay", .cmd_desc = "set led delay (in ms) [0 - 693]", .cmd_cb = LED_Delay, .cmd_hidden = false},
-    {.cmd_name = "pattern", .cmd_desc = "set led pattern [0 - 6]", .cmd_cb = LED_Pattern, .cmd_hidden = false},
+    {.cmd_name = "pattern", .cmd_desc = "set led pattern [0 - ", .cmd_cb = LED_Pattern, .cmd_hidden = false},
+    {.cmd_name = "reset", .cmd_desc = "reset settings", .cmd_cb = CLI_Reset, .cmd_hidden = false},
     {.cmd_name = "flag", .cmd_desc = "print flag", .cmd_cb = CLI_Flag, .cmd_hidden = true},
 };
 // number of commands
 static const uint8_t CMD_Count = sizeof(CMD_List) / sizeof(CLI_Command);
-static bool dev_mode = true;
 
 /**
  * @brief initialize and start command-line interface task
@@ -70,10 +73,20 @@ static void CLI_task(void *pvParameters)
     CLI_Object *cli = (CLI_Object *)pvParameters;
     cli->serial->println("\nWelcome to CLI");
     // todo: flag - reward people for correctly connecting the badge CLI
-    cli->serial->println("insert flag here");
-    if (dev_mode)
+    cli->serial->println("uart flag: insert flag here");
+    if (cli->dev_mode)
     {
-        cli->serial->println("Developer Mode: 1");
+        cli->serial->print("Developer Mode: ");
+        cli->serial->println(cli->dev_mode);
+        
+        cli->serial->print("LED Pattern: ");
+        cli->serial->println(cli->leds->mode);
+        cli->serial->print("LED Brightness: ");
+        cli->serial->println(cli->leds->brightness);
+        cli->serial->print("LED Delay: ");
+        cli->serial->print(cli->leds->delay_ms);
+        cli->serial->println(" ms");
+        
         cli->serial->print("CMD count: ");
         cli->serial->println(CMD_Count);
     }
@@ -173,7 +186,7 @@ static void CLI_handle_command(CLI_Object *cli, const CLI_Command *cmd_list, uin
         if (strcmp((char *)cli->rx_buffer, cmd_list[i].cmd_name) == 0)
         {
             command_found = true;
-            
+
             if (strcmp((char *)cli->rx_buffer, "flag") == 0)
             {
                 cli->serial->println("ERR: Permission denied!");
@@ -240,7 +253,7 @@ static void CLI_Help(CLI_Object *cli, uint8_t nargs, char **args)
     cli->serial->println("Available CLI Commands");
     for (int i = 0; i < CMD_Count; i++)
     {
-        if (dev_mode)
+        if (cli->dev_mode)
         {
             // list item start address
             cli->serial->print("0x");
@@ -256,7 +269,7 @@ static void CLI_Help(CLI_Object *cli, uint8_t nargs, char **args)
             cli->serial->print("desc: ");
             if (strcmp("pattern", CMD_List[i].cmd_name) == 0)
             {
-                cli->serial->print("set led pattern [0 - ");
+                cli->serial->print(CMD_List[i].cmd_desc);
                 cli->serial->print(LED_MODE_TOTAL);
                 cli->serial->print("]");
             }
@@ -273,7 +286,7 @@ static void CLI_Help(CLI_Object *cli, uint8_t nargs, char **args)
             cli->serial->print(" - ");
 
             // hide
-            cli->serial->print("hide: ");
+            cli->serial->print("hidden: ");
             cli->serial->println(CMD_List[i].cmd_hidden);
         }
         else if (CMD_List[i].cmd_hidden == false)
@@ -283,7 +296,7 @@ static void CLI_Help(CLI_Object *cli, uint8_t nargs, char **args)
             cli->serial->print(name);
             if (strcmp("pattern", CMD_List[i].cmd_name) == 0)
             {
-                cli->serial->print("set led pattern [0 - ");
+                cli->serial->print(CMD_List[i].cmd_desc);
                 cli->serial->print(LED_MODE_TOTAL);
                 cli->serial->println("]");
             }
@@ -305,7 +318,23 @@ static void CLI_Help(CLI_Object *cli, uint8_t nargs, char **args)
 static void CLI_Flag(CLI_Object *cli, uint8_t nargs, char **args)
 {
     // todo: flag
-    cli->serial->println("insert flag here.");
+    cli->serial->println("buff overflow: insert flag here.");
+}
+
+static void CLI_Reset(CLI_Object *cli, uint8_t nargs, char **args)
+{
+    cli->leds->mode = Led_Mode_Default;
+    cli->leds->brightness = Led_Brightness_Default;
+    cli->leds->delay_ms = Led_Delay_Default;
+    cli->dev_mode = 0;
+
+    EEPROM.writeByte(EEPROM_ADDR_LED_MODE, Led_Mode_Default);
+    EEPROM.writeByte(EEPROM_ADDR_LED_BRIGHT, Led_Brightness_Default);
+    EEPROM.writeUShort(EEPROM_ADDR_LED_DELAY, Led_Delay_Default);
+    EEPROM.writeByte(EEPROM_ADDR_DEV_MODE, 0);
+    EEPROM.commit();
+
+    cli->serial->println("Settings reset complete");
 }
 
 static void LED_Brightness(CLI_Object *cli, uint8_t nargs, char **args)
@@ -324,11 +353,13 @@ static void LED_Brightness(CLI_Object *cli, uint8_t nargs, char **args)
     }
 
     uint32_t brightness = strtoul(args[1], NULL, 10);
-    if (brightness > 255)
+    if (brightness > LED_MAX_BRIGHTNES)
     {
-        brightness = 255;
+        brightness = LED_MAX_BRIGHTNES;
     }
     cli->leds->brightness = (uint8_t)(brightness & 0xFF);
+    EEPROM.writeByte(EEPROM_ADDR_LED_BRIGHT, brightness);
+    EEPROM.commit();
 
     // signal to led driver there's an update
     xTaskNotifyIndexed(cli->leds->task_handle, 0, LED_UPDATE, eSetValueWithOverwrite);
@@ -352,12 +383,20 @@ static void LED_Delay(CLI_Object *cli, uint8_t nargs, char **args)
         return;
     }
 
+    // make sure delay isn't above driver's max rating
     uint32_t delay = strtoul(args[1], NULL, 10);
-    if (delay > 693)
+    if (delay > LED_MAX_DELAY_ms)
     {
-        delay = 693;
+        delay = LED_MAX_DELAY_ms;
     }
-    cli->leds->delay_ms = (uint16_t)(delay & 0xFFFF);
+
+    // delay less than 11ms doesn't do anything
+    if (delay < 11)
+        cli->leds->delay_ms = 11;
+    else
+        cli->leds->delay_ms = (uint16_t)(delay & 0xFFFF);
+    EEPROM.writeUShort(EEPROM_ADDR_LED_DELAY, delay);
+    EEPROM.commit();
 
     // signal to led driver there's an update
     xTaskNotifyIndexed(cli->leds->task_handle, 0, LED_UPDATE, eSetValueWithOverwrite);
@@ -390,6 +429,8 @@ static void LED_Pattern(CLI_Object *cli, uint8_t nargs, char **args)
         return;
     }
     cli->leds->mode = (led_mode_t)(pattern & 0xFF);
+    EEPROM.writeByte(EEPROM_ADDR_LED_MODE, pattern);
+    EEPROM.commit();
 
     // signal to led driver there's an update
     xTaskNotifyIndexed(cli->leds->task_handle, 0, LED_UPDATE, eSetValueWithOverwrite);

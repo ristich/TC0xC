@@ -19,3 +19,10 @@
 #define BUZZER_CHANNEL 2
 #define BUZZER_DEFAULT_FREQ 4000
 #define BUZZER_RESOLUTION 10
+
+// EEPROM addresses
+#define EEPROM_SIZE 0x40
+#define EEPROM_ADDR_LED_MODE 0x20 // 8 bit
+#define EEPROM_ADDR_LED_BRIGHT 0x21 // 8 bit
+#define EEPROM_ADDR_LED_DELAY 0x22 // 16 bit
+#define EEPROM_ADDR_DEV_MODE 0x24 // 8 bit

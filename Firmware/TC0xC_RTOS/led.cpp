@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <EEPROM.h>
 #include "rtos.h"
 #include "led.h"
 #include "hal.h"
@@ -49,10 +50,36 @@ LED_Error LED_init(LED_Object *leds)
     led_controller.begin(I2C_SDA_PIN, I2C_SCL_PIN);
     leds->controller = &led_controller;
 
-    // init led setting defaults
-    leds->mode = LED_MODE_ROTATE_CW;
-    leds->delay_ms = 500;
-    leds->brightness = 10;
+    // get saved settings
+    leds->mode = (led_mode_t)EEPROM.readByte(EEPROM_ADDR_LED_MODE);
+    leds->delay_ms = EEPROM.readUShort(EEPROM_ADDR_LED_DELAY);
+    if (leds->delay_ms < 11)
+        leds->delay_ms = 11;
+    leds->brightness = EEPROM.readByte(EEPROM_ADDR_LED_BRIGHT);
+
+    bool update = false;
+    if (leds->mode >= LED_MODE_TOTAL)
+    {
+        leds->mode = Led_Mode_Default;
+        EEPROM.writeByte(EEPROM_ADDR_LED_MODE, leds->mode);
+        update = true;
+    }
+    if (leds->delay_ms > LED_MAX_DELAY_ms)
+    {
+        leds->delay_ms = Led_Delay_Default;
+        EEPROM.writeUShort(EEPROM_ADDR_LED_DELAY, leds->delay_ms);
+        update = true;
+    }
+    if (leds->brightness > LED_MAX_BRIGHTNES)
+    {
+        leds->brightness = Led_Brightness_Default;
+        EEPROM.writeByte(EEPROM_ADDR_LED_BRIGHT, leds->brightness);
+        update = true;
+    }
+    if (update)
+    {
+        EEPROM.commit();
+    }
 
     xTaskCreatePinnedToCore(LED_task, "LED_task", 2048, leds, tskIDLE_PRIORITY + 2, &leds->task_handle, app_cpu);
 
