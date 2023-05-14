@@ -50,9 +50,9 @@ void touch_task(void *pvParameters)
             }
             if (check_Konami())
             {
-                // todo: flag
                 xTaskNotifyIndexed(touch->audio_handle, 0, STAGE_COMPLETE_SONG, eSetValueWithOverwrite);
-                touch->cli->serial->println("Hadouken!");
+                // todo: flag
+                touch->cli->serial->println("Hadouken! insert flag here");
             }
         }
 

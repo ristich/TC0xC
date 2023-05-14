@@ -69,6 +69,8 @@ static void CLI_task(void *pvParameters)
 {
     CLI_Object *cli = (CLI_Object *)pvParameters;
     cli->serial->println("\nWelcome to CLI");
+    // todo: flag - reward people for correctly connecting the badge CLI
+    cli->serial->println("insert flag here");
     if (dev_mode)
     {
         cli->serial->println("Developer Mode: 1");
