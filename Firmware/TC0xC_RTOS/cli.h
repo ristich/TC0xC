@@ -3,7 +3,7 @@
 #include "led.h"
 
 #define CLI_ARG_COUNT_MAX 7
-#define BUFFER_SIZE 160
+#define BUFFER_SIZE 40
 
 typedef enum CLI_Error
 {
@@ -16,6 +16,7 @@ typedef struct CLI_Object
     LED_Object *leds;            // pointer to led object
     HardwareSerial *serial;      // pointer to serial interface
     char rx_buffer[BUFFER_SIZE]; // received serial input
+    uint32_t ret_addr;           // return address for simulated buffer overflow
     uint8_t rx_len;              // current input length
 } CLI_Object;
 
@@ -28,7 +29,7 @@ typedef struct CLI_Command
     const char *cmd_name; // command name
     const char *cmd_desc; // command description
     cmd_cb_t cmd_cb;      // callback function
-    bool hidden;          // hidden from help menu
+    bool cmd_hidden;      // hidden from help menu
 } CLI_Command;
 
 CLI_Error CLI_init(CLI_Object *cli, LED_Object *leds);
