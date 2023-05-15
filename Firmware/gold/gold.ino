@@ -85,7 +85,7 @@ void setup()
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP()); 
   client.setCallback(command_handler);
-  client.setSentCallback(debugSentCallback); // TODO comment out for final bin
+  client.setSentCallback(debugSentCallback); // todo comment out for final bin
   Serial.print("Contra Player ");
   Serial.print(Badge.player.id);
   Serial.print(" locked and loaded @ ");
@@ -95,7 +95,7 @@ void setup()
  // xTaskNotifyIndexed(Badge.audio.task_handle, 0, HIT_SONG, eSetValueWithOverwrite); 
   // initializing touch here makes the system "stable" until a touch is handled then fails: assert failed: xTaskGenericNotify tasks.c:5545 (xTaskToNotify)
   ir_init(&Badge.ir);
-  touch_init(&Badge.touch, &Badge.cli, Badge.leds.task_handle, Badge.audio.task_handle, Badge.ir.task_handle);
+  touch_init(&Badge.touch, &Badge.cli, Badge.leds.task_handle, Badge.audio.task_handle, Badge.ir.tx_task_handle);
 
 }
 
@@ -106,12 +106,12 @@ void loop()
   if (!client.connected()) {
     if (millis() > nextCheckTime)
     {
-      Serial.println("Attempting BadgeNET connection...");
+      Serial.print("Attempting BadgeNET connection... ");
       // Attempt to connect
       if (client.connect(NICK, IRC_USER)) {
         Serial.println("connected");
         delay(3000);
-        client.sendRaw("JOIN #dev RR");
+        client.sendRaw("JOIN #dev RR"); //todo pick a initial channel name
       } else {
         Serial.println("failed... try again in 2 minutes");
         // Wait 5 seconds before retrying

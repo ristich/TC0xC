@@ -27,9 +27,11 @@
 #define EEPROM_ADDR_LED_DELAY 0x22 // 16 bit
 #define EEPROM_ADDR_DEV_MODE 0x24 // 8 bit
 
-// IR pins
+// IR
 #define IR_TX_PIN 4u
 #define IR_RX_PIN 25u
+#define PULSE_BUFFER_SIZE 66u
+#define TOLERANCE 0.25 // how much play we want within pulse measurements
 
 // networking
 #define IRC_SERVER "irl.depaul.edu"

@@ -9,7 +9,8 @@ typedef enum IR_Error
 typedef struct IR_Object
 {
     bool initialized;         // state of audio task creation
-    TaskHandle_t task_handle; // task handle
+    TaskHandle_t tx_task_handle; // task handle
+    TaskHandle_t rx_task_handle;
 } IR_Object;
 
 IR_Error ir_init(IR_Object *ir);

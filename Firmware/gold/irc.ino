@@ -31,13 +31,6 @@ void command_handler(IRCMessage ircMessage) {
        client.sendMessage(ircMessage.parameters, "playing boot animation");   
   }
 
-  // if (ircMessage.text == "!roll") 
-  // {
-  //      rollEm(tcleds, 0);
-  //      client.sendMessage(ircMessage.parameters, "keep on rollin' babeh");   
-  // }
-
-
 
   if(ircMessage.text == "!update")
      {
