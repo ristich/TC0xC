@@ -46,7 +46,7 @@ void touch_task(void *pvParameters)
             {
                 if (new_presses & Buttons[i].mask)
                 {
-                    // xTaskNotifyIndexed(touch->audio_handle, 0, (i + 1), eSetValueWithoutOverwrite);
+                    xTaskNotifyIndexed(touch->audio_handle, 0, (i + 1), eSetValueWithoutOverwrite);
                     touch->cli->serial->println(Buttons[i].name);
                     if (Buttons[i].mask & (1 << SELECT_BIT)) 
                         xTaskNotifyIndexed(touch->ir_handle, 0, 0, eSetValueWithoutOverwrite);
@@ -58,10 +58,11 @@ void touch_task(void *pvParameters)
                 {
                     EEPROM.writeByte(EEPROM_ADDR_DEV_MODE, 1);
                     EEPROM.commit();
+                    
                 }
-                // xTaskNotifyIndexed(touch->audio_handle, 0, STAGE_COMPLETE_SONG, eSetValueWithOverwrite);
-                // todo: flag
-                touch->cli->serial->println("Hadouken! insert flag here");
+                xTaskNotifyIndexed(touch->audio_handle, 0, STAGE_COMPLETE_SONG, eSetValueWithOverwrite);
+                
+                touch->cli->serial->println("Hadouken! flag{lets_fight!}");
             }
         }
 

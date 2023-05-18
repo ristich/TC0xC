@@ -26,6 +26,8 @@
 #define EEPROM_ADDR_LED_BRIGHT 0x21 // 8 bit
 #define EEPROM_ADDR_LED_DELAY 0x22 // 16 bit
 #define EEPROM_ADDR_DEV_MODE 0x24 // 8 bit
+#define EEPROM_ADDR_TAG_LIVES 0x25 // one byte
+#define EEPROM_ADDR_TAG_DAMAGE 0x26 // one byte, for now
 
 // IR
 #define IR_TX_PIN 4u

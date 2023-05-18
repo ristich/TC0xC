@@ -30,6 +30,7 @@ typedef enum Song_Index
     STAGE_COMPLETE_SONG,
     HIT_SONG,
     RICK_SONG,
+    WELCOME_CHIME,
     TOTAL_SONGS, // should always be last
 } Song_Index;
 

@@ -1,5 +1,5 @@
 const char* binhost = "tc0xb.s3.us-east-2.amazonaws.com";
-String bin = "TC_0xB.bin";
+String bin = "TC_0xB.bin"; // todo change file for 0xC
 int contentLength = 0;
 bool isValidContentType = false;
 
@@ -42,7 +42,7 @@ void execOTA() {
     // check stuff
    delay(300);
     /*
-       Response Structure
+       Response Structure should be close to
         HTTP/1.1 200 OK
         x-amz-id-2: NVKxnU1aIQMmpGKhSwpCBh8y2JPbak18QLIfE+OiUDOos+7UftZKjtCFqrwsGOZRN5Zee0jpTd0=
         x-amz-request-id: 2D56B47560B764EC

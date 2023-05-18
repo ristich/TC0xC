@@ -22,9 +22,11 @@ const uint32_t Alarm_Interval_Short = 3000000; // 5 min
 const uint8_t Message_Brightness = 100;
 const uint16_t Message_Delay_ms = 150;
 const uint8_t MAX_MESSAGE_LEN = 50;
-const uint8_t TOTAL_MESSAGES = 3;
-// todo: change these to c7five messages
+const uint8_t TOTAL_MESSAGES = 5;
+
 char Messages[TOTAL_MESSAGES][MAX_MESSAGE_LEN] = {"up up down down left right left right b a start",
+                                                  "a fork and a knife"
+                                                  "a bottle and a cork",
                                                   "foobar",
                                                   "abcxzy"};
 
@@ -195,6 +197,7 @@ void set_LED_mode(LED_Object *leds)
 
 static void boot_sequence(LED_Object *leds)
 {
+    //Serial.println("Boot Anim..");
     leds->controller->clear();
     uint16_t i, j;
     uint32_t led_rings[4] = {LED_RING_INNER, LED_RING_MID_INNER, LED_RING_MID_OUTER, LED_RING_OUTER};

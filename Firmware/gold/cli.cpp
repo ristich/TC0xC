@@ -1,3 +1,5 @@
+#include "Printable.h"
+#include "ir.h"
 #include "cli.h"
 #include <Arduino.h>
 #include <EEPROM.h>
@@ -14,6 +16,7 @@ static void CLI_Test(CLI_Object *cli, uint8_t nargs, char **args);
 static void CLI_Help(CLI_Object *cli, uint8_t nargs, char **args);
 static void CLI_Flag(CLI_Object *cli, uint8_t nargs, char **args);
 static void CLI_Reset(CLI_Object *cli, uint8_t nargs, char **args);
+static void CLI_IRcode(CLI_Object *cli, uint8_t nargs, char **args);
 
 static void LED_Brightness(CLI_Object *cli, uint8_t nargs, char **args);
 static void LED_Delay(CLI_Object *cli, uint8_t nargs, char **args);
@@ -28,6 +31,7 @@ static const CLI_Command CMD_List[] = {
     {.cmd_name = "pattern", .cmd_desc = "set led pattern [0 - ", .cmd_cb = LED_Pattern, .cmd_hidden = false},
     {.cmd_name = "reset", .cmd_desc = "reset settings", .cmd_cb = CLI_Reset, .cmd_hidden = false},
     {.cmd_name = "flag", .cmd_desc = "print flag", .cmd_cb = CLI_Flag, .cmd_hidden = true},
+    {.cmd_name = "ircode", .cmd_desc = "print last IR code recieved", .cmd_cb = CLI_IRcode, .cmd_hidden = true},
 };
 // number of commands
 static const uint8_t CMD_Count = sizeof(CMD_List) / sizeof(CLI_Command);
@@ -38,7 +42,7 @@ static const uint8_t CMD_Count = sizeof(CMD_List) / sizeof(CLI_Command);
  * @param serial pointer to a running serial interface
  * @return CLI_Error
  */
-CLI_Error CLI_init(CLI_Object *cli, LED_Object *leds)
+CLI_Error CLI_init(CLI_Object *cli, LED_Object *leds, IR_Object *ir)
 {
     static bool initialized = false;
     if (initialized)
@@ -53,7 +57,7 @@ CLI_Error CLI_init(CLI_Object *cli, LED_Object *leds)
     cli->leds = leds,
     cli->serial = &Serial,
     cli->rx_len = 0,
-
+    cli->ir = ir,
     xTaskCreatePinnedToCore(CLI_task, "CLI_task", 2048, cli, tskIDLE_PRIORITY + 3, NULL, app_cpu);
 
     initialized = true;
@@ -72,8 +76,8 @@ static void CLI_task(void *pvParameters)
 {
     CLI_Object *cli = (CLI_Object *)pvParameters;
     cli->serial->println("\nWelcome to CLI");
-    // todo: flag - reward people for correctly connecting the badge CLI
-    cli->serial->println("uart flag: insert flag here");
+    
+    cli->serial->println("uart flag: flag{welcome_to_the_8bit_world}");
     if (cli->dev_mode)
     {
         cli->serial->print("Developer Mode: ");
@@ -317,8 +321,8 @@ static void CLI_Help(CLI_Object *cli, uint8_t nargs, char **args)
  */
 static void CLI_Flag(CLI_Object *cli, uint8_t nargs, char **args)
 {
-    // todo: flag
-    cli->serial->println("buff overflow: insert flag here.");
+    const char* flag = (char*)(0x95a67dc088a865d3 ^ 0xFeca1ca7Feca1ca7);
+    cli->serial->printf("buff overflow: %s\n",flag);
 }
 
 static void CLI_Reset(CLI_Object *cli, uint8_t nargs, char **args)
@@ -437,4 +441,10 @@ static void LED_Pattern(CLI_Object *cli, uint8_t nargs, char **args)
 
     cli->serial->print("LED pattern set to ");
     cli->serial->println(pattern);
+}
+
+static void CLI_IRcode(CLI_Object *cli, uint8_t nargs, char **args)
+{
+    cli->serial->print("Last Code Received: ");
+    cli->serial->printf("%X\n",cli->ir->last_code);
 }

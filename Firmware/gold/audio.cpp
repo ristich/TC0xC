@@ -15,7 +15,8 @@ const song_t songs[] = {
     {button_select, sizeof(button_select) / sizeof(tone_t)},
     {stage_complete, sizeof(stage_complete) / sizeof(tone_t)},
     {hit, sizeof(hit) / sizeof(tone_t)},
-    {rick, sizeof(rick) / sizeof(tone_t)}};
+    {rick, sizeof(rick) / sizeof(tone_t)},
+    {welcome, sizeof(welcome) / sizeof(tone_t)}};
 
 void audio_task(void *pvParameters);
 Song_Error play_song(uint32_t *index);
@@ -34,7 +35,7 @@ Audio_Error audio_init(Audio_Object *audio)
     xTaskCreatePinnedToCore(audio_task, "audio_task", 2048, audio, tskIDLE_PRIORITY + 2, &audio->task_handle, app_cpu);
 
     audio->initialized = true;
-
+    xTaskNotifyIndexed(audio->task_handle, 0, 9, eSetValueWithoutOverwrite); // welcome tone on success.
     return AUDIO_SUCCESS;
 }
 

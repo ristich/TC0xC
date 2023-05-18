@@ -1,4 +1,5 @@
 #include <WiFi.h>
+#include <EEPROM.h>
 #include <IRCClient.h>
 #include <IRremoteESP8266.h>
 #include <IRsend.h>
@@ -13,8 +14,10 @@
 #include "tag.h"
 #include "ir.h"
 
-const char* ssid = "FACEPLANT"; //TODO Update for Con Wifi
-const char* pass = "FACEPLANT";
+// const char* ssid = "FACEPLANT"; //TODO Update for Con Wifi
+// const char* pass = "FACEPLANT";
+const char* ssid = "THOTCON-Open";
+const char* pass = NULL;
 
 char NICK[9] = "t0XXXXXX";
 uint32_t nextCheckTime = 0;
@@ -51,13 +54,30 @@ void setup()
 {
     //variable builds
     sprintf(NICK, "TC%06X", (uint32_t)(ESP.getEfuseMac() >> 24));
+        // check for dev mode
+    EEPROM.begin(EEPROM_SIZE);
+    delay(500);
+    uint8_t dev_read = EEPROM.readByte(EEPROM_ADDR_DEV_MODE);
+    if (dev_read > 1)
+    {
+        EEPROM.writeByte(EEPROM_ADDR_DEV_MODE, 0);
+        EEPROM.commit();
+    }
+    else if (dev_read == 1)
+    {
+        Badge.cli.dev_mode = 1;
+    }
     delay(3000);
     // Badge object initializations
-    pinMode(BUZZER_PIN,OUTPUT);
+    
+   
+    vTaskDelay(500);
     LED_init(&Badge.leds);
-    CLI_init(&Badge.cli, &Badge.leds);
     Player_init(&Badge.player, NICK, MAX_HEALTH, LIVES);
+    vTaskDelay(500);
     audio_init(&Badge.audio);
+    vTaskDelay(500);
+    CLI_init(&Badge.cli, &Badge.leds, &Badge.ir);
     
     //touch_init here fails an assert as soon as wifi connects
     Badge.state = MAIN_MENU;
@@ -68,6 +88,7 @@ void setup()
 
   Serial.println();
   Serial.println();
+  vTaskDelay(3000);
   Serial.print("Connecting to ");
   Serial.println(ssid);
   
@@ -84,34 +105,36 @@ void setup()
   Serial.println(WiFi.macAddress());  
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP()); 
-  client.setCallback(command_handler);
-  client.setSentCallback(debugSentCallback); // todo comment out for final bin
-  Serial.print("Contra Player ");
+  Badge.player.irc->setCallback(command_handler);
+  //Badge.player.irc->setSentCallback(debugSentCallback); 
+  Serial.print("BadgeBattles Soldier ");
   Serial.print(Badge.player.id);
   Serial.print(" locked and loaded @ ");
   configTime((-5*60*60), 0, NTP_SERVER);
   printLocalTime();
  
- // xTaskNotifyIndexed(Badge.audio.task_handle, 0, HIT_SONG, eSetValueWithOverwrite); 
-  // initializing touch here makes the system "stable" until a touch is handled then fails: assert failed: xTaskGenericNotify tasks.c:5545 (xTaskToNotify)
-  ir_init(&Badge.ir);
+ 
+  // initializing ir & touch here makes the system have fewer timing conflicts.
+  ir_init(&Badge.ir,Badge.player.irc);
   touch_init(&Badge.touch, &Badge.cli, Badge.leds.task_handle, Badge.audio.task_handle, Badge.ir.tx_task_handle);
-
+ 
 }
 
 void loop()
 {
   
   vTaskDelay(1000 / portTICK_PERIOD_MS);
-  if (!client.connected()) {
+  if (!Badge.player.irc->connected()) {
     if (millis() > nextCheckTime)
     {
       Serial.print("Attempting BadgeNET connection... ");
       // Attempt to connect
-      if (client.connect(NICK, IRC_USER)) {
+      if (Badge.player.irc->connect(NICK, IRC_USER)) {
         Serial.println("connected");
-        delay(3000);
-        client.sendRaw("JOIN #dev RR"); //todo pick a initial channel name
+        vTaskDelay(3000 / portTICK_PERIOD_MS);
+        Badge.player.irc->sendRaw("JOIN #jungle RR"); 
+        vTaskDelay(3000 / portTICK_PERIOD_MS);
+        Badge.player.irc->sendRaw("JOIN #bb23 CONTRA");
       } else {
         Serial.println("failed... try again in 2 minutes");
         // Wait 5 seconds before retrying
@@ -120,5 +143,6 @@ void loop()
     }
   }
 
-  client.loop();
+  Badge.player.irc->loop();                                                                      
+  
 }
