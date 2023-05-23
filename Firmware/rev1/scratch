@@ -1,0 +1,22 @@
+OnTouch:
+
+    MAIN MENU:
+       UP or DOWN: Update ring
+       Left or Right: Dud Noise
+       Action: Blink and Ding Noise
+
+    TAG: 
+       UP,DOWN,L,R : Ding Noise
+       Action: IRTX + Fire Noise
+
+
+    SNIFF:
+      UP, DOWN, L, R; Ding Noise
+      Action: SetSendBuff, 1UP Noise
+
+    REPLAY:
+
+
+
+
+ANY: Left,Left goes to MAIN_MENU, If in Main Menu : Dug (covered above);
